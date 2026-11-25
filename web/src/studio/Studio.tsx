@@ -3,12 +3,13 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import type { AgentsState, CaseDetail, DeskSummary, DrillInfo, Feeds, Marker, RegisterList, ScoreResult, SealedRecord, TakedownPackage, WatchState } from '../api/types';
 import { clock, useEngine, useLang } from '../i18n';
 import { Icon, Mks, Ticks } from '../kit/basics';
+import { JudgesPage } from './Judges';
 import { AgentsFlow, AgentsRow, CasesList, CheckPanel, DrillView, FunnelView, GreyDot, Mirror, RecordsList, RecordView, Replay, ScaleView, SchedulePill, TakedownView, VerdictView } from '../kit/pieces';
 
 export const PAGES = [
   ['watch', { ar: 'الرصد', en: 'Watch' }], ['cases', { ar: 'الحالات', en: 'Cases' }], ['check', { ar: 'فحص عنوان', en: 'Check an address' }],
   ['register', { ar: 'السجل', en: 'Register' }], ['drill', { ar: 'التمرين', en: 'Drill' }], ['scale', { ar: 'الحجم', en: 'Scale' }],
-  ['records', { ar: 'المحاضر', en: 'Records' }], ['agents', { ar: 'الوكلاء', en: 'Agents' }],
+  ['records', { ar: 'المحاضر', en: 'Records' }], ['agents', { ar: 'الوكلاء', en: 'Agents' }], ['judges', { ar: 'للحكام', en: 'For judges' }],
 ] as const;
 export type Page = (typeof PAGES)[number][0];
 
@@ -212,6 +213,7 @@ export function Studio({ page, setPage, watch, onRunNow, needDecision }: { page:
         {page === 'scale' && <ScalePage />}
         {page === 'records' && <RecordsPage />}
         {page === 'agents' && <AgentsPage />}
+        {page === 'judges' && <JudgesPage />}
       </div>
     </section>
   );

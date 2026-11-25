@@ -308,3 +308,17 @@ def scorecard() -> dict:
         if data is not None:
             return {"status": "live", "scorecard": to_plain(data)}
     return {"status": "unavailable", "note_en": "No sealed scorecard yet", "note_ar": "لا توجد بطاقة دقة مختومة بعد"}
+
+
+def register_families(q: str = "", limit: int = 40) -> dict:
+    """The register's families (official bodies and their addresses), for the desk's Register page."""
+    from istibaq.core import register
+    q = (q or "").strip().lower()
+    fams = register.families()
+    out = []
+    for f in fams:
+        if q and not (q in f.name_en.lower() or q in f.name_ar or any(q in d for d in f.domains)):
+            continue
+        out.append({"id": f.family, "name_ar": f.name_ar, "name_en": f.name_en, "domains": list(f.domains),
+                    "official": f.official, "source": f.source, "date": f.date})
+    return {"total": sum(len(f.domains) for f in fams), "families": out[:limit], "count": len(out)}

@@ -11,7 +11,7 @@ import { deskReducer, initialDesk } from './desk';
 import { match } from './matcher';
 import { Orb, type Levels, type OrbState } from './Orb';
 import { RealtimeVoice, type RtHooks, type VoiceLike, type VoiceProblem, type VoiceStatus } from './realtime';
-import { runTool, TOOL_NAMES, type Answer, type ToolContext } from './tools';
+import { runTool, TOOL_NAMES, type Answer, type ToolContext, type ToolResult } from './tools';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
@@ -77,7 +77,12 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
   const run = useCallback(async (name: ToolName, args: Record<string, unknown>, via: 'voice' | 'click', mark: Marker) => {
     setOrb('think'); setBrain(mark);
     const tool = TOOL_NAMES.includes(name) ? name : 'help';
-    const r = await runTool(engine, ctx.current, tool, args, via);
+    let r: ToolResult;
+    try { r = await runTool(engine, ctx.current, tool, args, via); }
+    catch (e) { // a hard limit or an engine error: say it plainly, keep the screen as it is
+      const er = e as Error & { ar?: string };
+      r = { answer: null, keep: true, say: { ar: er.ar || 'تعذّر ذلك الآن: ' + er.message, en: 'That could not be done now: ' + er.message }, output: { error: er.message } };
+    }
     dispatch({ type: 'result', result: r });
     if (statusRef.current === 'on') setOrb('listen');
     else if (failed.current) { setOrb('speak'); say(r.say[langRef.current], langRef.current, () => setOrb(o => (o === 'speak' ? 'idle' : o))); }

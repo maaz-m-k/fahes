@@ -15,7 +15,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 
 from istibaq import __version__
-from istibaq.api import integrations, watchrun
+from istibaq.api import integrations, limits, watchrun
 from istibaq.cases import service as cases
 from istibaq.costs import log as costlog
 from istibaq.drill import records as drills
@@ -25,7 +25,10 @@ from istibaq.voice import mint as voice
 PAGE = Path(__file__).with_name("page.html")
 WATCH_EVERY_SECONDS = 6 * 3600
 TOKEN_HEADER = "X-Istibaq-Officer-Token"
-OPEN_POST_PREFIXES = ("/api/score",)  # the judges' scoring endpoints stay open
+# The desk is open to the public (no passcode); hard limits bound the risk (istibaq/api/limits.py).
+# The officer token is only for maintenance: these admin endpoints change shared data by hand.
+ADMIN = {("POST", "/api/register/edits"), ("POST", "/api/drills"), ("POST", "/api/costs")}
+WEB_DIST = Path(os.environ.get("ISTIBAQ_WEB_DIST", str(Path(__file__).resolve().parents[2] / "web" / "dist")))
 log = logging.getLogger("istibaq.service")
 Mode = Literal["judging", "officer"]
 
@@ -77,6 +80,16 @@ class CostIn(BaseModel):
     detail: dict = {}
 
 
+class VerifyIn(BaseModel):
+    address: str | None = None
+
+
+class VoiceUsage(BaseModel):
+    session_id: int | None = None
+    seconds: float | None = None
+    model: str | None = None
+
+
 class ToolCall(BaseModel):
     case_id: int | None = None
     address: str | None = None
@@ -121,14 +134,20 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
 
     app = FastAPI(title="Istibaq engine", version=__version__, lifespan=lifespan)
     app.state.store = store
+    lim = limits.Limits(store)
+    app.state.limits = lim
+
+    def visitor(request: Request) -> str:
+        fwd = request.headers.get("fly-client-ip") or request.headers.get("x-forwarded-for", "")
+        return fwd.split(",")[0].strip() or (request.client.host if request.client else "?")
+
+    def limited(exc: limits.LimitHit) -> JSONResponse:
+        headers = {"Retry-After": str(exc.retry_after)} if exc.retry_after else None
+        return JSONResponse(exc.to_dict(), status_code=429, headers=headers)
 
     @app.middleware("http")
     async def officer_token(request: Request, call_next):
-        path = request.url.path
-        reveal = request.query_params.get("reveal", "").lower() in ("1", "true", "yes", "on")
-        needs = ((request.method == "POST" and not path.startswith(OPEN_POST_PREFIXES))
-                 or reveal or path.endswith("/takedown"))
-        if needs:
+        if (request.method, request.url.path) in ADMIN:
             expected = os.environ.get("ISTIBAQ_OFFICER_TOKEN", "")
             given = request.headers.get(TOKEN_HEADER, "")
             if not expected:
@@ -153,9 +172,14 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
                 "watch": "live" if wr else "unavailable", "capture": "live" if cap else "unavailable",
                 "schedule": schedule}
 
-    @app.get("/", response_class=HTMLResponse)
-    def page():
+    @app.get("/engine", response_class=HTMLResponse)
+    def engine_page():
         return PAGE.read_text(encoding="utf-8")
+
+    if not (WEB_DIST / "index.html").exists():  # no built desk: the engine's own page at /
+        @app.get("/", response_class=HTMLResponse)
+        def page():
+            return PAGE.read_text(encoding="utf-8")
 
     # ---------------------------------------------------------------- the Fahes search page (recorded footage)
     @app.get("/search", response_class=HTMLResponse)
@@ -173,6 +197,8 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
             raise HTTPException(401, "officer token required")
         from istibaq.adapters.base import AdapterError, MissingKey
         from istibaq.capture import searchpage
+        if not limits.paid_on():
+            return searchpage.render_results(q, [], label="Paid searches are switched off (ISTIBAQ_PAID=0)", lang=lang)
         try:
             results = searchpage.live_results(q, maps=maps, lang=lang, cost_sink=sink) if q.strip() else []
             label = "Real results · Fahes search page"
@@ -182,12 +208,22 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
 
     # ---------------------------------------------------------------- scoring
     @app.post("/api/score")
-    def score_one(body: ScoreOne):
+    def score_one(body: ScoreOne, request: Request):
+        try:
+            lim.hit(visitor(request))
+        except limits.LimitHit as exc:
+            return limited(exc)
         return integrations.score(body.link, mode=body.mode)
 
     @app.post("/api/score/batch")
-    def score_batch(body: ScoreMany):
+    def score_batch(body: ScoreMany, request: Request):
+        try:
+            lim.hit(visitor(request))
+        except limits.LimitHit as exc:
+            return limited(exc)
         links = [l.strip() for l in body.links if l.strip()]
+        if len(links) > limits.batch_max():
+            raise HTTPException(413, f"at most {limits.batch_max()} links per request")
         return {"results": integrations.score_many(links, mode=body.mode), "count": len(links)}
 
     # ---------------------------------------------------------------- register
@@ -230,6 +266,17 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
     def seal_case(case_id: int):
         return nf(cases.seal, store, case_id)
 
+    @app.post("/api/cases/{case_id}/verify")
+    def verify_record(case_id: int, body: VerifyIn):
+        """Would the seal still hold if the record's address read like this? (the desk's "edit one letter" check)"""
+        from istibaq.seal import record as seal_record
+        rec = nf(cases.show, store, case_id, reveal=True).get("record")
+        if not rec:
+            raise HTTPException(409, "not sealed")
+        edited = {**rec["body"], "address": body.address if body.address is not None else rec["body"].get("address")}
+        out = seal_record.verify(edited, rec["sha256"])
+        return {**out, "fingerprint_now": seal_record.fingerprint(edited)}
+
     @app.post("/api/cases/{case_id}/approve")
     def approve_case(case_id: int, body: Approve):
         return nf(cases.approve, store, case_id, body.method, body.officer)
@@ -243,9 +290,23 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
         return nf(cases.takedown_package, store, case_id)
 
     # ---------------------------------------------------------------- watch
+    def run_now(trigger: str, wait: bool = True) -> dict:
+        """Run a round now (off with ISTIBAQ_PAID=0); ``wait=False`` starts it in the background."""
+        if not limits.paid_on():
+            return {"status": "off", "note_en": "Paid searches are switched off on this server (ISTIBAQ_PAID=0)",
+                    "note_ar": "عمليات البحث المدفوعة متوقفة على هذا الخادم", "results": 0, "cases": []}
+        if wait:
+            return watchrun.run_round(store, wr, cap, sink, trigger=trigger)
+        import threading
+        threading.Thread(target=watchrun.run_round, args=(store, wr, cap, sink, trigger), daemon=True).start()
+        return {"status": "started"}
+
     @app.post("/api/watch/run")
-    def watch_run():
-        return watchrun.run_round(store, wr, cap, sink, trigger="manual")
+    def watch_run(wait: bool = True):
+        try:
+            return run_now("manual", wait)
+        except limits.LimitHit as exc:
+            return limited(exc)
 
     @app.get("/api/watch/last")
     def watch_last():
@@ -264,6 +325,9 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
 
     # ---------------------------------------------------------------- Google and ads check (paid, on demand only)
     def google_check() -> dict:
+        if not limits.paid_on():
+            return {"status": "off", "note_en": "Paid searches are switched off on this server (ISTIBAQ_PAID=0)",
+                    "note_ar": "عمليات البحث المدفوعة متوقفة", "google": integrations.google_status(store)}
         if google_round is None:
             return {"status": "unavailable", "google": integrations.google_status(store)}
         if not integrations.google_enabled():
@@ -343,10 +407,30 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
     # ---------------------------------------------------------------- voice
     @app.post("/api/voice/session")
     def voice_session():
+        """A short-lived voice key (off with ISTIBAQ_VOICE=0); each session is counted for the cost view."""
         try:
-            return voice.mint(cost_sink=sink, transport=openai_transport)
+            sid = lim.start_voice()
+        except limits.LimitHit as exc:
+            return limited(exc)
+        try:
+            out = voice.mint(cost_sink=sink, transport=openai_transport)
         except voice.VoiceUnavailable as exc:
+            lim.end_voice(sid, 0)
             raise HTTPException(503, f"voice unavailable: {exc}")
+        return {**out, "session_id": sid}
+
+    @app.post("/api/voice/usage")
+    def voice_usage(body: VoiceUsage):
+        lim.end_voice(body.session_id, body.seconds or 0)
+        return lim.voice_status()
+
+    @app.get("/api/voice/status")
+    def voice_status():
+        return lim.voice_status()
+
+    @app.get("/api/register/families")
+    def register_families(q: str = Query("", max_length=100)):
+        return integrations.register_families(q)
 
     @app.post("/api/voice/tools/{name}")
     def voice_tool(name: str, body: ToolCall):
@@ -372,12 +456,21 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
         if name == "scale":
             return integrations.mask_feed_names(feed_counts(), body.reveal)
         if name == "run_now":
-            return watchrun.run_round(store, wr, cap, sink, trigger="voice")
+            try:
+                return run_now("voice")
+            except limits.LimitHit as exc:
+                return limited(exc)
         if name == "google_check":
             return google_check()
         if name == "agents":
             return agents_status()
         raise HTTPException(404, "unknown tool")
 
+    # ---------------------------------------------------------------- recorded footage and the built desk
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/media/footage", StaticFiles(directory=str(watchrun.footage_dir(store)), check_dir=False), name="footage")
+    app.mount("/media/captures", StaticFiles(directory=watchrun.capture_dir(store, 0)[:-2], check_dir=False), name="captures")
+    if (WEB_DIST / "index.html").exists():  # one app: the desk at /, the API where it is
+        app.mount("/", StaticFiles(directory=str(WEB_DIST), html=True), name="desk")
     return app
 

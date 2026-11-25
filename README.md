@@ -1,145 +1,278 @@
-# Istibaq (استباق) — proactive detection of fake links
+# Fahes (فاحص), "the examiner"
 
-**Istibaq** is Team Fortress's engine for the SCAMSHIELD AI hackathon (42 Abu Dhabi × Abu Dhabi Police). It knows the
-real Abu Dhabi (the **Genuine Register**), scores every link with reasons in Arabic and English, and works offline on
-bare addresses — dead links included.
+**Proactive monitoring of fake links for Abu Dhabi Police.** Fahes watches where residents look for help (search
+results, Google ads, Google's AI answer, Maps listings), scores every link it finds with clear reasons in Arabic and
+English, sees through cloaking, and prepares a sealed draft record for takedown. A voice-first desk gives the duty
+officer all of it in a few words.
 
-**Requires Python 3.12+.**
+> فاحص: رصد استباقي للروابط الوهمية لشرطة أبوظبي، بأسباب واضحة بالعربية والإنجليزية ومسودة محضر مختومة جاهزة للإزالة.
+> (Fahes: proactive monitoring of fake links for Abu Dhabi Police, with clear reasons in Arabic and English and a sealed draft record ready for takedown.)
 
-Each link gets one of three verdicts:
+Team Fortress · SCAMSHIELD AI hackathon (42 Abu Dhabi × Abu Dhabi Police), November 2026.
 
-| verdict | meaning |
-|---|---|
-| **green** | official: the address is in the Genuine Register (Abu Dhabi Police, TAMM, DGE, ICP, u.ae, UAE PASS, `*.gov.ae`, `*.gov.abudhabi`, `*.abudhabi.ae`, UAE banks, telecoms, utilities) |
-| **grey** | not official, not accused |
-| **red** | fake, with at least two independent reasons |
+---
 
-## Install
+## For judges (start here)
+
+### 1. The live app, no passcode
+
+**https://fahes.fly.dev**
+
+- **Voice:** press «تكلّم مع فاحص» / "Talk to Fahes" and speak Arabic or English, or type in the bottom field. Try "good morning, what do we have today?", "open the first one", "seal it", "show it on the phone", or paste a link.
+- **Studio** (top switch): every feature by hand.
+- **For judges** (last item in the studio's side menu, or https://fahes.fly.dev/?mode=studio&page=judges): paste links or upload a `.txt` or `.csv` file, see each verdict with its reasons, and download a CSV. It uses the same scoring as the command below.
+- **English:** the button at the top right switches to English. "Show what is real" toggles the REAL / STAND-IN / DEMO DATA labels.
+
+### 2. Score a file of links offline (no keys, no internet)
 
 Python 3.12 or newer.
 
 ```bash
-git clone https://github.com/maaz-codes/ad-police-hackathon.git
-cd ad-police-hackathon
+git clone https://github.com/maaz-m-k/fahes.git
+cd fahes
 python3.12 -m venv .venv && . .venv/bin/activate
-pip install -e '.[dev]'
-```
-
-## Score a file of links (judges' offline command)
-
-No keys and no internet are needed.
-
-```bash
+pip install .
 istibaq score links.txt --out results.csv
-# same thing:
-python -m istibaq score links.txt --out results.csv
 ```
 
-- **Input:** one link per line, or a CSV with a `url` column. Use `-` to read from stdin.
-- **Options:** `--mode judging|officer` (default `judging`), `--out <file>` (default stdout),
-  `--format csv|jsonl` (default `csv`), `--online` (server only: follow short links and redirects hop by
-  hop through the capture address guard, and read RDAP age; never on a laptop with suspect links).
+- **Input:** one link per line, or a CSV with a `url` column. Use `-` to read from standard input.
+- **Options:** `--mode judging` (default) or `--mode officer`, and `--format csv` (default) or `--format jsonl`.
 
-### Output columns
+**Output columns:**
 
-| column | content |
+| Column | Content |
 |---|---|
 | `link` | the link exactly as given |
-| `is_fraud` | `yes` / `no` (JSONL: `true` / `false`) — use this for precision and recall |
+| `is_fraud` | `yes` / `no`. Use this for precision and recall |
 | `score` | 0 to 1 |
-| `verdict` | `green` / `grey` / `red` |
-| `reasons` | `code: Arabic / English`, separated by ` \| ` (JSONL: list of `{code, ar, en, evidence, time, online}`) |
-| `model_version` | scorer model and training cut date (`heuristic-…` when no trained address model is bundled) |
-| `scored_at` | ISO-8601 UTC |
+| `verdict` | `green` (official), `grey` (not official, not accused), `red` (suspected fake, at least two independent reasons) |
+| `reasons` | `code: Arabic / English`, separated by ` \| ` |
+| `model_version` | address model and its training cut date |
+| `scored_at` | time, ISO-8601 UTC |
 
-### The two modes
+**The two modes:**
+- `judging` gives the most catches: `is_fraud = yes` when the link is not green and scores 0.9 or more.
+- `officer` gives a quiet desk: `is_fraud = yes` only for red, which needs an independent reason besides the address pattern.
 
-- **judging** (default) — maximum catch for the judges' file: `is_fraud = yes` when the link is not green and its score
-  is at least 0.9.
-- **officer** — a quiet desk: `is_fraud = yes` only when the verdict is red: not green, score at least 0.9 **and**
-  at least one independent reason besides the address pattern.
+### 3. Full mode, online
 
-In both modes red always needs two independent reasons. Real UAE government and bank sites are green before any model
-runs. Popular sites (Tranco top 100k, exact domain only; never free hosts, tunnels, dynamic DNS or shorteners) are
-never flagged. A page on a free host says plainly that the address alone cannot tell real from fake. Offline, a short
-link is grey with "short link, destination unknown"; given a redirect chain (online), every hop is judged.
+```bash
+pip install '.[service]'
+istibaq score links.txt --online --out results.csv
+```
 
-## How a link is scored
+`--online` follows short links and redirects hop by hop, judging every hop through an address guard, and adds the domain's registration age (RDAP).
 
-1. **Normalise** — lowercase; strip scheme, `www`, trailing slash; split registered domain and private-suffix site
-   (bundled Public Suffix List, no network); decode punycode for display.
-2. **Genuine Register** (`istibaq/data/register/register.json`, each entry with source and date) — official ends it
-   (green). Officers' "not a scam" / "licensed" marks are applied on top.
-3. **Popular allow-list** — grey, not accused.
-4. **Address model** — `istibaq.model.load()`; a transparent heuristic when no trained model is present.
-5. **Independent reason families** — brand mismatch (typos, digit for letter, Arabic/Cyrillic/Greek look-alike letters,
-   brand plus a word, brand glued to an account word, an official address with its dots turned into hyphens, brand on
-   an unowned domain); disguised address (an official name before `@` or after `\@`); new domain (bundled
-   newly-registered-domains list offline, RDAP age online); free host, short link or IP host, and account words in a
-   free-host page's own name; known-bad (bundled OpenPhish snapshot). Reverse-DNS names (`*.arpa`) are never accused,
-   and a subdomain of a popular site is not accused on its address alone. Online only: young certificate, cross-domain
-   redirect, two-view difference, live page brand vs domain, human-check wall, payee not in the register, optional AI
-   reason (it can only add a reason, never clear a link).
-6. **Thresholds** — as in the modes above.
+The live-page checks run on the server, when a case is captured:
+- two views (a server and a phone) to see through cloaking;
+- human-check walls;
+- the brand a page claims, compared with the register;
+- an optional AI reading of that brand, when `OPENROUTER_API_KEY` and `ISTIBAQ_AI_LAYER=1` are set.
 
-Never used as evidence: path length, scheme, `www`, trailing slash, popularity rank.
+Do not run `--online` on a laptop with suspect links: it fetches them.
 
-Bundled snapshots live in `istibaq/data/snapshots/` with their source and fetch date:
+### 4. The whole app in Docker
 
-- **Popular allow-list:** the [Tranco list](https://tranco-list.eu) top 100k, fetched 2026-11-25. Le Pochat et al.,
-  "Tranco: A Research-Oriented Top Sites Ranking Hardened Against Manipulation", NDSS 2019.
-- **Known-bad:** the OpenPhish community feed (hosts only), fetched 2026-11-25.
-- **New domains:** the [hagezi/nrd](https://github.com/hagezi/nrd) 7-day newly-registered-domains list (GPL-3.0),
-  list date 24 Nov 2026, bundled as `nrd7.txt.xz`; each reason names the list and its day. It is a week wide:
-  refresh it before a judging run with `scripts/data/refresh_nrd.sh`. Online, RDAP age is used too.
-- **Shared platforms, tunnels, dynamic DNS, shorteners:** `platforms.json`, hand-collected.
+```bash
+docker build -t fahes . && docker run --rm -p 8080:8080 fahes
+```
 
-Global consumer brands (Microsoft, Apple, PayPal, Amazon, DHL and others) are never green: their domains host other
-people's content. Look-alikes of them are still caught; their own domains are "owned, not accused".
+Then open http://localhost:8080. Without keys, scoring, cases and the judges' page work. Voice and the search rounds need the keys listed under [Run it yourself](#run-it-yourself).
 
-## Data sources and credits
+---
+
+## What Fahes does, mapped to the judging criteria
+
+| Criterion | What Fahes does |
+|---|---|
+| **Detection accuracy (30%)** | Scores every link through a register of the real Abu Dhabi, an address model, and independent reason families. Red needs two independent reasons. Follows redirects and short links, and sees through cloaking by opening a suspect page as a server and as a phone. Measured on a sealed test: see [Accuracy, honestly](#accuracy-honestly) |
+| **Early detection and coverage (25%)** | A watch round every 6 hours asks the questions residents ask (fines, bills, helplines, banks, government services) in Arabic and English. It covers Brave search results, **Google results, Google ads and the links cited by Google's AI answer** (DataForSEO, on demand), and **Google Maps listings**, including fake helpline phone numbers. Fresh domains come from the newly-registered-domains list and certificate logs |
+| **Explainability and actionability (20%)** | Every verdict has a 0–1 score and plain reasons in Arabic and English, with evidence. Each case gets a **sealed Arabic draft record (SHA-256)** that the officer approves by voice or click; changing one letter breaks the seal. The takedown package is prepared (never sent automatically), and the judges' page exports a CSV |
+| **UAE relevance and innovation (15%)** | The **Genuine Register** of Abu Dhabi and UAE government, banks, telecoms and utilities, each entry with its source and date. Arabic first. A voice-first desk in the style of Mira, the UAE government's assistant: the officer talks, Fahes shows only what matters |
+| **Feasibility and presentation (10%)** | Live at https://fahes.fly.dev as one small app (Python engine + web desk). Costs are logged and projected in the app. Honest labels on every part, and a [route to a police pilot](#trade-offs-what-was-left-out-and-the-route-to-a-pilot) |
+
+---
+
+## Accuracy, honestly
+
+From [`docs/accuracy.md`](docs/accuracy.md): **sealed test v2**.
+- 1,011 fresh fakes, one per site, reported after the model's training cut.
+- 5,935 real links: real UAE pages and names, real search results, popular sites and popular subdomain hosts.
+- The known-bad list is switched off, so nothing is a lookup.
+- Ranges are 95% Wilson ranges, counted by registered domain.
+
+| Setting | Fakes caught | False alarms on real links | Right when it says "fraud" |
+|---|---|---|---|
+| Judges (`judging`) | **72.8%** (69.5–76.0%) | 384 of 5,935 (**6.5%**, 5.8–7.2%) | 65.7% on this mix (6 reals per fake); 91.8% at half and half |
+| Officer (`officer`) | **21.8%** (18.9–25.0%) | 10 of 5,935 (**0.17%**, 0.08–0.32%) | **95.7%** (92.2–97.6%) |
+
+**What is measured:**
+- Bare addresses only, and no real UAE page is flagged in either setting.
+- Almost all remaining false alarms in the judges' setting are real pages on free website builders (`*.github.io`, `*.pages.dev`). There the address alone cannot tell real from fake, so they are flagged, but never red.
+
+**What is not measured:**
+- The online levers (redirects, live brand, Maps phones) need live pages. They are tested with recorded fakes only.
+- Public feeds hold almost no UAE-targeted fakes, so the 25 UAE look-alikes are a stress check that is not counted.
+- The officer catch leans on the offline domain-age list, whose dates overlap the test's fakes. Read it as a best case.
+
+**Known misses:**
+- fakes on hosting companies' customer subdomains;
+- fakes whose only signal is a word inside a longer word;
+- anything a week-old domain list has not seen yet (refresh it with `scripts/data/refresh_nrd.sh`).
+
+We do not quote public benchmark numbers as our accuracy. The release gate is `python -m istibaq.eval.gate`.
+
+---
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Sources["Where residents look"]
+    B[Brave search API] --- G["Google results, ads, AI answer<br/>(DataForSEO, on demand)"] --- M[Google Maps listings]
+    F["Fresh domains:<br/>new-domain list, certificate log"]
+  end
+  subgraph Engine["Fahes engine (Python, FastAPI, SQLite)"]
+    W["Watch round<br/>every 6 h, resident questions"] --> S["Scorer: Genuine Register →<br/>address model → reason families"]
+    S -->|suspicious| C["Case + two-view capture<br/>(server and phone, isolated browser)"]
+    C --> R["Sealed Arabic draft record<br/>SHA-256, approval, takedown package"]
+  end
+  Sources --> W
+  D["Desk (React): voice mode + studio + judges' page"] <-->|"/api"| Engine
+  D <-->|"WebRTC, short-lived key"| V["OpenAI realtime voice"]
+```
+
+- **One app:** the engine serves the desk at `/` and the API under `/api`, on one Fly.io machine with a volume for SQLite, captures and footage.
+- **Code layout:**
+  - engine: `istibaq/` (scoring core in `istibaq/core/`, watch and capture in `istibaq/watch/` and `istibaq/capture/`);
+  - desk: `web/`;
+  - more detail: [`docs/service.md`](docs/service.md), [`docs/watch.md`](docs/watch.md), [`docs/model.md`](docs/model.md).
+
+### Model choices
+
+- **Genuine Register first.** An official address is green before any model runs. Each entry has a source and a date, and officers' "not a scam" / "licensed" marks are applied on top.
+- **Address model:**
+  - character 3-to-5-gram logistic regression over the host, then gradient boosting (LightGBM) over that score plus address facts;
+  - trained on PhishTank reports before 17 Nov 2026 and on popular sites;
+  - it never uses path length, scheme, `www`, trailing slash or popularity rank;
+  - it works on dead links, because it needs only the address.
+- **Independent reason families:**
+  - brand mismatch: typos, look-alike letters, brand plus a word;
+  - disguised addresses, new domains, free hosts, short links and IP hosts;
+  - online: redirects, the difference between the two views, the live page's brand, human-check walls, a payee not in the register.
+- **Rules decide the verdict.** Red needs two independent reasons.
+- **The AI layer** (OpenRouter) is optional and used only to read which brand a live page claims. It can add a reason, never clear a link, and the register decides who owns a brand. Page text addressed to an AI is stripped.
+- **Voice:** OpenAI gpt-realtime-2.1 over WebRTC, using a short-lived key minted by the server. The model calls tools; every number and verdict it speaks comes from the engine.
+
+### Privacy design
+
+- **No personal data:** no resident or officer data is collected or stored, and the demo cases use reserved, made-up addresses (`.test`, `.example`).
+- **Keys stay on the server:** they live only in server environment variables and are never logged or returned. The browser gets only a short-lived (10-minute) voice key.
+- **Suspect pages are handled at arm's length:**
+  - they are opened only in the server's isolated capture browser;
+  - every hop passes an address guard: no private or local addresses, and nothing but http or https;
+  - Fahes never types, submits or solves a challenge on them;
+  - typing happens only in a search engine's own search box;
+  - `ISTIBAQ_CAPTURE_LOCAL_ONLY=1` keeps a laptop to 127.0.0.1.
+- **Grey sites** (not official, not accused) appear as quiet dots; their names show only on tap.
+- **Nothing is sent outward.** Takedown packages are prepared for the officer to decide.
+
+---
+
+## Data and credits
+
+| Data or service | Use | Licence / credit |
+|---|---|---|
+| [PhishTank](https://phishtank.org) | training fakes (before the cut), sealed test | CC BY-SA 4.0, credit PhishTank |
+| [OpenPhish community feed](https://openphish.com/phishing_feeds.html) | known-bad hosts, held-out test | credit OpenPhish |
+| [Tranco list](https://tranco-list.eu) | popular sites (never accused), training reals | Le Pochat et al., NDSS 2019 |
+| [hagezi/nrd](https://github.com/hagezi/nrd) | newly registered domains (7 days) | GPL-3.0, credit hagezi |
+| Public certificate logs, [crt.sh](https://crt.sh) | live new-certificate rate, register evidence | public data |
+| [RDAP](https://about.rdap.org) (rdap.org) | domain age (online) | public data |
+| Public sitemaps of adpolice.gov.ae, mohre.gov.ae, bankfab.com | real UAE pages for training and tests | public pages |
+| [Brave Search API](https://brave.com/search/api/) | the watch round's web results | paid API |
+| [Google Places API](https://developers.google.com/maps/documentation/places/web-service) | Maps listings (names, phones, websites) | paid API |
+| [DataForSEO](https://dataforseo.com) | Google results, ads and AI-answer links (on demand, hard spend limits) | paid API |
+| [OpenAI Realtime](https://platform.openai.com/docs/guides/realtime) (gpt-realtime-2.1) | voice | paid API |
+| [OpenRouter](https://openrouter.ai) | optional AI layer; typed understanding in development | paid API |
+| [Playwright](https://playwright.dev) / Chromium, [FFmpeg](https://ffmpeg.org) | two-view capture, recorded footage | Apache-2.0 / LGPL |
+| FastAPI, scikit-learn, LightGBM, tldextract, React, Vite | engine and desk | open source |
+
+Snapshot dates and files: [`istibaq/data/snapshots/SOURCES.md`](istibaq/data/snapshots/SOURCES.md).
 
 > **Warning:** the known-bad list and the test set contain live scam links. Never open them in a browser.
 
-- **PhishTank** — https://phishtank.org, data under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-- **OpenPhish community feed** — https://openphish.com/phishing_feeds.html.
-- **Tranco** — https://tranco-list.eu. Le Pochat, Van Goethem, Tajalizadehkhoob, Korczyński, Joosen,
-  "Tranco: A Research-Oriented Top Sites Ranking Hardened Against Manipulation", NDSS 2019.
+---
 
-See also `istibaq/data/snapshots/SOURCES.md`.
+## What is real in the live app
 
-## Accuracy
+The desk labels every part (the "Show what is real" switch):
 
-Accuracy claims come only from our sealed test, with ranges: see [`docs/accuracy.md`](docs/accuracy.md)
-(method, before and after numbers per change, and what they do not cover). Public benchmark numbers are never
-quoted as our accuracy.
+| Label | Means | Examples |
+|---|---|---|
+| **REAL** | works for real | scoring and reasons, the register, cases from real watch rounds, sealing and the tamper check, approval, voice, the judges' page, the scorecard, costs |
+| **STAND-IN** | holds the place of something real later | approval by click or voice (UAE PASS in a pilot), the phone view (an iPhone emulation, not a real phone on a UAE SIM), the fallback typed understanding |
+| **DEMO DATA** | made up or recorded for the demo | the recorded demo footage shown until the first round runs on the server, drill timelines, synthetic look-alike pages on reserved names |
 
-## Model and scorecard
+---
 
-See [`docs/model.md`](docs/model.md): the address model, the sealed UAE test set, the scorecard and the release gate
-(`python -m istibaq.eval.gate`).
+## Trade-offs, what was left out, and the route to a pilot
 
-## Service and deployment
+**Trade-offs:**
+- **Two settings:** most catches (`judging`) or a quiet desk with few false alarms (`officer`). The desk uses officer mode.
+- **Google results and ads:** only on demand, with hard spend limits, because licensed Google data is paid and Google forbids scraping.
+- **Hosting:** the server runs in Frankfurt (`fra`), because Fly.io has no UAE region.
+- **Open desk:** the live desk is open to the public with no passcode, on the team lead's choice. The risk is bounded by a per-visitor scoring rate, a batch size limit, and switches that turn voice (`ISTIBAQ_VOICE=0`) or paid searches (`ISTIBAQ_PAID=0`) off.
 
-See [`docs/service.md`](docs/service.md) for the HTTP API, the officer token and the Fly.io deployment, and
-[`docs/watch.md`](docs/watch.md) for the watch round and the two-view capture. The desk screens live in [`web/`](web/README.md).
+**Left out:**
+- real police accounts and UAE PASS sign-in;
+- real phones on du or e& SIMs;
+- sending takedowns outward;
+- a light theme;
+- a UAE-targeted fake test set (public feeds hold almost none).
 
-Environment variables (secrets are read only from the environment, never logged or returned):
+**Route to a police pilot:**
+- UAE hosting for the engine and its data;
+- a data partnership with Google for ads and Maps (instead of a paid reseller);
+- officer accounts with UAE PASS;
+- a dedicated phone-view capture on UAE networks;
+- a feedback loop where officers' marks and approved cases retrain the model on UAE fakes.
 
-| Variable | Meaning |
-|---|---|
-| `ISTIBAQ_OFFICER_TOKEN` | officer token for every POST except scoring |
-| `OPENAI_API_KEY` | realtime voice |
-| `OPENROUTER_API_KEY` + `ISTIBAQ_AI_LAYER=1` | optional AI layer |
-| `BRAVE_API_KEY`, `GOOGLE_PLACES_API_KEY` | the 6-hourly watch round |
-| `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD` | Google results and sponsored ads, used **only** by the on-demand Google and ads check |
-| `ISTIBAQ_DATAFORSEO` | `1` turns the Google and ads check on (off by default; the one switch) |
-| `ISTIBAQ_DATAFORSEO_RESERVE_USD` / `ISTIBAQ_DATAFORSEO_DAILY_CAP` | balance kept back (default 0.20) / paid searches a day (default 30, can only be lowered) |
+---
 
-See [`docs/service.md`](docs/service.md) for the full list.
+## Run it yourself
 
-## Tests
+**Engine** (Python 3.12):
 
 ```bash
-pytest
+python3.12 -m venv .venv && . .venv/bin/activate
+pip install -e '.[dev]'
+python -m playwright install chromium        # for capture and recording
+uvicorn istibaq.api.app:create_app --factory --port 8080
+pytest                                        # engine tests
 ```
+
+**Desk** (Node 22):
+
+```bash
+cd web && npm install
+npm run dev                                   # the desk on a built-in fake engine
+ISTIBAQ_ENGINE_URL=http://127.0.0.1:8080 VITE_ENGINE=http npm run dev   # the desk on your engine
+npm test && npm run build
+```
+
+**Environment variables** (names only; read only from the environment):
+- **Keys:**
+  - `OPENAI_API_KEY`: voice;
+  - `BRAVE_API_KEY`, `GOOGLE_PLACES_API_KEY`: the watch round;
+  - `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD`, with `ISTIBAQ_DATAFORSEO=1`: the Google check;
+  - `OPENROUTER_API_KEY`, with `ISTIBAQ_AI_LAYER=1`: the AI layer;
+  - `ISTIBAQ_OFFICER_TOKEN`: maintenance endpoints only.
+- **Switches:**
+  - `ISTIBAQ_SCHEDULE=1`: a round every 6 hours;
+  - `ISTIBAQ_RECORD_FOOTAGE=1`: record footage;
+  - `ISTIBAQ_VOICE=0`, `ISTIBAQ_PAID=0`: turn voice or paid searches off.
+
+The full list is in [`docs/service.md`](docs/service.md).
+
+**Deploy:** `scripts/deploy.sh` (Fly.io app `fahes`, region `fra`, a volume at `/data`).

@@ -39,10 +39,12 @@ The real key stays in the dev server process. The browser only gets a short-live
 ### Against the real engine
 
 ```sh
-ISTIBAQ_ENGINE_URL=http://127.0.0.1:8000 VITE_ENGINE=http npm run dev
+ISTIBAQ_ENGINE_URL=http://127.0.0.1:8080 VITE_ENGINE=http npm run dev
 ```
 
-For a static build served by the engine: `VITE_ENGINE=http npm run build`.
+In production there is one app: the Docker image builds the desk with `VITE_ENGINE=http`, and the engine serves it at `/`, with the API under `/api` on the same origin (https://fahes.fly.dev). The desk needs no passcode. `src/api/engine.ts` maps the engine's responses onto the screens' shapes. Until the first round has run on the server, the replay shows the recorded demo footage, labelled DEMO DATA.
+
+**For judges** (studio side menu): paste links or upload a `.txt` or `.csv` file, get each verdict with its reasons, and download a CSV. It uses the same scoring as the judges' command: the engine's `/api/score/batch` in `judging` mode, 1,000 links per request.
 
 ## Real footage for the replay
 

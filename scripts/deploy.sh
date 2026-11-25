@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# One-command deploy of the Istibaq engine to Fly.io.
+# One-command deploy of Fahes (the desk and the engine, one app) to Fly.io: https://fahes.fly.dev
 # Reads secrets from the operator's environment (never from the repository) and pushes
-# only those that are set. First run: `fly apps create istibaq` and
-# `fly volumes create istibaq_data --region dxb --size 1` (one machine, one volume).
+# only those that are set. First run: `fly apps create fahes` and
+# `fly volumes create istibaq_data --region fra --size 3` (one machine, one volume).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 

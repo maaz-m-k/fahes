@@ -64,6 +64,7 @@ const IC: Record<string, string> = {
   officer: '<circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>',
   voice: '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/>',
   studio: '<rect x="3.5" y="3.5" width="7" height="7" rx="2.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.2"/>',
+  judges: '<path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0Zm14 0-3 7a3 3 0 0 0 6 0Z"/>',
   mic: '<path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12Z"/>',
 };
 export const Icon = ({ k }: { k: string }) => <svg viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: IC[k] || IC.voice }} />;

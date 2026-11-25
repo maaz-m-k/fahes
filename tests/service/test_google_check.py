@@ -18,9 +18,10 @@ def dfs_on(monkeypatch):
         monkeypatch.setenv(k, "test-key-not-real")
 
 
-def test_google_check_needs_the_officer_token(make_client, dfs_on):
+def test_google_check_is_open_but_off_when_paid_is_off(make_client, dfs_on, monkeypatch):
     c = make_client(token=False, google_client=recorded_client())
-    assert c.post("/api/google/check").status_code == 401
+    monkeypatch.setenv("ISTIBAQ_PAID", "0")
+    assert c.post("/api/google/check").json()["status"] == "off"
 
 
 def test_switched_off_check_spends_nothing(make_client, monkeypatch):

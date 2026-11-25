@@ -53,6 +53,8 @@ export interface ScoreResult {
   reasons: Reason[];
   modelVersion: string;
   marker: Marker;
+  link?: string; // as given
+  score?: number;
 }
 
 export interface RegisterFamily {
@@ -170,7 +172,7 @@ export interface AgentsState {
   lastCase: { query: Bi; at: number; steps: { agent: AgentId; line: Bi }[]; marker: Marker } | null;
 }
 
-export interface VoiceSession { value: string; model: string; expiresAt: number }
+export interface VoiceSession { value: string; model: string; expiresAt: number; sessionId?: number; maxSeconds?: number }
 
 /* the tools the voice model (and the typed path) may call; mapped to engine endpoints in src/voice/tools.ts */
 export type ToolName =

@@ -12,10 +12,10 @@ const open = () => {
 };
 
 describe('studio', () => {
-  it('has the eight pages in the side menu', () => {
+  it('has the nine pages in the side menu', () => {
     open();
     const names = within(document.querySelector('nav.side') as HTMLElement).getAllByRole('button').map(b => b.textContent?.replace(/\d+$/, ''));
-    expect(names).toEqual(['Watch', 'Cases', 'Check an address', 'Register', 'Drill', 'Scale', 'Records', 'Agents']);
+    expect(names).toEqual(['Watch', 'Cases', 'Check an address', 'Register', 'Drill', 'Scale', 'Records', 'Agents', 'For judges']);
   });
 
   it('Watch: engines as logos, the last round with replays', async () => {

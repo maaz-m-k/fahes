@@ -115,6 +115,7 @@ export function createFakeClient(opts: FakeOptions = {}): EngineClient {
       await wait();
       return { ...resolve(fams, licensed, link), modelVersion: 'heuristic-proto', marker: { kind: 'stand', note: 'prototype rule' } };
     },
+    async scoreBatch(links) { return Promise.all(links.map(async l => ({ ...(await client.score(l)), link: l }))); },
     async register(q) {
       await wait();
       const s = (q || '').toLowerCase();

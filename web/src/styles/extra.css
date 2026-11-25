@@ -55,3 +55,4 @@
 .fp-screen video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 .fp-speed { position: absolute; top: 8px; inset-inline-end: 8px; z-index: 2; padding: 2px 8px; border-radius: 999px; background: rgba(3,8,10,.72); color: #fff; font: 700 12px var(--en); direction: ltr; }
 .fp .rp-phone .rp-screen { aspect-ratio: auto; }
+.judges-text { width: 100%; background: var(--s3); color: var(--tx); border: 1px solid var(--line2); border-radius: 16px; padding: 12px 14px; font: 14px/1.5 var(--en); resize: vertical; }

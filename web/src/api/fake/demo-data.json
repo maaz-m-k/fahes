@@ -1,5 +1,5 @@
 {
-  "_note": "PROTOTYPE, wipe me. DEMO DATA: stand-in tool outputs for the voice desk prototype. Every number shown or spoken by the desk comes from this file or from a computation in the browser. Addresses on .test are reserved names that cannot exist on the internet.",
+  "_note": "DEMO DATA for the desk's built-in fake engine (development and tests only; the live app reads the real engine). Addresses on .test are reserved names that cannot exist on the internet.",
   "desk": {
     "label": "DEMO DATA",
     "sealedAt": "07:12",

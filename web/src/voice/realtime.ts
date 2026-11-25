@@ -30,7 +30,7 @@ export class RealtimeVoice implements VoiceLike {
   private pc: RTCPeerConnection | null = null; private dc: RTCDataChannel | null = null; private mic: MediaStream | null = null;
   private audio: HTMLAudioElement | null = null; private ac: AudioContext | null = null; private timer = 0;
   private startedAt = 0; private lastActivity = 0; private maxUser = 0; private needCreate = false; private outstanding = 0;
-  private quiet = false; private pending: string[] = [];
+  private quiet = false; private pending: string[] = []; private sessionId?: number; private maxS = MAX_S;
   constructor(private h: RtHooks) {}
 
   private problem(step: string, ar: string, en: string, detail?: string): false { this.h.onProblem({ step, text: bi(ar, en), detail, quiet: this.quiet }); return false; }
@@ -66,8 +66,12 @@ export class RealtimeVoice implements VoiceLike {
     // 2. a short-lived voice key from the engine
     let s;
     try { s = await this.h.engine.voiceSession(); }
-    catch (e) { this.stop(); return this.problem('mint', 'لم نستطع فتح جلسة صوتية (مفتاح الصوت أو الشبكة). اكتب بدلاً من ذلك.', 'We could not open a voice session (the voice key or the network). Type instead.', (e as Error).message); }
-    this.model = s.model;
+    catch (e) {
+      this.stop(); const er = e as Error & { ar?: string; status?: number };
+      if (er.status === 429) return this.problem('limit', er.ar || er.message, er.message); // a plain message from the server's hard limits
+      return this.problem('mint', 'لم نستطع فتح جلسة صوتية (مفتاح الصوت أو الشبكة). اكتب بدلاً من ذلك.', 'We could not open a voice session (the voice key or the network). Type instead.', er.message);
+    }
+    this.model = s.model; this.sessionId = s.sessionId; this.maxS = s.maxSeconds || MAX_S;
     // 3. WebRTC to OpenAI
     try {
       const pc = new RTCPeerConnection(); this.pc = pc;
@@ -88,7 +92,7 @@ export class RealtimeVoice implements VoiceLike {
       if (!r.ok) throw new Error('OpenAI answered ' + r.status);
       await pc.setRemoteDescription({ type: 'answer', sdp: await r.text() });
       clearInterval(this.timer);
-      this.timer = window.setInterval(() => { const now = Date.now(); if (this.on && ((now - this.startedAt) / 1000 > MAX_S || (now - this.lastActivity) / 1000 > IDLE_S)) this.stop(); }, 1000);
+      this.timer = window.setInterval(() => { const now = Date.now(); if (this.on && ((now - this.startedAt) / 1000 > this.maxS || (now - this.lastActivity) / 1000 > IDLE_S)) this.stop(); }, 1000);
     } catch (e) {
       this.stop(); return this.problem('webrtc', 'تعذّر وصل الصوت المباشر. اكتب بدلاً من ذلك.', 'Could not connect the live audio. Type instead.', (e as Error).message);
     }
@@ -97,7 +101,8 @@ export class RealtimeVoice implements VoiceLike {
 
   stop() {
     const secs = this.startedAt ? (Date.now() - this.startedAt) / 1000 : 0;
-    if (this.startedAt) this.h.engine.voiceUsage({ model: this.model, seconds: secs }).catch(() => undefined);
+    if (this.startedAt || this.sessionId) this.h.engine.voiceUsage({ model: this.model, seconds: secs, sessionId: this.sessionId }).catch(() => undefined);
+    this.sessionId = undefined;
     this.startedAt = 0; this.on = false; this.connecting = false; clearInterval(this.timer);
     try { this.dc?.close(); } catch { /* closed */ } try { this.pc?.close(); } catch { /* closed */ }
     this.mic?.getTracks().forEach(t => t.stop()); this.mic = null; this.pc = null; this.dc = null;

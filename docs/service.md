@@ -22,7 +22,7 @@ Environment:
 | Variable | Meaning |
 |---|---|
 | `ISTIBAQ_DB` | SQLite path (default `./var/istibaq.db`; `/data/istibaq.db` on Fly.io) |
-| `ISTIBAQ_OFFICER_TOKEN` | required. Every POST except `/api/score` and `/api/score/batch` must send it in the `X-Istibaq-Officer-Token` header. If it isn't set, those POSTs are refused (503) |
+| `ISTIBAQ_OFFICER_TOKEN` | maintenance only. The desk is open to the public with no passcode; only the admin endpoints (`POST /api/register/edits`, `POST /api/drills`, `POST /api/costs`) and the paid Fahes search page (`/search/results`) need it in the `X-Istibaq-Officer-Token` header. If it isn't set, those are refused (503) |
 | `ISTIBAQ_SCHEDULE` | `1` runs a watch round every 6 hours (off by default; on in `fly.toml`) |
 | `ISTIBAQ_FIRST_RUN_DELAY` | seconds before the first scheduled round after start (default 60) |
 | `ISTIBAQ_DATAFORSEO` | `1` turns on the paid Google and ads check (DataForSEO). Off by default; this is the one switch |
@@ -31,6 +31,10 @@ Environment:
 | `ISTIBAQ_CAPTURE_DIR` | where screenshots go, one folder per case (default `captures/` beside the database, so `/data/captures/<case_id>` on Fly.io) |
 | `ISTIBAQ_REALTIME_SESSION_USD` | estimated cost logged per minted voice session (default 0.50, marked as an estimate) |
 | `ISTIBAQ_REALTIME_MODEL` / `ISTIBAQ_REALTIME_FALLBACK` | realtime voice model, default `gpt-realtime-2.1`, fallback `gpt-realtime-2.1-mini` |
+| `ISTIBAQ_WEB_DIST` | the built desk (`web/dist`); when present it is served at `/` and the engine's own page moves to `/engine` |
+| `ISTIBAQ_VOICE`, `ISTIBAQ_PAID` | `0` turns off voice, or all paid searches (watch round, Google check, Fahes search page) |
+| `ISTIBAQ_SCORE_PER_MINUTE`, `ISTIBAQ_BATCH_MAX` | scoring: 60 requests a minute per visitor, at most 1,000 links per batch |
+| `ISTIBAQ_RECORD_FOOTAGE`, `ISTIBAQ_FOOTAGE_DIR`, `ISTIBAQ_PUBLIC_URL` | record round and case footage (see `docs/watch.md`), served under `/media/footage` and `/media/captures` |
 | `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `BRAVE_API_KEY`, `GOOGLE_PLACES_API_KEY`, `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD` | secrets, read only from the environment; never logged or returned |
 
 ## Endpoints
@@ -38,7 +42,9 @@ Environment:
 | Method and path | What it does |
 |---|---|
 | `GET /health` | liveness plus which modules are live or stand-ins |
-| `GET /` | paste-and-score page (Arabic first, right-to-left) |
+| `GET /` | the desk (voice mode and studio, `web/dist`); the engine's paste-and-score page is at `/engine` |
+| `POST /api/voice/session`, `POST /api/voice/usage`, `GET /api/voice/status` | a short-lived voice key (429 with a plain Arabic and English message when voice is switched off); each session and its seconds are counted for the cost view |
+| `GET /api/register/families?q=` | the register's families and addresses |
 | `POST /api/score` | `{link, mode}` → one verdict (output contract) |
 | `POST /api/score/batch` | `{links: [...], mode}` → `{results, count}` |
 | `GET /api/register/lookup?address=` | register lookup |
@@ -94,10 +100,10 @@ A failed watch round is stored as `failed` with its error.
 ## Deploy (Fly.io)
 
 ```sh
-fly apps create istibaq                                   # first time only
-fly volumes create istibaq_data --region dxb --size 1     # first time only
+fly apps create fahes                                     # first time only
+fly volumes create istibaq_data --region fra --size 3     # first time only (Fly has no UAE region)
 export ISTIBAQ_OFFICER_TOKEN=... OPENAI_API_KEY=... BRAVE_API_KEY=... DATAFORSEO_LOGIN=... DATAFORSEO_PASSWORD=...   # whichever you have
 scripts/deploy.sh                                         # stages secrets from env, then fly deploy
 ```
 
-One machine, a volume at `/data`, health check on `/health`.
+One app serves the desk and the engine (https://fahes.fly.dev): the Docker image builds `web/` in real engine mode and installs Chromium and ffmpeg. One machine (shared-cpu-2x, 2 GB), a volume at `/data`, health check on `/health`.

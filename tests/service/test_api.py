@@ -139,24 +139,26 @@ def test_not_a_scam_feedback(client, monkeypatch):
     assert client.get(f"/api/cases/{cid}").json()["status"] == "not_scam"
 
 
-def test_officer_token_required_on_posts(make_client):
+def test_the_desk_is_open_and_only_admin_needs_the_token(make_client):
+    """No passcode for the public: desk actions work for any visitor; the token is only for maintenance."""
     anon = make_client(token=False)
     assert anon.post("/api/register/edits", json={"address": "adp0lice-gov.example", "status": "licensed",
                                                   "source": "anyone"}).status_code == 401
-    assert anon.post("/api/cases", json={"link": "https://x.example/"}).status_code == 401
-    assert anon.post("/api/cases/1/capture").status_code == 401
-    assert anon.post("/api/voice/session").status_code == 401
-    assert anon.post("/api/watch/run").status_code == 401
-    assert anon.get("/api/register/edits").json() == []
-    bad = anon.post("/api/cases", json={"link": "https://x.example/"}, headers={"X-Istibaq-Officer-Token": "wrong"})
-    assert bad.status_code == 401
+    assert anon.post("/api/drills", json={"address": "d.example", "published_at": "2026-11-24T10:00:00Z"}).status_code == 401
+    assert anon.post("/api/costs", json={"service": "x", "amount_usd": 1}).status_code == 401
+    cid = anon.post("/api/cases", json={"link": "https://tamm-fines-pay.example/login"}).json()["id"]
+    assert anon.post(f"/api/cases/{cid}/seal").status_code == 200
+    assert anon.post(f"/api/cases/{cid}/approve", json={"method": "click"}).status_code == 200
+    assert anon.get(f"/api/cases/{cid}/takedown").status_code == 200
+    assert anon.get(f"/api/cases/{cid}?reveal=true").status_code == 200
+    assert anon.post("/api/watch/run").json()["status"] == "done"
     assert anon.post("/api/score", json={"link": "https://x.example/"}).status_code == 200
 
 
-def test_token_unset_refuses_posts(make_client, monkeypatch):
+def test_admin_refused_when_token_unset(make_client, monkeypatch):
     c = make_client()
     monkeypatch.delenv("ISTIBAQ_OFFICER_TOKEN")
-    assert c.post("/api/cases", json={"link": "https://x.example/"}).status_code == 503
+    assert c.post("/api/drills", json={"address": "d.example", "published_at": "2026-11-24T10:00:00Z"}).status_code == 503
 
 
 def test_bad_register_status_rejected_and_restart_survives(make_client, monkeypatch):
@@ -238,18 +240,6 @@ def test_watch_unavailable_is_honest(make_client):
     c = make_client(db="u.db", watch_round=None, capture=None)
     assert c.post("/api/watch/run").json()["status"] == "unavailable"
     assert c.post("/api/cases/1/capture").status_code == 503
-
-
-def test_reveal_and_takedown_need_token(make_client):
-    officer = make_client()
-    cid = officer.post("/api/cases", json={"link": "https://tamm-fines-pay.example/login"}).json()["id"]
-    run = officer.post("/api/watch/run").json()["run_id"]
-    anon = make_client(token=False)
-    for path in (f"/api/cases/{cid}?reveal=true", "/api/cases?reveal=1", f"/api/cases/{cid}/takedown",
-                 f"/api/watch/runs/{run}/replay?reveal=true", "/api/feeds?reveal=true"):
-        assert anon.get(path).status_code == 401, path
-    assert officer.get(f"/api/cases/{cid}/takedown").status_code == 200
-    assert anon.get(f"/api/cases/{cid}").status_code == 200  # masked view stays open
 
 
 def test_feed_lookalike_names_masked(make_client):
