@@ -44,7 +44,8 @@ class BraveSearch:
         self.cost_sink = cost_sink
 
     def search(self, query: str, lang: str = "en") -> list[SearchResult]:
-        params = {"q": query, "country": "AE", "search_lang": lang, "count": 10}
+        # Brave has no "AE" country (it answers 422); ALL with the question's language finds the UAE pages
+        params = {"q": query, "country": "ALL", "search_lang": lang if lang in ("ar", "en") else "en", "count": 10}
         headers = {"X-Subscription-Token": env_key("BRAVE_API_KEY"), "Accept": "application/json"}
         resp = check(self.client.get(self.url, params=params, headers=headers), self.name)
         self.cost_sink(self.name, BRAVE_COST, {"query": query})

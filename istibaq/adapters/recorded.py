@@ -16,6 +16,12 @@ import httpx
 DEFAULT_DIR = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "recorded"
 
 
+# Brave Search API's accepted values (from its 422 validation message and docs); "AE" is not among them
+BRAVE_COUNTRIES = set("AR AU AT BE BR CA CL DK FI FR DE GR HK IN ID IT JP KR MY MX NL NZ NO CN PL PT PH RU SA ZA ES "
+                      "SE CH TW TR GB US ALL".split())
+BRAVE_LANGS = {"ar", "en"}  # the two languages the watch asks in
+
+
 def recorded_client(fixtures: Path | str | None = None, log: list | None = None) -> httpx.Client:
     root = Path(fixtures or DEFAULT_DIR)
 
@@ -38,6 +44,10 @@ def recorded_client(fixtures: Path | str | None = None, log: list | None = None)
             if "/task_get/advanced/" in path:
                 return httpx.Response(200, json=load("dataforseo_task_get_advanced.json"))
         if host == "api.search.brave.com":
+            # like the real API: an unsupported country or language is a 422
+            country, lang = request.url.params.get("country", "US"), request.url.params.get("search_lang", "en")
+            if country.upper() not in BRAVE_COUNTRIES or lang not in BRAVE_LANGS:
+                return httpx.Response(422, json={"type": "ErrorResponse", "error": {"status": 422, "code": "VALIDATION"}})
             return httpx.Response(200, json=load("brave.json"))
         if host == "places.googleapis.com":
             return httpx.Response(200, json=load("places.json"))

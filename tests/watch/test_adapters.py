@@ -97,3 +97,15 @@ def test_ai_layer_reads_which_brand_a_page_claims_and_the_register_judges_it(key
     assert "live_brand_mismatch" in {r.code for r in v.reasons} and v.verdict == "red"
     v = score("https://www.tamm.abudhabi/", online=OnlineFacts(live_page_brand=claim))
     assert v.verdict == "green"
+
+
+def test_brave_uses_a_country_brave_accepts(keys, costs):
+    """Brave has no "AE" country and answers 422; the recorded fake rejects it the same way."""
+    import httpx
+    log = []
+    from istibaq.adapters.recorded import recorded_client as rc
+    for q, lang in (("pay abu dhabi police traffic fine", "en"), ("دفع مخالفات المرور أبوظبي", "ar")):
+        assert BraveSearch(rc(log=log), sink(costs)).search(q, lang)
+    bad = rc().get("https://api.search.brave.com/res/v1/web/search", params={"q": "x", "country": "AE"})
+    assert bad.status_code == 422
+    assert isinstance(bad, httpx.Response)
