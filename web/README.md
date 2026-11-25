@@ -5,12 +5,10 @@ The voice-first desk for the duty officer (spec: issue #10). One dark web app, A
 - **Voice**: the teal orb rests big. Talk (OpenAI gpt-realtime-2.1 over WebRTC) or type. When an answer needs a screen, the orb moves to the top and a card appears below it. The card stays while you keep talking. The next request that needs a screen changes the content inside the same card. The card closes only on «سكّرها» / "close it", on the ×, or when an answer needs no screen.
 - **Studio**: every feature in a side menu (Watch, Cases, Check an address, Register, Drill, Scale, Records, Agents), built from the same components.
 
-Every part is marked REAL, STAND-IN or DEMO DATA. One switch ("Show what is real") hides the markers.
-
 How the voice behaves:
 
 - **Language.** Fahes replies in the language of the officer's last sentence, whatever it is. "Speak in Arabic" / "speak English" switches the language, and it stays switched. The screen follows: Arabic or English words. For any other language the reply is spoken in that language and the screen uses English.
-- **Typing.** Text typed or pasted in the bottom field joins the live voice conversation, and the session starts if it is off. The realtime voice answers and calls the tools, for example `check_address` on a pasted link. The browser's own voice is used only as the labelled fallback when the live session cannot start.
+- **Typing.** Text typed or pasted in the bottom field joins the live voice conversation, and the session starts if it is off. The realtime voice answers and calls the tools, for example `check_address` on a pasted link. The browser's own voice is used only as the fallback when the live session cannot start.
 - **Suggestions.** After an answer, two or three suggestions appear and Fahes says one of them. Tapping a suggestion does the same as saying it. A tap is also told to the live session, so the voice can speak about it.
 - **Checking links.** "I want to check some links" opens the same link checker as the studio's Check page inside the card. Several links can be checked one after another in the same card.
 
@@ -42,7 +40,7 @@ The real key stays in the dev server process. The browser only gets a short-live
 ISTIBAQ_ENGINE_URL=http://127.0.0.1:8080 VITE_ENGINE=http npm run dev
 ```
 
-In production there is one app: the Docker image builds the desk with `VITE_ENGINE=http`, and the engine serves it at `/`, with the API under `/api` on the same origin (https://fahes.fly.dev). The desk needs no passcode. `src/api/engine.ts` maps the engine's responses onto the screens' shapes. Until the first round has run on the server, the replay shows the recorded demo footage, labelled DEMO DATA.
+In production there is one app: the Docker image builds the desk with `VITE_ENGINE=http`, and the engine serves it at `/`, with the API under `/api` on the same origin (https://fahes.fly.dev). The desk needs no passcode. `src/api/engine.ts` maps the engine's responses onto the screens' shapes. Until the first round has run on the server, the replay shows the recorded footage of an earlier round.
 
 **For judges** (studio side menu): paste links or upload a `.txt` or `.csv` file, get each verdict with its reasons, and download a CSV. It uses the same scoring as the judges' command: the engine's `/api/score/batch` in `judging` mode, 1,000 links per request.
 
@@ -53,7 +51,6 @@ The replay plays real, sped-up video of a real browser, not still pictures:
 - **Players:** a computer window and a phone frame, each with a real video player. One play/pause button and one scrub bar control both. The speed label (for example "3×") is on the video, and the agent's step captions stay in time with it.
 - **Phone view:** "show it on the phone" fills the card with the phone video.
 - **Round overview:** a round carries `footage` (one overview video per view) and `clips` (extra clips, for example a real Google clip added later). A case can carry `footage` of its two-view capture.
-- **Labels:** a real browser on real results is REAL. A synthetic look-alike page is DEMO DATA.
 - **Demo assets** (`public/demo-footage/`):
   - the round overview on the Fahes search page, with recorded real results, opening a real official page;
   - the two-view capture of a local synthetic look-alike page.

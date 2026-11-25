@@ -35,6 +35,8 @@ FAMILY = {
     "human_check_wall": "wall",
     "payee_not_in_register": "payee",
     "ai_page_description": "ai",
+    "ai_second_opinion": "ai",
+    "ai_brand_mismatch": "brand",
     "disguised_address": "disguise",
     "lure_words": "lure",
     "listing_phone_not_official": "listing_phone",
@@ -77,6 +79,17 @@ def _snap(name: str) -> dict:
 def known_bad() -> tuple[frozenset[str], dict]:
     d = _snap("known_bad.json")
     return frozenset(d["hosts"]), {"source": d["source"], "fetched": d["fetched"]}
+
+
+# Hosts listed by a public scam feed read at run time (e.g. OpenPhish), with that feed's credit.
+_feed_bad: dict[str, dict] = {}
+
+
+def add_known_bad(hosts, source: str, fetched: str) -> None:
+    """Add hosts from a public scam list read now; they give the same known_bad reason, credited to that list."""
+    for h in hosts:
+        if h:
+            _feed_bad[h.lower()] = {"source": source, "fetched": fetched}
 
 
 class SortedNames:
@@ -349,9 +362,10 @@ def offline_reasons(a: Address) -> list[Reason]:
         out.append(Reason("ip_host", "العنوان رقم IP بدلاً من اسم نطاق", "Address is a bare IP number, not a domain name",
                           {"ip": a.host}, t, False))
     kb, kb_meta = known_bad()
-    if a.host in kb or a.site in kb:
+    feed_meta = _feed_bad.get(a.host)
+    if a.host in kb or a.site in kb or feed_meta:
         out.append(Reason("known_bad", "العنوان مدرج في قائمة تصيّد معروفة", "Address is on a known phishing list",
-                          {"host": a.host, **kb_meta}, t, False))
+                          {"host": a.host, **(feed_meta or kb_meta)}, t, False))
     return out
 
 

@@ -7,7 +7,7 @@ import { RealtimeVoice } from '../voice/realtime';
 
 const open = () => {
   const user = userEvent.setup();
-  render(<App engine={createFakeClient()} initial={{ lang: 'en', mode: 'studio', markers: true }} />);
+  render(<App engine={createFakeClient()} initial={{ lang: 'en', mode: 'studio' }} />);
   return { user, page: (name: string) => user.click(within(document.querySelector('nav.side') as HTMLElement).getByRole('button', { name: new RegExp(name) })) };
 };
 

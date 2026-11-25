@@ -91,6 +91,113 @@ recorded fakes instead.
   (title first); the optional AI layer can report which brand a page claims. The register, never the
   model, decides whether the address belongs to that brand. Not on the offline test.
 
+## AI second opinion: adopted on the live app
+
+**One-line result:** a language model reading only the uncertain links lifted the judges' catch from
+72.8% to 78.5% with fewer false alarms overall (384 → 375), and real UAE pages stayed at 0. It also
+added 6 false alarms on popular sites (3 → 9). That broke the ship rule below, but the team lead
+accepted the trade (58 more fakes caught).
+
+Where it is on, and where it is not:
+
+- **On:** the live server's scoring and the "For judges" page. `fly.toml` sets `ISTIBAQ_AI_SECOND=1`,
+  with a $1 daily cap (`ISTIBAQ_AI_DAILY_USD`) and answers cached in `/data/ai_cache.jsonl`.
+- **Off by default:** the judges' offline command `istibaq score` stays pure code with no key. Add
+  `--ai` to use the second opinion, which needs `OPENROUTER_API_KEY`.
+- **Fallback:** with no key, an outage, or the daily cap reached, scoring falls back to pure code
+  silently.
+- **Frozen settings:** the model and settings are the ones frozen on the development split, read from
+  `istibaq/eval/ai_policy.json`.
+
+We tested four ideas. In each one a language model (through OpenRouter) reads only the links the
+checker could not settle, and each idea was scored alone on the same sealed test v2. Rules that
+held throughout:
+
+- the model never sees a register-green, licensed or popular site;
+- it never clears a red verdict;
+- it never sees the checker's score;
+- the judges' command stays offline and needs no key.
+
+The four ideas:
+
+1. **Second opinion.** Inside a score band, a confident "fake" or "real" answer moves the judges'
+   yes/no. It never changes the officer setting.
+2. **Brand reading.** The model names the brand the address imitates, and the Genuine Register
+   decides whether the address belongs to it.
+3. **Brand reading for global brands** (the "2b" variant of idea 2). For a brand outside the
+   register, the model's answer counts only if all three hold:
+   - the brand's domain is a Tranco popular site;
+   - the brand's name is written in the address;
+   - the address is not on that domain.
+   On the development split this was limited to the officer setting.
+4. **Clearing free-builder pages.** A confident "real" answer lowers a flagged page on a free builder.
+
+**How it was chosen.** Everything was picked on a separate development split,
+`istibaq/data/testsets/dev_ai.jsonl`:
+
+- 800 PhishTank fakes reported 1–16 Nov, before the sealed window;
+- 1,800 Tranco hosts that are not in the sealed test.
+
+Three cheap models read the 2,559 dev links:
+
+- Gemini 2.5 Flash-Lite: $0.101
+- GPT-4.1 nano: $0.085
+- GPT-4o mini: $0.137
+
+A rule fixed in advance picked Gemini 2.5 Flash-Lite and each idea's settings, and froze them in
+`istibaq/eval/ai_policy.json`. That file was committed before any sealed-test answer existed. Gemini
+then read all 6,258 sealed links that may be sent. The whole experiment cost **$0.567** (log:
+`istibaq/eval/ai_spend.jsonl`).
+
+**Sealed test v2.** All ranges are 95% Wilson ranges. Before is main, after is with the idea.
+
+| Idea | Setting | Fakes caught | False alarms | When we say "fraud", right | Real UAE pages | Popular sites |
+|---|---|---|---|---|---|---|
+| (main) | judges | 72.8% (69.5–76.0) | 384 (6.5%, 5.8–7.2) | 65.7% (62.9–68.4) | 0 | 3 |
+| (main) | officer | 21.8% (18.9–25.0) | 10 (0.17%, 0.08–0.32) | 95.7% (92.2–97.6) | 0 | 0 |
+| 1. Second opinion (confidence ≥ 0.8, scores 0.70–0.99) | judges | **78.5% (75.3–81.3)** | **375 (6.3%, 5.6–7.1)** | **67.9% (65.2–70.5)** | 0 | **9** |
+| 1. Second opinion | officer | 21.8% (no change, by design) | 10 | 95.7% | 0 | 0 |
+| 2. Brand reading (register brands) | judges | 72.8% | 384 | 65.7% | 0 | 3 |
+| 2. Brand reading (register brands) | officer | 21.9% | 11 | 95.3% | 0 | 0 |
+| 3. Brand reading (global brands, officer only) | judges | 72.8% (no change, by design) | 384 | 65.7% | 0 | 3 |
+| 3. Brand reading (global brands, officer only) | officer | 32.9% (29.6–36.5) | 54 (0.9%, 0.7–1.2) | 86.1% (82.2–89.2) | 0 | 0 |
+| 4. Clearing free-builder pages (confidence ≥ 0.95) | judges | 72.5% | 383 | 65.7% | 0 | 3 |
+| 4. Clearing free-builder pages | officer | 21.8% | 10 | 95.7% | 0 | 0 |
+
+**What each result means.** The ship rule: precision must not drop and catch must rise, or false
+alarms must drop with catch steady. Real UAE pages must stay at 0 false alarms, and popular-site
+false alarms must not rise.
+
+- **Idea 1 comes closest, and fails the rule only on popular sites.** In the judges' setting:
+  - it catches 58 more fakes (57 PhishTank, 1 OpenPhish);
+  - it removes 15 false alarms on popular subdomain hosts;
+  - precision rises (91.8% → 92.6% if half the links were fake);
+  - but it adds 6 false alarms on popular sites (3 → 9).
+  The team lead adopted it on the live app anyway (see the top of this section). Nothing was retuned
+  on this test.
+- **Idea 2 does nothing useful.** Public feeds hold almost no fakes of the brands in the Genuine
+  Register.
+- **Idea 3 trades too many false alarms for its catch.** It raises the officer catch by 11 points,
+  but officer false alarms go from 10 to 54. These are mostly big companies' own server and CDN
+  names: the model names the company even when it says the link looks real. Precision falls from
+  95.7% to 86.1%, so it is rejected.
+- **Idea 4 does not help.** The model cannot tell a real free-builder page from a fake one by its
+  address any better than the checker can. On dev, no confidence level helped.
+
+**Run it yourself.** No key is needed: the answers are cached by address.
+
+```sh
+python -m istibaq.eval.ai_second choose --models google/gemini-2.5-flash-lite,openai/gpt-4.1-nano,openai/gpt-4o-mini
+python -m istibaq.eval.ai_second sealed --no-log    # report: istibaq/eval/ai_sealed_report.json
+```
+
+New answers need `OPENROUTER_API_KEY`:
+
+- `python -m istibaq.eval.ai_second plan --split dev` is the dry run: it prints the call count and
+  cost, with no key and no network.
+- `python -m istibaq.eval.ai_second fetch --split dev --max-usd 1` makes the live calls. Every
+  call's cost goes to `istibaq/eval/ai_spend.jsonl`, and the experiment stops before $3 in all.
+
 ## The sealed test v2: how it was built
 
 `istibaq/data/testsets/sealed_v2.jsonl`, SHA-256 `5e2f5307…87d2ac` in `manifest_v2.json`, sealed

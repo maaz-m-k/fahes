@@ -1,7 +1,7 @@
 /* What is born below the orb: a few large words, only the pieces that matter, and next-step chips. */
-import type { Marker, RecordFields } from '../api/types';
+import type { RecordFields } from '../api/types';
 import { useLang } from '../i18n';
-import { Mk, Ticks } from '../kit/basics';
+import { Ticks } from '../kit/basics';
 import { AgentsRow, CasesList, CheckPanel, DrillView, Mirror, RecordsList, RecordView, Replay, RoundView, ScaleView, ScorecardView, TakedownView, VerdictView } from '../kit/pieces';
 import type { Answer, Card, Chip } from './tools';
 
@@ -32,7 +32,7 @@ export function CardBody({ card, act }: { card: Card; act: CardActions }) {
   }
 }
 
-export function AnswerCard({ answer, brain, act }: { answer: Answer; brain: Marker; act: CardActions }) {
+export function AnswerCard({ answer, act }: { answer: Answer; act: CardActions }) {
   const { t } = useLang();
   const words = t(answer.words);
   return (
@@ -44,7 +44,6 @@ export function AnswerCard({ answer, brain, act }: { answer: Answer; brain: Mark
           {answer.chips.slice(0, 3).map((c, k) => <button key={k} type="button" className={'chip' + (k === 0 ? ' pri' : '')} onClick={() => act.chip(c)}>{t(c.label)}</button>)}
         </div>
       )}
-      <div className="brainline"><Mk m={brain} /></div>
     </>
   );
 }

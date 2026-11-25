@@ -1,0 +1,7 @@
+https://example-shop-login.web.app/verify/account
+https://tamm-abudhabi-fines.pay-portal.example/login
+https://secure-adcb-verify.example.net/auth
+https://tamm-abudhabi-fines.pay-portal.example/second-copy
+https://dead-link.example.org/
+https://mail-update.example.com/webmail
+not a link

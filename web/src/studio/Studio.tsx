@@ -1,8 +1,8 @@
 /* The studio: every feature in a side menu, operated by hand with the same kit as voice mode. */
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import type { AgentsState, CaseDetail, DeskSummary, DrillInfo, Feeds, Marker, RegisterList, ScoreResult, SealedRecord, TakedownPackage, WatchState } from '../api/types';
+import type { AgentsState, CaseDetail, DeskSummary, DrillInfo, Feeds, RegisterList, ScoreResult, SealedRecord, TakedownPackage, WatchState } from '../api/types';
 import { clock, useEngine, useLang } from '../i18n';
-import { Icon, Mks, Ticks } from '../kit/basics';
+import { Icon, Ticks } from '../kit/basics';
 import { JudgesPage } from './Judges';
 import { AgentsFlow, AgentsRow, CasesList, CheckPanel, DrillView, FunnelView, GreyDot, Mirror, RecordsList, RecordView, Replay, ScaleView, SchedulePill, TakedownView, VerdictView } from '../kit/pieces';
 
@@ -20,8 +20,8 @@ function useLoad<T>(f: () => Promise<T>, deps: unknown[] = []): [T | null, () =>
   return [v, useCallback(() => setN(x => x + 1), [])];
 }
 
-function Card({ title, sub, marks, children }: { title: ReactNode; sub?: ReactNode; marks?: Marker[]; children?: ReactNode }) {
-  return <section className="card"><div className="card-h"><div className="card-t">{title}{sub && <small>{sub}</small>}</div>{marks && <Mks marks={marks} />}</div>{children}</section>;
+function Card({ title, sub, children }: { title: ReactNode; sub?: ReactNode; children?: ReactNode }) {
+  return <section className="card"><div className="card-h"><div className="card-t">{title}{sub && <small>{sub}</small>}</div></div>{children}</section>;
 }
 function Head({ title, sub, extra }: { title: string; sub: string; extra?: ReactNode }) {
   return <div className="main-h"><div><h1>{title}</h1><p>{sub}</p></div>{extra}</div>;
@@ -35,14 +35,14 @@ function WatchPage({ watch, onRunNow }: { watch: WatchState | null; onRunNow: ()
   return (
     <>
       <Head title={tx('الرصد', 'Watch')} sub={tx('يبحث كما يبحث المقيم، على الحاسوب والهاتف في الوقت نفسه، كل 6 ساعات أو عند الطلب.', 'Searches the way a resident does, on a computer and a phone at the same time, every 6 hours or on demand.')} extra={<div id="actS"><SchedulePill w={watch} onRunNow={onRunNow} /></div>} />
-      <Card title={tx('محرك البحث', 'Search engine')} sub={tx('اضغط شعاراً ليبدأ به. فحص «لست روبوتاً» لا يُتجاوز أبداً: نتوقف وننتقل.', 'Tap a logo to start with it. A robot check is never bypassed: we stop and move on.')} marks={[watch.marker, { kind: 'real', note: 'BORROWED logos' }]}>
+      <Card title={tx('محرك البحث', 'Search engine')} sub={tx('اضغط شعاراً ليبدأ به. فحص «لست روبوتاً» لا يُتجاوز أبداً: نتوقف وننتقل.', 'Tap a logo to start with it. A robot check is never bypassed: we stop and move on.')}>
         <div className="engines">
           {watch.engines.map(e => { const on = (first || watch.engines.find(x => x.first)?.id) === e.id; return (
             <button key={e.id} type="button" className={'eng' + (on ? ' on' : '')} onClick={() => setFirst(e.id)}><img src={e.logo} alt="" /><span><b>{e.name}</b><small>{on ? tx('يبدأ به', 'goes first') : tx('احتياطي', 'fallback')}</small></span></button>
           ); })}
         </div>
       </Card>
-      <Card title={tx('الحالات من آخر جولة', 'Cases from the last round')} sub={r ? `${clock(r.startedAt)} · ${Math.round(r.ms / 1000)} ${tx('ث', 's')} · ${tx('النقاط الرمادية: الاسم عند الضغط', 'grey dots: name on tap')}` : ''} marks={r ? [r.marker] : []}>
+      <Card title={tx('الحالات من آخر جولة', 'Cases from the last round')} sub={r ? `${clock(r.startedAt)} · ${Math.round(r.ms / 1000)} ${tx('ث', 's')} · ${tx('النقاط الرمادية: الاسم عند الضغط', 'grey dots: name on tap')}` : ''}>
         {r?.cases.map((k, ci) => {
           const lc = k.computer.steps.at(-1), lp = k.phone.steps.at(-1); const diffN = k.onlyPhone.length + k.onlyComputer.length;
           const robots = [...k.computer.robot, ...k.phone.robot];
@@ -122,12 +122,11 @@ function RegisterPage() {
   return (
     <>
       <Head title={tx('السجل', 'Register')} sub={reg ? tx(`أبوظبي الحقيقية: ${reg.total} عنواناً رسمياً في عائلاتها.`, `The real Abu Dhabi: ${reg.total} official addresses in their families.`) : ''} />
-      <Card title={tx('العائلات', 'Families')} sub={tx('ابحث لترى أيضاً الأسماء العامة من القائمة', 'Search to also see the generic names from the list')} marks={reg ? [reg.marker] : undefined}>
+      <Card title={tx('العائلات', 'Families')} sub={tx('ابحث لترى أيضاً الأسماء العامة من القائمة', 'Search to also see the generic names from the list')}>
         <div className="field"><input aria-label={tx('ابحث في السجل', 'Search the register')} placeholder={tx('ابحث في السجل', 'Search the register')} value={q} onChange={e => setQ(e.target.value)} /></div>
         {reg?.families.map(x => (
           <div key={x.id} className="row" style={{ gridTemplateColumns: '1fr auto', marginTop: 8, cursor: 'default' }}>
             <span><span className="t">{t(x.name)}</span><div className="doors" style={{ justifyContent: 'flex-start', marginTop: 6 }}>{x.addresses.map(d => <span key={d} className="door">{d}</span>)}</div></span>
-            <Mks marks={[x.marker]} />
           </div>
         ))}
       </Card>
@@ -145,7 +144,7 @@ function DrillPage() {
   return (
     <>
       <Head title={tx('التمرين', 'Drill')} sub={tx('نهاجم أنفسنا ونرى من يلتقط: تمرين الجاهزية، يوم المحتال، وتزييف الحكام.', "We attack ourselves and see who catches it: the readiness drill, the attacker's day, and the judges' fakes.")} />
-      <Card title={tx('هاجم والتقط', 'Attack and catch')} marks={d ? [d.marker, { kind: 'real', note: "judges' fakes" }] : undefined}>{d && <DrillView d={d} />}</Card>
+      <Card title={tx('هاجم والتقط', 'Attack and catch')}>{d && <DrillView d={d} />}</Card>
     </>
   );
 }
@@ -157,7 +156,7 @@ function ScalePage() {
     <>
       <Head title={tx('الحجم', 'Scale')} sub={tx('كم يولد على الإنترنت الآن، وكم يصل إلى مكتبك.', 'How much is born on the internet right now, and how much reaches your desk.')} />
       {f && <ScaleView feeds={f} />}
-      {f && <div style={{ marginTop: 14 }}><FunnelView feeds={f} /></div>}
+      {f && f.funnel.length > 0 && <div style={{ marginTop: 14 }}><FunnelView feeds={f} /></div>}
     </>
   );
 }
@@ -188,9 +187,9 @@ function AgentsPage() {
   if (!a) return null;
   return (
     <>
-      <Head title={tx('الوكلاء', 'Agents')} sub={tx('من يفعل ماذا الآن، وآخر حالة حقيقية تنتقل بينهم.', 'Who is doing what now, and the last real case travelling between them.')} />
+      <Head title={tx('الوكلاء', 'Agents')} sub={tx('من يفعل ماذا الآن، وآخر حالة تنتقل بينهم.', 'Who is doing what now, and the last case travelling between them.')} />
       <Card title={tx('الآن', 'Right now')}><AgentsRow a={a} /></Card>
-      <Card title={tx('آخر حالة حقيقية', 'The last real case')} sub={a.lastCase ? `«${t(a.lastCase.query)}» · ${clock(a.lastCase.at)}` : tx('لا جولة بعد', 'No round yet')} marks={a.lastCase ? [a.lastCase.marker] : undefined}><AgentsFlow a={a} /></Card>
+      <Card title={tx('آخر حالة', 'The last case')} sub={a.lastCase ? `«${t(a.lastCase.query)}» · ${clock(a.lastCase.at)}` : tx('لا جولة بعد', 'No round yet')}><AgentsFlow a={a} /></Card>
     </>
   );
 }

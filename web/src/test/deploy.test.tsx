@@ -12,13 +12,13 @@ const verdict = (link: string, v: string) => ({ link, verdict: v, score: v === '
 describe("judges' page", () => {
   it('reads links from pasted text or a CSV and writes a CSV', () => {
     expect(linksFrom('link,note\nadpolice-fines.top,x\n"https://www.tamm.abudhabi/",y\n\nnot a link')).toEqual(['adpolice-fines.top', 'https://www.tamm.abudhabi/']);
-    const csv = toCsv([{ host: 'a.top', link: 'a.top', verdict: 'red', score: 0.9, family: null, officialAddresses: [], modelVersion: 'm', marker: { kind: 'real' }, reasons: [{ code: 'x', ar: 'سبب', en: 'a "reason"' }] }]);
+    const csv = toCsv([{ host: 'a.top', link: 'a.top', verdict: 'red', score: 0.9, family: null, officialAddresses: [], modelVersion: 'm', reasons: [{ code: 'x', ar: 'سبب', en: 'a "reason"' }] }]);
     expect(csv.split('\n')).toEqual(['link,verdict,score,reasons_en,reasons_ar', '"a.top","red","0.9","a ""reason""","سبب"']);
   });
 
   it('scores pasted links and lists each verdict with reasons', async () => {
     const user = userEvent.setup();
-    render(<App engine={createFakeClient()} initial={{ lang: 'en', mode: 'studio', page: 'judges', markers: true }} />);
+    render(<App engine={createFakeClient()} initial={{ lang: 'en', mode: 'studio', page: 'judges' }} />);
     await user.type(screen.getByRole('textbox', { name: 'links' }), 'adpolice-fines.top\ntamm.abudhabi');
     await user.click(screen.getByRole('button', { name: 'Score 2 links' }));
     await waitFor(() => expect(screen.getByTestId('judges-summary')).toHaveTextContent('1 red · 0 grey · 1 green'));
@@ -66,10 +66,10 @@ describe('the desk against the real engine', () => {
 
 describe('the replay before the first round has run on the server', () => {
   afterEach(() => vi.unstubAllGlobals());
-  it('shows the recorded demo footage, labelled as demo', async () => {
+  it('shows the recorded footage of an earlier round, with no label', async () => {
     vi.stubGlobal('fetch', async (url: string) => new Response(JSON.stringify(url.includes('schedule') ? { enabled: true, every_hours: 6 } : { status: 'none' })));
     const w = await engineClient('').watch();
-    expect(w.lastRound!.marker.kind).toBe('demo');
-    expect(w.lastRound!.footage!.computer!.marker).toEqual({ kind: 'demo', note: 'recorded demo footage, not from this server yet' });
+    expect(w.lastRound!.footage!.computer!.src).toMatch(/overview-computer\.mp4$/);
+    expect(JSON.stringify(w)).not.toMatch(/marker|demo footage/);
   });
 });

@@ -1,4 +1,4 @@
-/* The local matcher: understands a typed (or heard) request without any model. STAND-IN for the engine's text
+/* The local matcher: understands a typed (or heard) request without any model. In place of the engine's text
    understanding; also the fallback when that call fails. Maps words to one tool from the closed kit. */
 import type { Understanding } from '../api/types';
 

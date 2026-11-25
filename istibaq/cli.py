@@ -5,6 +5,8 @@
 Input: one link per line, or a CSV with a ``url`` column. No keys, no internet.
 ``--online`` (server only, never on a laptop with suspect links) also follows short links and
 redirects hop by hop through the capture address guard, and reads domain age from RDAP.
+``--ai`` (opt-in, needs ``OPENROUTER_API_KEY``) adds the measured AI second opinion on links in the uncertain
+band (docs/accuracy.md); without a key, or past its $1 spend limit, it scores exactly as without ``--ai``.
 """
 from __future__ import annotations
 
@@ -52,6 +54,13 @@ def _online_facts(link: str):
     return online_facts(link, rdap=RDAP())
 
 
+def _reviewer():
+    from .adapters.second_opinion import OpinionCache, Reviewer
+    import os
+    cache = os.environ.get("ISTIBAQ_AI_CACHE")
+    return Reviewer(cache=OpinionCache(cache) if cache else None, max_usd_per_day=1.0)
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="istibaq", description="Istibaq engine: score links offline.")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -62,6 +71,8 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--format", choices=["csv", "jsonl"], default="csv")
     s.add_argument("--online", action="store_true",
                    help="follow short links and redirects and read RDAP age (needs internet; run on the server)")
+    s.add_argument("--ai", action="store_true",
+                   help="add the AI second opinion on uncertain links (needs OPENROUTER_API_KEY; otherwise pure code)")
     args = p.parse_args(argv)
 
     text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8-sig").read()
@@ -75,6 +86,12 @@ def main(argv: list[str] | None = None) -> int:
             except Exception as e:  # online facts are optional; the link is still scored offline
                 print(f"online facts failed for one link: {type(e).__name__}", file=sys.stderr)
     verdicts = score_many(links, mode=args.mode, online_by_link=online)
+    if args.ai:
+        from .adapters.base import has_key
+        if not has_key("OPENROUTER_API_KEY"):
+            print("--ai: OPENROUTER_API_KEY is not set; scored with pure code", file=sys.stderr)
+        else:
+            verdicts = _reviewer().review(verdicts, args.mode)
     if args.out:
         with open(args.out, "w", encoding="utf-8", newline="") as f:
             write(verdicts, f, args.format)

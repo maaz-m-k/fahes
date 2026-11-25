@@ -57,14 +57,13 @@ export function Replay({ round, ci, view, fill }: { round: Round; ci: number; vi
   const foot = src ? views.flatMap(v => (src[v] ? [{ key: v, frame: v === 'phone' ? 'phone' : 'window', label: v === 'phone' ? tx('هاتف · وضع iPhone', 'Phone · iPhone mode') : tx('حاسوب', 'Computer'), f: src[v]! } as FootageItem] : [])) : [];
   const clips = (round.clips || []).map(c => ({ label: c.label, items: views.flatMap(v => (c.footage[v] ? [{ key: 'clip-' + v, frame: v === 'phone' ? 'phone' : 'window', label: ar ? c.label.ar : c.label.en, f: c.footage[v]! } as FootageItem] : [])) })).filter(c => c.items.length);
   if (foot.length) return (
-    <Piece head={round.footage ? tx(`آخر جولة · ${round.cases.length} أسئلة المقيمين`, `The last round · residents' questions`) : `«${ar ? k.ar : k.q}»`} marks={[foot[0].f.marker]} className={'rp' + (fill ? ' fill' : '')}>
+    <Piece head={round.footage ? tx(`آخر جولة · ${round.cases.length} أسئلة المقيمين`, `The last round · residents' questions`) : `«${ar ? k.ar : k.q}»`} className={'rp' + (fill ? ' fill' : '')}>
       <div data-testid="replay" data-view={view}><FootagePlayer items={foot} fill={fill} /></div>
       {clips.map((c, i) => <div key={i} style={{ marginTop: 16 }} data-testid="extra-clip"><div className="small mut" style={{ marginBottom: 6 }}>{ar ? c.label.ar : c.label.en}</div><FootagePlayer items={c.items} /></div>)}
     </Piece>
   );
   return (
     <Piece head={`«${ar ? k.ar : k.q}» · ${k.computer.engine || k.phone.engine || ''} · ${Math.round(k.ms / 1000)} ${tx('ث', 's')}`}
-      marks={[{ kind: round.marker.kind, note: 'REPLAY ' + clock(k.startedAt) }, { kind: 'stand', note: 'phone = emulation' }]}
       className={'rp' + (fill ? ' fill' : '')}>
       <div className={'rp-stage ' + (views.length === 1 ? 'one ' + view : 'both')} data-testid="replay" data-view={view}>
         {views.map(v => {

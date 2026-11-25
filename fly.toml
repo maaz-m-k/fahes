@@ -18,6 +18,10 @@ primary_region = "fra"
   ISTIBAQ_RECORD_FOOTAGE = "1"
   ISTIBAQ_DATAFORSEO = "1"
   ISTIBAQ_AI_LAYER = "1"
+  # AI second opinion on uncertain links (docs/accuracy.md); needs OPENROUTER_API_KEY; above the daily cap: pure code
+  ISTIBAQ_AI_SECOND = "1"
+  ISTIBAQ_AI_DAILY_USD = "1.0"
+  ISTIBAQ_AI_CACHE = "/data/ai_cache.jsonl"
   # limits for the open desk (istibaq/api/limits.py); ISTIBAQ_VOICE=0 / ISTIBAQ_PAID=0 switch voice / paid searches off
   ISTIBAQ_SCORE_PER_MINUTE = "60"
   ISTIBAQ_BATCH_MAX = "1000"

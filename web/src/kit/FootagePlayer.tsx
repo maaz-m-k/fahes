@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Footage } from '../api/types';
 import { useLang } from '../i18n';
-import { Mk } from './basics';
 
 export type FootageItem = { key: string; frame: 'phone' | 'window'; label: string; f: Footage; url?: string };
 
@@ -44,7 +43,7 @@ export function FootagePlayer({ items, fill }: { items: FootageItem[]; fill?: bo
               {it.frame === 'phone'
                 ? <div className="rp-phone"><span className="rp-notch" /><div className="rp-screen fp-screen" style={{ aspectRatio: `${it.f.width} / ${it.f.height}` }}>{video}<span className="fp-speed">{speed}×</span></div></div>
                 : <div className="rp-win"><div className="rp-bar"><i /><i /><i /><span className="addr">{it.url || ''}</span></div><div className="rp-screen fp-screen" style={{ aspectRatio: `${it.f.width} / ${it.f.height}` }}>{video}<span className="fp-speed">{speed}×</span></div></div>}
-              <figcaption><b>{it.label}</b> <Mk m={it.f.marker} /><span className="rp-cap" data-testid={'fcap-' + it.key}>{caption(it)}</span></figcaption>
+              <figcaption><b>{it.label}</b><span className="rp-cap" data-testid={'fcap-' + it.key}>{caption(it)}</span></figcaption>
             </figure>
           );
         })}

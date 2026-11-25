@@ -8,7 +8,7 @@ import pytest
 watch = pytest.importorskip("istibaq.watch")
 recorded = pytest.importorskip("istibaq.adapters.recorded")
 
-from istibaq.api import integrations  # noqa: E402
+from istibaq.api import integrations, watchrun  # noqa: E402
 
 
 @pytest.fixture
@@ -25,7 +25,8 @@ def test_real_run_round_opens_cases(make_client, keys):
     assert run["status"] == "done", run
     assert run["results"] > 0
     rnd = real(lambda *a: None, client=recorded.recorded_client()).to_dict()
-    assert len(run["cases"]) == len(rnd["suspicious"])
+    # a case only for red, or grey with a brand-imitation reason; other suspicious results stay in the round
+    assert len(run["cases"]) == len([r for r in rnd["suspicious"] if watchrun.worth_a_case(r["verdict"])]) > 0
     assert client.get(f"/api/watch/runs/{run['run_id']}/replay").json()["steps"]
     assert client.get("/api/costs").json()["summary"]["total_usd"] > 0
 

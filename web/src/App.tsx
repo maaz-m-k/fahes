@@ -1,60 +1,40 @@
-/* Fahes desk: one dark app, two modes (Voice and Studio), Arabic first with an English switch, and the one switch that
-   shows or hides the REAL / STAND-IN / DEMO DATA markers (on for review; off before deployment on the team lead's word). */
+/* Fahes desk: one dark app, two modes (Voice and Studio), Arabic first with an English switch. */
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { EngineClient } from './api/client';
-import type { Costs, Lang, MarkerKind, WatchState } from './api/types';
+import type { Costs, Lang, WatchState } from './api/types';
 import { EngineContext, LangContext, useLang } from './i18n';
-import { Icon, Mk } from './kit/basics';
+import { Icon } from './kit/basics';
 import { PAGES, Studio, type Page } from './studio/Studio';
 import { VoiceMode } from './voice/VoiceMode';
 import { followSpeech, type Heard } from './voice/lang';
 import type { RtHooks, VoiceLike } from './voice/realtime';
 
-type Part = [string, string, string, string, MarkerKind];
-const PARTS: Part[] = [
-  ['الصوت الفوري (استماع ونطق)', 'Realtime voice (in and out)', 'OpenAI gpt-realtime-2.1 عبر WebRTC؛ مفتاح قصير العمر من المحرك', 'OpenAI gpt-realtime-2.1 over WebRTC; a short-lived key from the engine', 'real'],
-  ['فهم المكتوب', 'Typed understanding', 'فهم المحرك (OpenRouter)، والمطابق المحلي عند الفشل', "the engine's understanding (OpenRouter); a local matcher when it fails", 'stand'],
-  ['صوت الإجابة المكتوبة', 'Voice for typed answers', 'صوت المتصفح', "the browser's speech", 'stand'],
-  ['الدائرة الصوتية', 'The voice circle', '«خليج هادئ»، تُرسم حياً وتتفاعل مع الميكروفون', '"Calm gulf teal", drawn live, reacts to the mic', 'real'],
-  ['المحرك', 'The engine', 'محرك وهمي من بيانات النموذج الأولي حتى يُدمج محرك فاحص', "a fake engine from the prototype's data until the Fahes engine is merged", 'stand'],
-  ['الحالات الثلاث والمرآة', 'The three cases and the mirror', 'على عناوين ‎.test', 'on .test addresses', 'demo'],
-  ['الإعادة', 'Replay', 'لقطات حقيقية من جولة سابقة', 'real captures from an earlier round', 'real'],
-  ['الختم وكسره', 'Seal and broken seal', 'SHA-256', 'SHA-256', 'real'],
-  ['الاعتماد', 'Approval', 'بالصوت أو بالضغط؛ UAE PASS في التجربة', 'by voice or click; UAE PASS in a pilot', 'stand'],
-  ['الإزالة', 'Takedown', 'لا يُرسل شيء', 'nothing is sent', 'demo'],
-  ['التمرين ويوم المحتال', "Drill and attacker's day", 'أمثلة؛ لم تُنفّذ', 'examples; not run', 'demo'],
-];
-
-function PartsSheet({ onClose }: { onClose: () => void }) {
-  const { lang, t, tx } = useLang();
+function CostSheet({ onClose }: { onClose: () => void }) {
+  const { t, tx } = useLang();
   const engine = useEngineSafe();
   const [costs, setCosts] = useState<Costs | null>(null);
   useEffect(() => { engine?.costs().then(setCosts).catch(() => undefined); }, [engine]);
   return (
-    <aside className="sheet" data-testid="parts">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><b style={{ fontSize: 18 }}>{tx('الحقيقي والتجريبي', 'Real vs demo')}</b><button className="ghost" type="button" onClick={onClose}>{tx('إغلاق', 'Close')}</button></div>
-      <p className="small mut">{tx('REAL يعمل فعلاً. STAND-IN مكان محجوز لشيء حقيقي لاحقاً. DEMO DATA محتوى مختلق.', 'REAL works for real. STAND-IN holds the place of something real later. DEMO DATA is made up.')}</p>
+    <aside className="sheet" data-testid="cost-sheet">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><b style={{ fontSize: 18 }}>{tx('التكلفة', 'Cost')}</b><button className="ghost" type="button" onClick={onClose}>{tx('إغلاق', 'Close')}</button></div>
       {costs && (
         <div className="piece" data-testid="costs" style={{ marginBottom: 12 }}>
-          <div className="piece-h"><span>{tx('التكلفة', 'Cost')}</span><Mk m={costs.marker} /></div>
-          <ul className="parts">{costs.soFar.map((c, i) => <li key={i}><span>{t(c.item)}<small>${c.usd.toFixed(c.usd < 1 ? 4 : 2)} {tx('حتى الآن', 'so far')}</small></span><Mk m={c.marker} /></li>)}</ul>
+          <ul className="parts">{costs.soFar.map((c, i) => <li key={i}><span>{t(c.item)}<small>${c.usd.toFixed(c.usd < 1 ? 4 : 2)} {tx('حتى الآن', 'so far')}</small></span></li>)}</ul>
           <p className="small">{tx('المتوقع شهرياً', 'Projected a month')}: <b>${costs.projectedMonthUsd}</b> · <span className="mut">{t(costs.projectedNote)}</span></p>
         </div>
       )}
-      <ul className="parts">{PARTS.map(([nar, nen, dar, den, k]) => <li key={nen}><span>{lang === 'ar' ? nar : nen}<small>{lang === 'ar' ? dar : den}</small></span><Mk m={{ kind: k }} /></li>)}</ul>
     </aside>
   );
 }
 function useEngineSafe() { return useContext(EngineContext); }
 
-export type AppInitial = { lang?: Lang; mode?: 'voice' | 'studio'; page?: Page; markers?: boolean };
+export type AppInitial = { lang?: Lang; mode?: 'voice' | 'studio'; page?: Page };
 export function App({ engine, initial = {}, toolPort, makeVoice }: { engine: EngineClient; initial?: AppInitial; toolPort?: (fn: (name: string, args: Record<string, unknown>) => Promise<unknown>) => void; makeVoice?: (hooks: RtHooks) => VoiceLike }) {
   const q = new URLSearchParams(typeof location !== 'undefined' ? location.search : '');
   const [lang, setLang] = useState<Lang>(initial.lang || (q.get('lang') === 'en' ? 'en' : 'ar'));
   const [mode, setMode] = useState<'voice' | 'studio'>(initial.mode || (q.get('mode') === 'studio' ? 'studio' : 'voice'));
   const [page, setPage] = useState<Page>(initial.page || (PAGES.find(p => p[0] === q.get('page'))?.[0]) || 'watch');
-  const [markers, setMarkers] = useState(initial.markers ?? q.get('mk') !== '0');
-  const [parts, setParts] = useState(false);
+  const [costOpen, setCostOpen] = useState(false);
   const kept = useRef<Heard | null>(null); // a language the officer asked to keep
   const onHeard = (text: string) => { const f = followSpeech(text, kept.current); kept.current = f.kept; if (f.ui) setLang(f.ui); return f.ui; };
   const [watch, setWatch] = useState<WatchState | null>(null);
@@ -71,7 +51,7 @@ export function App({ engine, initial = {}, toolPort, makeVoice }: { engine: Eng
     document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.title = lang === 'ar' ? 'فاحص' : 'Fahes';
   }, [lang]);
-  useEffect(() => { document.body.classList.toggle('show-mk', markers); document.body.classList.toggle('studio-on', mode === 'studio'); }, [markers, mode]);
+  useEffect(() => { document.body.classList.toggle('studio-on', mode === 'studio'); }, [mode]);
 
   const tx = (ar: string, en: string) => (lang === 'ar' ? ar : en);
   return (
@@ -84,14 +64,13 @@ export function App({ engine, initial = {}, toolPort, makeVoice }: { engine: Eng
             {(['voice', 'studio'] as const).map(m => <button key={m} type="button" className={mode === m ? 'on' : ''} onClick={() => setMode(m)}><Icon k={m} /><span>{m === 'voice' ? tx('الصوت', 'Voice') : tx('الاستوديو', 'Studio')}</span></button>)}
           </div>
           <div className="tools">
-            <label className="switch"><input type="checkbox" aria-label="markers" checked={markers} onChange={e => setMarkers(e.target.checked)} /><span className="sw" /><span>{tx('أظهر الحقيقي', 'Show what is real')}</span></label>
-            <button className="ghost" type="button" onClick={() => setParts(p => !p)}>{tx('الحقيقي والتجريبي', 'Real vs demo')}</button>
+            <button className="ghost" type="button" onClick={() => setCostOpen(o => !o)}>{tx('التكلفة', 'Cost')}</button>
             <button className="ghost" type="button" onClick={() => { const l = lang === 'ar' ? 'en' : 'ar'; kept.current = l; setLang(l); }}>{lang === 'ar' ? 'English' : 'العربية'}</button>
           </div>
         </header>
         <VoiceMode toolPort={toolPort} makeVoice={makeVoice} onHeard={onHeard} watch={watch} onRunNow={runNow} onOpenStudio={p => { setPage(p as Page); setMode('studio'); }} />
         {mode === 'studio' && <Studio page={page} setPage={setPage} watch={watch} onRunNow={runNow} needDecision={need} />}
-        {parts && <><PartsSheet onClose={() => setParts(false)} /><div className="scrim" onClick={() => setParts(false)} /></>}
+        {costOpen && <><CostSheet onClose={() => setCostOpen(false)} /><div className="scrim" onClick={() => setCostOpen(false)} /></>}
       </LangContext.Provider>
     </EngineContext.Provider>
   );

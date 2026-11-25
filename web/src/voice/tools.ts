@@ -53,6 +53,13 @@ export const TOOL_NAMES: ToolName[] = ['summary', 'show_case', 'check_address', 
 
 function nextIn(ms: number, lang: 'ar' | 'en') { const d = Math.max(0, ms); const h = Math.floor(d / 3600e3), m = Math.floor((d % 3600e3) / 60e3); return lang === 'ar' ? `${h} س ${m} د` : `${h} h ${m} min`; }
 export const nextInBi = (at: number, now = Date.now()): Bi => ({ ar: nextIn(at - now, 'ar'), en: nextIn(at - now, 'en') });
+/* "updated N minutes ago" for numbers the server counted in the background */
+export function agoBi(at: number, now = Date.now()): Bi {
+  const m = Math.max(0, Math.round((now - at) / 60e3));
+  if (m < 1) return bi('حُدّثت الآن', 'updated just now');
+  if (m < 120) return bi(`حُدّثت قبل ${m} دقيقة`, `updated ${m} minute${m === 1 ? '' : 's'} ago`);
+  const h = Math.round(m / 60); return bi(`حُدّثت قبل ${h} ساعة`, `updated ${h} hours ago`);
+}
 
 async function focusCase(c: EngineClient, ctx: ToolContext): Promise<CaseDetail | null> {
   if (ctx.focusCaseId) return c.caseDetail(ctx.focusCaseId);
@@ -175,10 +182,19 @@ export async function runTool(c: EngineClient, ctx: ToolContext, name: ToolName,
     }
     case 'scale': {
       const feeds = await c.feeds();
+      const answer: Answer = { tool: name, words: bi('الإنترنت يولد الآن', 'The internet, being born now'), card: { kind: 'scale', feeds }, chips: [chip('ماذا يحتاجني؟', 'What needs me?', 'summary')] };
+      if (!feeds.ct && !feeds.names) return {
+        answer, say: bi(`الأرقام قيد العدّ بعد تشغيل الخادم، تجهز خلال دقائق. ${feeds.needDecision} تحتاجك الآن.`, `The numbers are still being counted after the server started; ready in a few minutes. ${feeds.needDecision} need you now.`),
+        output: { warmingUp: true, needDecision: feeds.needDecision },
+      };
+      const ago = feeds.updatedAt ? agoBi(feeds.updatedAt) : null;
+      const certs = feeds.ct ? bi(`نحو ${fmt(feeds.ct.perMin)} شهادة جديدة في الدقيقة. `, `About ${fmt(feeds.ct.perMin)} new certificates a minute. `) : bi('', '');
+      const names = feeds.names ? bi(`${fmt(feeds.names.lookAlikes)} اسماً جديداً يشبه اسماً رسمياً. `, `${fmt(feeds.names.lookAlikes)} new names look like an official one. `) : bi('', '');
       return {
-        answer: { tool: name, words: bi('الإنترنت يولد الآن', 'The internet, being born now'), card: { kind: 'scale', feeds }, chips: [chip('ماذا يحتاجني؟', 'What needs me?', 'summary')] },
-        say: bi(`نحو ${fmt(feeds.ct.perMin)} شهادة جديدة في الدقيقة. ${feeds.needDecision} تحتاجك.`, `About ${fmt(feeds.ct.perMin)} new certificates a minute. ${feeds.needDecision} need you.`),
-        output: { certificatesPerMinute: feeds.ct.perMin, logName: feeds.ct.log, newNames7days: feeds.names.total, withUaeWord: feeds.names.branded, lookAlikesGrey: feeds.names.lookAlikes, needDecision: feeds.needDecision },
+        answer,
+        say: bi(`${certs.ar}${names.ar}${feeds.needDecision} تحتاجك.${ago ? ' ' + ago.ar + '.' : ''}`, `${certs.en}${names.en}${feeds.needDecision} need you.${ago ? ' Numbers ' + ago.en + '.' : ''}`),
+        output: { certificatesPerMinute: feeds.ct?.perMin ?? null, logName: feeds.ct?.log ?? null, newNames: feeds.names?.total ?? null, lookAlikesGrey: feeds.names?.lookAlikes ?? null,
+          needDecision: feeds.needDecision, updated: ago?.en ?? null },
       };
     }
     case 'run_now': {

@@ -6,15 +6,15 @@ import type {
   SealedRecord, TakedownPackage, WatchState,
 } from '../api/types';
 import { clock, fmt, useEngine, useLang } from '../i18n';
-import { nextInBi } from '../voice/tools';
+import { agoBi, nextInBi } from '../voice/tools';
 import { FootagePlayer, type FootageItem } from './FootagePlayer';
-import { Addr, Icon, Mk, Mks, Piece, Pill, Reasons, Spark, Ticks } from './basics';
+import { Addr, Icon, Piece, Pill, Reasons, Spark, Ticks } from './basics';
 
 /* ---------- cases ---------- */
 export function CasesList({ desk, onPick, picked }: { desk: DeskSummary; onPick?: (c: CaseSummary) => void; picked?: string | null }) {
   const { t, tx } = useLang();
   return (
-    <Piece head={tx('بانتظار قرارك', 'Waiting for your decision')} marks={[desk.marker]}>
+    <Piece head={tx('بانتظار قرارك', 'Waiting for your decision')}>
       <div className="rows" data-testid="cases-list">
         {desk.cases.map(c => (
           <button key={c.id} type="button" className="row" style={picked === c.id ? { borderColor: 'var(--teal)' } : undefined} onClick={() => onPick?.(c)}>
@@ -34,15 +34,15 @@ export function Mirror({ d, compact }: { d: CaseDetail; compact?: boolean }) {
   if (d.verdict === 'grey' || !d.imitates || !d.trick) return <GreyCase d={d} />;
   const crumbs = d.imitates.crumbs.map(t);
   return (
-    <Piece head={<><Pill v={d.verdict} sm /> <span style={{ marginInlineStart: 6 }}>{t(d.source)}</span></>} marks={[d.marker, { kind: 'stand', note: 'rule' }]} className="case-mirror">
+    <Piece head={<><Pill v={d.verdict} sm /> <span style={{ marginInlineStart: 6 }}>{t(d.source)}</span></>} className="case-mirror">
       <div className="mirror" data-testid="mirror">
         <div className="pane">
-          <div className="pane-h"><span>{tx('ما رآه المقيم', 'What the resident saw')}</span><Mk m={{ kind: 'demo', note: 'wireframe, no form' }} /></div>
+          <div className="pane-h"><span>{tx('ما رآه المقيم', 'What the resident saw')}</span></div>
           <div className="urlbar"><span className="dim">{d.trick.decoy}</span><span className="lit" data-testid="trick">{d.trick.owner}</span><span className="dim">{d.trick.rest}</span></div>
-          <div className="wire"><div className="stampdemo">DEMO</div><div className="bar s" /><div className="bt2">{t(d.title)}</div><span className="urgent">{tx('ادفع خلال 24 ساعة', 'Pay within 24 hours')}</span>{!compact && <div className="bar m" />}<div className="nopay">{tx('منطقة الدفع أزيلت: لا يوجد نموذج', 'Payment area removed: no form')}</div></div>
+          <div className="wire"><div className="bar s" /><div className="bt2">{t(d.title)}</div><span className="urgent">{tx('ادفع خلال 24 ساعة', 'Pay within 24 hours')}</span>{!compact && <div className="bar m" />}<div className="nopay">{tx('منطقة الدفع أزيلت: لا يوجد نموذج', 'Payment area removed: no form')}</div></div>
         </div>
         <div className="pane">
-          <div className="pane-h"><span>{tx('الحقيقي', 'The real one')}</span><Mk m={{ kind: 'stand', note: 'illustration' }} /></div>
+          <div className="pane-h"><span>{tx('الحقيقي', 'The real one')}</span></div>
           <div className="urlbar"><span className="ok">{d.imitates.address}</span></div>
           <div className="wire"><div className="crumbs">{crumbs.join(' › ')}</div><div className="bar s" /><div className="bt2">{crumbs[crumbs.length - 1]}</div><span className="okb">{tx('في السجل · رسمي', 'In the register · official')}</span></div>
         </div>
@@ -74,7 +74,7 @@ function CaptureFootage({ d }: { d: CaseDetail }) {
 export function GreyCase({ d }: { d: CaseDetail }) {
   const { t } = useLang();
   return (
-    <Piece head={<Pill v="grey" sm />} marks={[d.marker]}>
+    <Piece head={<Pill v="grey" sm />}>
       <div className="addrbig" style={{ fontSize: 20 }}>{d.address}</div>
       <div className="saw" style={{ textAlign: 'center' }} data-testid="saw">{t(d.sawThrough)}</div>
       <Reasons reasons={d.reasons} v="grey" />
@@ -86,7 +86,7 @@ export function GreyCase({ d }: { d: CaseDetail }) {
 export function VerdictView({ r }: { r: ScoreResult }) {
   const { t, tx } = useLang();
   return (
-    <Piece head={tx('فُحص في السجل', 'Checked against the register')} marks={[r.marker]}>
+    <Piece head={tx('فُحص في السجل', 'Checked against the register')}>
       <div className="addrbig" data-testid="verdict-host">{r.verdict === 'red' ? <span className="lit">{r.host}</span> : r.host}</div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
         <Pill v={r.verdict} />
@@ -109,7 +109,7 @@ export function CheckPanel({ results, onCheck, compact }: { results: ScoreResult
   const go = (v = q) => { const s = v.trim(); if (!s) return; setQ(''); void onCheck(s); };
   const paste = async () => { try { const t = (await navigator.clipboard.readText()).trim(); if (t) go(t); } catch { /* clipboard blocked: the field still works */ } };
   return (
-    <Piece head={tx('افحص رابطاً', 'Check a link')} marks={results[0] ? [results[0].marker] : undefined} className={'checkpanel' + (compact ? ' compact' : '')}>
+    <Piece head={tx('افحص رابطاً', 'Check a link')} className={'checkpanel' + (compact ? ' compact' : '')}>
       <div className="field" data-testid="check-panel">
         <input aria-label={tx('العنوان', 'address')} dir="ltr" placeholder={tx('الصق أو اكتب عنواناً، مثل abudhabipolice.ae', 'Paste or type an address, e.g. abudhabipolice.ae')} value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') go(); }} />
         <button className="btn sec" type="button" onClick={paste}>{tx('لصق', 'Paste')}</button>
@@ -146,7 +146,7 @@ export function RecordView({ record, onFields, onApprove }: { record: SealedReco
   };
   const f = record.fields;
   return (
-    <Piece head={tx('مسودة المحضر · شكل ثابت لا يُولَّد', 'Draft record · a fixed layout, never generated')} marks={[record.marker, { kind: 'demo', note: 'case' }, { kind: 'stand', note: 'captures' }]}>
+    <Piece head={tx('مسودة المحضر · شكل ثابت لا يُولَّد', 'Draft record · a fixed layout, never generated')}>
       <div className="record" data-testid="record">
         <div className="rec-h"><b>مسودة محضر رصد رابط مشتبه به</b><span className="hash">{record.id}</span></div>
         <dl className="rec-grid">
@@ -174,7 +174,7 @@ export function RecordView({ record, onFields, onApprove }: { record: SealedReco
 
 export function RecordsList({ records, picked, onPick }: { records: SealedRecord[]; picked?: string | null; onPick?: (r: SealedRecord) => void }) {
   const { t, tx } = useLang();
-  if (!records.length) return <Piece head={tx('لا مسودات بعد', 'No drafts yet')} marks={[{ kind: 'real', note: 'this session' }]}><p className="small mut">{tx('من «الحالات» اختم الحالة الأولى، أو قل «وثّقها».', 'From Cases, seal the first case, or say "seal it".')}</p></Piece>;
+  if (!records.length) return <Piece head={tx('لا مسودات بعد', 'No drafts yet')}><p className="small mut">{tx('من «الحالات» اختم الحالة الأولى، أو قل «وثّقها».', 'From Cases, seal the first case, or say "seal it".')}</p></Piece>;
   return (
     <div className="rows" data-testid="records-list">
       {records.map(r => (
@@ -195,7 +195,7 @@ export function TakedownView({ pkg }: { pkg: TakedownPackage }) {
   const [p, setP] = useState(pkg);
   useEffect(() => setP(pkg), [pkg]);
   return (
-    <Piece head={<>{tx('طلب الإزالة', 'Takedown request')} · <Addr a={p.address} /></>} marks={[p.marker]}>
+    <Piece head={<>{tx('طلب الإزالة', 'Takedown request')} · <Addr a={p.address} /></>}>
       <ul className="td" data-testid="takedown">
         {p.recipients.map(r => (
           <li key={r.id}><span>{t(r.name)}</span>
@@ -222,7 +222,7 @@ export function SchedulePill({ w, onRunNow }: { w: WatchState | null; onRunNow: 
       <span className="t">{running
         ? tx(`وكيل الرصد يعمل الآن · ${(w.progress?.i ?? 0) + 1} من ${w.progress?.total ?? 4} · حاسوب + هاتف`, `Watch running now · ${(w.progress?.i ?? 0) + 1} of ${w.progress?.total ?? 4} · computer + phone`)
         : tx(`الرصد كل ${w.everyHours} ساعات · الجولة القادمة بعد ${t(nextInBi(w.nextAt))}`, `Watch every ${w.everyHours} h · next round in ${t(nextInBi(w.nextAt))}`)}</span>
-      <Mk m={{ kind: w.marker.kind, note: running ? 'LIVE' : 'schedule' }} />
+     
       <button type="button" disabled={running} onClick={onRunNow}>{tx('شغّل الآن', 'Run now')}</button>
     </div>
   );
@@ -233,10 +233,10 @@ const roundCounts = (r: Round) => r.cases.reduce((a, c) => ({ read: a.read + c.c
 export function RoundView({ w }: { w: WatchState }) {
   const { tx } = useLang();
   const r = w.lastRound;
-  if (!r) return <Piece head={tx('لا جولة بعد', 'No round yet')} marks={[w.marker]} />;
+  if (!r) return <Piece head={tx('لا جولة بعد', 'No round yet')} />;
   const c = roundCounts(r), tt = c.read || 1;
   return (
-    <Piece head={tx(`آخر جولة ${clock(r.startedAt)} · ${r.cases.length} عمليات بحث · حاسوب + هاتف`, `Last round ${clock(r.startedAt)} · ${r.cases.length} searches · computer + phone`)} marks={[r.marker]}>
+    <Piece head={tx(`آخر جولة ${clock(r.startedAt)} · ${r.cases.length} عمليات بحث · حاسوب + هاتف`, `Last round ${clock(r.startedAt)} · ${r.cases.length} searches · computer + phone`)}>
       <div className="bignum"><span className="v" data-testid="round-read">{c.read}</span><span className="k">{tx('عنواناً قرأها كما يراها المقيم', 'addresses read the way a resident sees them')}</span></div>
       <div className="stack"><i className="g" style={{ width: (c.green / tt) * 100 + '%' }} /><i className="y" style={{ width: (c.grey / tt) * 100 + '%' }} /><i className="r" style={{ width: (c.red / tt) * 100 + '%' }} /></div>
       <div className="legend"><span><i style={{ background: 'var(--green)' }} />{c.green} {tx('رسمي', 'official')}</span><span><i style={{ background: '#6c7a77' }} />{c.grey} {tx('غير رسمي، بلا اتهام', 'not official, not accused')}</span><span><i style={{ background: 'var(--red2)' }} />{c.red} {tx('أحمر', 'red')}</span></div>
@@ -257,29 +257,42 @@ export { Replay } from './Replay';
 /* ---------- scale: one big live number, a small chart ---------- */
 export function ScaleView({ feeds }: { feeds: Feeds }) {
   const { t, tx } = useLang();
-  const [now, setNow] = useState(feeds.ct.size);
+  const ct = feeds.ct, nm = feeds.names;
+  const [now, setNow] = useState(ct?.size ?? 0);
   const [sel, setSel] = useState<string | null>(null);
   useEffect(() => {
-    const i = setInterval(() => setNow(feeds.ct.size + ((Date.now() - feeds.ct.at) / 60000) * feeds.ct.perMin), 150);
+    if (!ct) return;
+    const i = setInterval(() => setNow(ct.size + ((Date.now() - ct.at) / 60000) * ct.perMin), 150);
     return () => clearInterval(i);
-  }, [feeds]);
+  }, [ct]);
+  const updated = feeds.updatedAt ? <p className="small mut" data-testid="scale-updated" style={{ margin: '6px 0 0', textAlign: 'center' }}>{t(agoBi(feeds.updatedAt))}</p> : null;
+  if (!ct && !nm) return (
+    <Piece head={tx('الحجم', 'Scale')}>
+      <p className="small mut" data-testid="scale-warming" style={{ textAlign: 'center' }}>{tx('الأرقام قيد العدّ بعد تشغيل الخادم، تجهز خلال دقائق.', 'The numbers are still being counted after the server started; ready in a few minutes.')}</p>
+      <div className="bignum"><span className="v">{fmt(feeds.needDecision)}</span><span className="k">{tx('تحتاج قرارك الآن', 'need your decision now')}</span></div>
+    </Piece>
+  );
   const det = [
-    { k: 'br', v: feeds.names.branded, l: tx('بكلمة إماراتية (7 أيام)', 'with a UAE word (7 days)'), m: feeds.names.marker, src: feeds.names.source, how: tx(`من ${fmt(feeds.names.total)} اسماً جديداً`, `of ${fmt(feeds.names.total)} new names`) },
-    { k: 'la', v: feeds.names.lookAlikes, l: tx('تشبه اسماً رسمياً · رمادي', 'look like an official name · grey'), m: feeds.names.marker, src: feeds.names.source, how: tx('اسم رسمي + كلمة إغراء، أو بفارق حرف. لا أحمر: العنوان وحده سبب واحد.', 'official name + lure word, or one letter off. No red: the address alone is one reason.') },
-    { k: 'dc', v: feeds.needDecision, l: tx('تحتاج قرارك', 'need your decision'), m: { kind: 'demo' as const }, src: 'desk', how: tx('الحالات التي تنتظرك', 'the cases waiting for you') },
+    ...(nm ? [
+      { k: 'br', v: nm.branded, l: tx('بكلمة إماراتية (7 أيام)', 'with a UAE word (7 days)'), src: nm.source, how: tx(`من ${fmt(nm.total)} اسماً جديداً`, `of ${fmt(nm.total)} new names`) },
+      { k: 'la', v: nm.lookAlikes, l: tx('تشبه اسماً رسمياً · رمادي', 'look like an official name · grey'), src: nm.source, how: tx('اسم رسمي + كلمة إغراء، أو بفارق حرف. لا أحمر: العنوان وحده سبب واحد.', 'official name + lure word, or one letter off. No red: the address alone is one reason.') },
+    ] : []),
+    { k: 'dc', v: feeds.needDecision, l: tx('تحتاج قرارك', 'need your decision'), src: 'desk', how: tx('الحالات التي تنتظرك', 'the cases waiting for you') },
   ];
   const s = det.find(x => x.k === sel);
   return (
-    <Piece head={tx('كل شهادة ويب جديدة في سجل عام واحد، تُعدّ الآن', 'Every new web certificate in one public log, counted now')} marks={[feeds.ct.marker]}>
-      <div className="counter" data-testid="live-number">{fmt(now)}</div>
-      <div className="bignum"><span className="k">{tx(`نحو ${fmt(feeds.ct.perMin)} في الدقيقة · ${feeds.ct.log}`, `about ${fmt(feeds.ct.perMin)} a minute · ${feeds.ct.log}`)}</span></div>
-      <Spark values={feeds.ct.spark} />
+    <Piece head={ct ? tx('كل شهادة ويب جديدة في سجل عام واحد', 'Every new web certificate in one public log') : tx('الحجم', 'Scale')}>
+      {ct && <>
+        <div className="counter" data-testid="live-number">{fmt(now)}</div>
+        <div className="bignum"><span className="k">{tx(`نحو ${fmt(ct.perMin)} في الدقيقة · ${ct.log}`, `about ${fmt(ct.perMin)} a minute · ${ct.log}`)}</span></div>
+        <Spark values={ct.spark} />
+      </>}
       <div className="scale-det">
-        {det.map(x => <button key={x.k} type="button" className={sel === x.k ? 'on' : ''} onClick={() => setSel(sel === x.k ? null : x.k)}><b>{fmt(x.v)}</b><span>{x.l}</span><br /><Mk m={x.m} /></button>)}
+        {det.map(x => <button key={x.k} type="button" className={sel === x.k ? 'on' : ''} onClick={() => setSel(sel === x.k ? null : x.k)}><b>{fmt(x.v)}</b><span>{x.l}</span></button>)}
       </div>
       {s ? <div className="detail"><dl><dt>{tx('المصدر', 'Source')}</dt><dd className="addr" style={{ textAlign: 'start' }}>{s.src}</dd><dt>{tx('كيف عُدّ', 'How counted')}</dt><dd>{s.how}</dd></dl></div>
         : <p className="small mut" style={{ margin: '8px 0 0', textAlign: 'center' }}>{tx('اضغط رقماً لترى مصدره.', 'Tap a number for its source.')}</p>}
-      {sel === null && feeds.funnel.length > 0 && <span hidden>{t(feeds.funnel[0].label)}</span>}
+      {updated}
     </Piece>
   );
 }
@@ -287,8 +300,8 @@ export function ScaleView({ feeds }: { feeds: Feeds }) {
 export function FunnelView({ feeds }: { feeds: Feeds }) {
   const { t, tx } = useLang();
   return (
-    <Piece head={tx('من كل الإنترنت إلى مكتبك', 'From the whole internet to your desk')} marks={[{ kind: 'demo', note: 'counts' }]}>
-      <ol className="reasons">{feeds.funnel.map((f, i) => <li key={i}><b style={{ width: 'auto', padding: '0 8px', borderRadius: 999 }}>{fmt(f.n)}</b><span>{t(f.label)} <Mk m={f.marker} /></span></li>)}</ol>
+    <Piece head={tx('من كل الإنترنت إلى مكتبك', 'From the whole internet to your desk')}>
+      <ol className="reasons">{feeds.funnel.map((f, i) => <li key={i}><b style={{ width: 'auto', padding: '0 8px', borderRadius: 999 }}>{fmt(f.n)}</b><span>{t(f.label)}</span></li>)}</ol>
     </Piece>
   );
 }
@@ -298,7 +311,7 @@ export function AgentsRow({ a }: { a: AgentsState }) {
   const { t } = useLang();
   return (
     <div className="agentsrow" data-testid="agents">
-      {a.agents.map(x => <div key={x.id} className={'ag ' + (x.busy ? 'busy' : '')}><span className="ic"><Icon k={x.id} /></span><span><span className="nm">{t(x.name)}</span><span className="st">{t(x.status)}</span><Mk m={x.marker} /></span></div>)}
+      {a.agents.map(x => <div key={x.id} className={'ag ' + (x.busy ? 'busy' : '')}><span className="ic"><Icon k={x.id} /></span><span><span className="nm">{t(x.name)}</span><span className="st">{t(x.status)}</span></span></div>)}
     </div>
   );
 }
@@ -333,7 +346,7 @@ export function ScorecardView({ s }: { s: Scorecard }) {
   const { t, tx } = useLang();
   return (
     <Piece head={tx('كم نحن متأكدون', 'How sure we are')}>
-      <div className="score">{s.rows.map((r, i) => <div key={i} className="sc"><div className={'v' + (r.marker.kind === 'stand' ? ' pending' : '')}>{r.value}</div><p className="small">{t(r.label)}</p><Mk m={r.marker} /></div>)}</div>
+      <div className="score">{s.rows.map((r, i) => <div key={i} className="sc"><div className={'v' + (r.pending ? ' pending' : '')}>{r.value}</div><p className="small">{t(r.label)}</p></div>)}</div>
     </Piece>
   );
 }
@@ -358,7 +371,7 @@ export function DrillView({ d, initialTab = 'drill' }: { d: DrillInfo; initialTa
       ) : (
         <>
           <ol className="reasons">{d[tab].map((x, i) => <li key={i}><b style={{ width: 'auto', padding: '0 8px', borderRadius: 999 }}>{x.t}</b><span>{t(x.line)}</span></li>)}</ol>
-          <p className="small mut" style={{ marginTop: 8 }}><Mks marks={[d.marker, { kind: 'stand', note: 'not run yet' }]} /></p>
+          <p className="small mut" style={{ marginTop: 8 }}></p>
         </>
       )}
     </div>

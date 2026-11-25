@@ -1,15 +1,7 @@
-/* The small parts every screen shares: markers, verdict pills, reasons, pieces, ticks, chips, icons. */
+/* The small parts every screen shares: verdict pills, reasons, pieces, ticks, chips, icons. */
 import type { ReactNode } from 'react';
-import type { Bi, Marker, Reason, Verdict } from '../api/types';
+import type { Bi, Reason, Verdict } from '../api/types';
 import { useLang } from '../i18n';
-
-export function Mk({ m, live }: { m: Marker; live?: boolean }) {
-  const label = m.kind === 'real' ? 'REAL' : m.kind === 'stand' ? 'STAND-IN' : 'DEMO DATA';
-  return <span className={`mk ${m.kind}${live || /LIVE/.test(m.note || '') ? ' live' : ''}`} data-marker={m.kind}>{label}{m.note ? ' · ' + m.note : ''}</span>;
-}
-export function Mks({ marks }: { marks: Marker[] }) {
-  return <span className="mks">{marks.map((m, i) => <Mk key={i} m={m} />)}</span>;
-}
 
 const VERD: Record<Verdict, Bi> = { green: { ar: 'رسمي', en: 'Official' }, grey: { ar: 'غير رسمي، بدون اتهام', en: 'Not official, not accused' }, red: { ar: 'مشتبه بأنه وهمي، بأسباب', en: 'Suspected fake, with reasons' } };
 export const verdictWords = (v: Verdict) => VERD[v];
@@ -28,10 +20,10 @@ export function Reasons({ reasons, v, max }: { reasons: Reason[]; v: Verdict | s
   );
 }
 
-export function Piece({ head, marks, children, className }: { head?: ReactNode; marks?: Marker[]; children?: ReactNode; className?: string }) {
+export function Piece({ head, children, className }: { head?: ReactNode; children?: ReactNode; className?: string }) {
   return (
     <div className={'piece' + (className ? ' ' + className : '')}>
-      {(head || marks) && <div className="piece-h"><span>{head}</span>{marks && <Mks marks={marks} />}</div>}
+      {head && <div className="piece-h"><span>{head}</span></div>}
       {children}
     </div>
   );

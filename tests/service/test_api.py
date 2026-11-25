@@ -1,5 +1,7 @@
 import json
 
+import httpx
+
 from istibaq.cases import service as cases
 
 
@@ -379,3 +381,43 @@ def test_phone_only_maps_listing_becomes_a_case(make_client):
     client = make_client(watch_round=one_listing)
     run = client.post("/api/watch/run").json()
     assert run["status"] == "done" and len(run["cases"]) == 1, run
+
+
+def _ai_model(log, cost=0.3):
+    import json as _json
+
+    def handler(request):
+        sent = _json.loads(_json.loads(request.content)["messages"][1]["content"])["links"]
+        log.append([it["address"] for it in sent])
+        items = [{"id": it["id"], "verdict": "fake", "confidence": 0.95, "brand": "", "brand_domain": "",
+                  "why_en": "fines scam", "why_ar": "احتيال مخالفات"} for it in sent]
+        return httpx.Response(200, json={"choices": [{"message": {"content": _json.dumps({"items": items})}}],
+                                         "usage": {"cost": cost}})
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+def test_live_scoring_uses_the_ai_second_opinion_with_a_daily_cap(make_client, monkeypatch, tmp_path):
+    monkeypatch.setenv("ISTIBAQ_AI_SECOND", "1")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-SECRET")
+    monkeypatch.setenv("ISTIBAQ_AI_CACHE", str(tmp_path / "ai_cache.jsonl"))
+    monkeypatch.setenv("ISTIBAQ_AI_DAILY_USD", "1.0")
+    log = []
+    client = make_client(ai_client=_ai_model(log))
+    v = client.post("/api/score", json={"link": "fines-portal.example"}).json()
+    assert v["is_fraud"] and "ai_second_opinion" in {r["code"] for r in v["reasons"]}
+    out = client.post("/api/score/batch", json={"links": ["fines-office.example", "https://www.tamm.abudhabi/"]}).json()
+    assert out["results"][1]["verdict"] == "green"
+    assert log == [["fines-portal.example"], ["fines-office.example"]]
+    costs = client.get("/api/costs").json()
+    assert "sk-or-SECRET" not in repr(costs)
+    # $0.60 spent today: a next call (0.3, with 1.5x headroom) could pass the $1 cap, so pure code, silently
+    w = client.post("/api/score", json={"link": "fines-service.example"}).json()
+    assert not w["is_fraud"] and len(log) == 2
+
+
+def test_live_scoring_is_pure_code_when_the_ai_is_off(make_client, monkeypatch):
+    monkeypatch.delenv("ISTIBAQ_AI_SECOND", raising=False)
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-SECRET")
+    log = []
+    v = make_client(ai_client=_ai_model(log)).post("/api/score", json={"link": "fines-portal.example"}).json()
+    assert not v["is_fraud"] and log == []

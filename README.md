@@ -21,7 +21,7 @@ Team Fortress · SCAMSHIELD AI hackathon (42 Abu Dhabi × Abu Dhabi Police), Nov
 - **Voice:** press «تكلّم مع فاحص» / "Talk to Fahes" and speak Arabic or English, or type in the bottom field. Try "good morning, what do we have today?", "open the first one", "seal it", "show it on the phone", or paste a link.
 - **Studio** (top switch): every feature by hand.
 - **For judges** (last item in the studio's side menu, or https://fahes.fly.dev/?mode=studio&page=judges): paste links or upload a `.txt` or `.csv` file, see each verdict with its reasons, and download a CSV. It uses the same scoring as the command below.
-- **English:** the button at the top right switches to English. "Show what is real" toggles the REAL / STAND-IN / DEMO DATA labels.
+- **English:** the button at the top right switches to English.
 
 ### 2. Score a file of links offline (no keys, no internet)
 
@@ -105,6 +105,18 @@ From [`docs/accuracy.md`](docs/accuracy.md): **sealed test v2**.
 |---|---|---|---|
 | Judges (`judging`) | **72.8%** (69.5–76.0%) | 384 of 5,935 (**6.5%**, 5.8–7.2%) | 65.7% on this mix (6 reals per fake); 91.8% at half and half |
 | Officer (`officer`) | **21.8%** (18.9–25.0%) | 10 of 5,935 (**0.17%**, 0.08–0.32%) | **95.7%** (92.2–97.6%) |
+| Judges, live app (AI second opinion on) | **78.5%** (75.3–81.3%) | 375 of 5,935 (**6.3%**, 5.6–7.1%) | 67.9% on this mix; 92.6% at half and half |
+
+**Two numbers for the judges' setting:**
+- **72.8%** is the address alone: `istibaq score` with no key, offline, pure code.
+- **78.5%** is the live app (server and "For judges" page). There a language model gives a second opinion on the
+  uncertain links only, those scoring 0.70–0.99 that the register has not turned green. A real UAE page is never sent.
+  - On the same sealed test, real UAE pages stayed at 0 false alarms. Popular-site false alarms went from 3 to 9,
+    while false alarms on popular subdomain hosts fell from 379 to 364.
+  - The officer setting is unchanged: the AI never makes a link red.
+  - Opt in on the command line with `istibaq score links.txt --ai` (needs `OPENROUTER_API_KEY`).
+  - Details, and how the model and settings were chosen without touching the test, are in
+    [docs/accuracy.md](docs/accuracy.md#ai-second-opinion-adopted-on-the-live-app).
 
 **What is measured:**
 - Bare addresses only, and no real UAE page is flagged in either setting.
@@ -162,6 +174,11 @@ flowchart LR
   - online: redirects, the difference between the two views, the live page's brand, human-check walls, a payee not in the register.
 - **Rules decide the verdict.** Red needs two independent reasons.
 - **The AI layer** (OpenRouter) is optional and used only to read which brand a live page claims. It can add a reason, never clear a link, and the register decides who owns a brand. Page text addressed to an AI is stripped.
+- **The AI second opinion** (OpenRouter, Gemini 2.5 Flash-Lite) is on for the live app's scoring.
+  - It reads only uncertain links and never sees the checker's score.
+  - It cannot touch a register-green, licensed or popular site, and it never clears or makes a red verdict.
+  - Answers are cached by address and every call goes to the cost log.
+  - Above a $1 daily cap (`ISTIBAQ_AI_DAILY_USD`), or with no key, scoring is pure code.
 - **Voice:** OpenAI gpt-realtime-2.1 over WebRTC, using a short-lived key minted by the server. The model calls tools; every number and verdict it speaks comes from the engine.
 
 ### Privacy design
@@ -183,8 +200,8 @@ flowchart LR
 
 | Data or service | Use | Licence / credit |
 |---|---|---|
-| [PhishTank](https://phishtank.org) | training fakes (before the cut), sealed test | CC BY-SA 4.0, credit PhishTank |
-| [OpenPhish community feed](https://openphish.com/phishing_feeds.html) | known-bad hosts, held-out test | credit OpenPhish |
+| [PhishTank](https://phishtank.org) | training fakes (before the cut), sealed test; fresh links each round when its list answers without a key | CC BY-SA 4.0, credit PhishTank |
+| [OpenPhish community feed](https://openphish.com/phishing_feeds.html) | known-bad hosts, held-out test; fresh scam links each round (the red cases on the desk) | credit OpenPhish |
 | [Tranco list](https://tranco-list.eu) | popular sites (never accused), training reals | Le Pochat et al., NDSS 2019 |
 | [hagezi/nrd](https://github.com/hagezi/nrd) | newly registered domains (7 days) | GPL-3.0, credit hagezi |
 | Public certificate logs, [crt.sh](https://crt.sh) | live new-certificate rate, register evidence | public data |
@@ -204,15 +221,22 @@ Snapshot dates and files: [`istibaq/data/snapshots/SOURCES.md`](istibaq/data/sna
 
 ---
 
-## What is real in the live app
+## Where the cases on the desk come from
 
-The desk labels every part (the "Show what is real" switch):
-
-| Label | Means | Examples |
-|---|---|---|
-| **REAL** | works for real | scoring and reasons, the register, cases from real watch rounds, sealing and the tamper check, approval, voice, the judges' page, the scorecard, costs |
-| **STAND-IN** | holds the place of something real later | approval by click or voice (UAE PASS in a pilot), the phone view (an iPhone emulation, not a real phone on a UAE SIM), the fallback typed understanding |
-| **DEMO DATA** | made up or recorded for the demo | the recorded demo footage shown until the first round runs on the server, drill timelines, synthetic look-alike pages on reserved names |
+- **Search results, ads and Maps listings** from each watch round. A case is opened only for a red link, or a grey
+  link with a reason saying it imitates an official brand or body. Ordinary blogs and directories stay as scored
+  results in the round. Older grey cases without such a reason are archived when the server starts, not deleted.
+- **Public scam lists, every round** (and on "Run now"): up to 10 fresh links from the OpenPhish community feed
+  (and PhishTank when its list answers without a key), links that imitate UAE or Gulf brands first. Each link is
+  scored, captured on the server from two views, and kept as a case only if it comes out red. Links that do not load
+  are recorded as dead in the round. The case shows its source as "public scam list: OpenPhish (credited)".
+  Off with `ISTIBAQ_PUBLIC_LISTS=0`; the number per round is `ISTIBAQ_PUBLIC_LISTS_PER_ROUND`.
+- **Scale numbers** (new certificates, new domain names and the look-alikes among them) are counted in the
+  background when the server starts and every hour (`ISTIBAQ_FEEDS_EVERY`, seconds), kept on the volume, and served
+  at once with "updated N minutes ago". Right after a first start they say "warming up" for a few minutes.
+- **Facts to know:** approval is by click or voice (UAE PASS in a pilot); the phone view is an iPhone emulation on
+  the server, not a real phone on a UAE SIM; drill timelines are examples; the look-alike pages in the recorded
+  footage are synthetic pages on reserved names.
 
 ---
 

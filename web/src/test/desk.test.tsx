@@ -14,7 +14,7 @@ function setup(initial: AppInitial = { lang: 'en' }) {
   }) as EngineClient;
   let voiceTool: ((n: string, a: Record<string, unknown>) => Promise<unknown>) | null = null;
   const user = userEvent.setup();
-  render(<App engine={spied} initial={{ markers: true, ...initial }} toolPort={fn => { voiceTool = fn; }} />);
+  render(<App engine={spied} initial={{ ...initial }} toolPort={fn => { voiceTool = fn; }} />);
   const say = async (text: string) => { const box = screen.getByRole('textbox', { name: /type a question|اكتب سؤالاً/i }); await user.clear(box); await user.type(box, text + '{Enter}'); };
   const voice = async (name: string, args: Record<string, unknown> = {}) => { await act(async () => { await voiceTool!(name, args); }); };
   const phase = () => screen.getByTestId('voice').dataset.phase;
@@ -195,16 +195,16 @@ describe('the desk around the voice', () => {
     await waitKind('summary');
   });
 
-  it('one switch hides every marker', async () => {
-    const { user } = setup();
-    expect(document.body).toHaveClass('show-mk');
-    await user.click(screen.getByRole('checkbox', { name: 'markers' }));
-    expect(document.body).not.toHaveClass('show-mk');
+  it('shows no real / demo labels and no switch for them', async () => {
+    setup();
+    expect(screen.queryByRole('checkbox')).toBeNull();
+    expect(screen.queryByRole('button', { name: /real vs demo|الحقيقي والتجريبي/i })).toBeNull();
+    expect(document.body.textContent).not.toMatch(/STAND-IN|DEMO DATA|REAL ·|Show what is real|أظهر الحقيقي/);
   });
 
   it('Arabic first, right to left, with an English switch', async () => {
     const user = userEvent.setup();
-    render(<App engine={createFakeClient()} initial={{ markers: true }} />);
+    render(<App engine={createFakeClient()}  />);
     expect(document.documentElement.dir).toBe('rtl');
     expect(screen.getByTestId('line')).toHaveTextContent('صباح الخير.');
     await user.type(screen.getByRole('textbox'), 'صباح الخير، شو عندنا اليوم؟{Enter}');
@@ -215,9 +215,9 @@ describe('the desk around the voice', () => {
     expect(screen.getByTestId('words')).toHaveTextContent('3 need your decision');
   });
 
-  it('shows cost so far and projected in the real-vs-demo sheet', async () => {
+  it('shows cost so far and projected in the cost sheet', async () => {
     const { user } = setup();
-    await user.click(screen.getByRole('button', { name: 'Real vs demo' }));
+    await user.click(screen.getByRole('button', { name: 'Cost' }));
     expect(await screen.findByTestId('costs')).toHaveTextContent(/Projected a month/);
   });
 });

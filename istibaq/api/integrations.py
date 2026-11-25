@@ -11,8 +11,10 @@ from __future__ import annotations
 import dataclasses
 import importlib
 import logging
+import os
 import threading
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -113,20 +115,52 @@ def _standin_score(link: str, mode: str = "judging", online: Any = None) -> dict
             "reasons": reasons, "model_version": "standin-0", "scored_at": t}
 
 
-def score(link: str, mode: str = "judging", online: Any = None) -> dict:
+def score(link: str, mode: str = "judging", online: Any = None, reviewer: Any = None) -> dict:
+    """``reviewer``: the optional AI second opinion (``Reviewer``); it never raises and falls back to pure code."""
     if isinstance(online, dict):
         online = online_facts(online)
     mod = _try("istibaq.core.scorer")
     if mod is not None:
-        return to_plain(mod.score(link, mode=mode, online=online))
+        v = mod.score(link, mode=mode, online=online)
+        if reviewer is not None:
+            v = reviewer.review([v], mode)[0]
+        return to_plain(v)
     return _standin_score(link, mode, online)
 
 
-def score_many(links: list[str], mode: str = "judging") -> list[dict]:
+def score_many(links: list[str], mode: str = "judging", reviewer: Any = None) -> list[dict]:
     mod = _try("istibaq.core.scorer")
     if mod is not None:
-        return to_plain(mod.score_many(links, mode=mode))
+        vs = mod.score_many(links, mode=mode)
+        if reviewer is not None:
+            vs = reviewer.review(vs, mode)
+        return to_plain(vs)
     return [_standin_score(link, mode) for link in links]
+
+
+def ai_reviewer(store, cost_sink, client=None):
+    """The live AI second opinion when ``ISTIBAQ_AI_SECOND=1`` (needs ``OPENROUTER_API_KEY``), else None.
+
+    Frozen model and policy, answers cached by address (``ISTIBAQ_AI_CACHE``), every call in the cost log, and a
+    daily cap (``ISTIBAQ_AI_DAILY_USD``, default $1) read from that log; above it, scoring is pure code."""
+    if os.environ.get("ISTIBAQ_AI_SECOND", "0") != "1":
+        return None
+    from istibaq.adapters.second_opinion import OpinionCache, Reviewer
+
+    def spent_today() -> float:
+        day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        row = store.one("SELECT COALESCE(SUM(amount_usd), 0) AS s FROM costs WHERE service='openrouter' "
+                        "AND at LIKE ? AND detail_json LIKE '%second_opinion%'", (day + "%",))
+        return float(row["s"] or 0.0)
+
+    cache = os.environ.get("ISTIBAQ_AI_CACHE") or os.path.join(
+        os.path.dirname(os.path.abspath(store.path)) if getattr(store, "path", None) else ".", "ai_cache.jsonl")
+    try:
+        cap = float(os.environ.get("ISTIBAQ_AI_DAILY_USD", "1.0"))
+    except ValueError:
+        cap = 1.0
+    return Reviewer(client=client, cost_sink=cost_sink, cache=OpinionCache(cache), max_usd_per_day=cap,
+                    spent_today=spent_today)
 
 
 def scorer_status() -> str:
@@ -234,6 +268,38 @@ def google_enabled() -> bool:
 def ad_prone_count() -> int:
     dfs = _try("istibaq.adapters.dataforseo")
     return len(dfs.ad_prone_questions()) if dfs else 0
+
+
+# ---------------------------------------------------------------- public scam lists (OpenPhish, PhishTank)
+
+PHISH_PER_ROUND = 10
+
+
+def default_phish_feed(client=None) -> Callable | None:
+    """Fresh links from public scam lists, each round (off with ISTIBAQ_PUBLIC_LISTS=0)."""
+    import os
+    if os.environ.get("ISTIBAQ_PUBLIC_LISTS", "1") == "0":
+        return None
+    mod = _try("istibaq.adapters.phishfeed")
+    if mod is None:
+        return None
+    limit = int(os.environ.get("ISTIBAQ_PUBLIC_LISTS_PER_ROUND", PHISH_PER_ROUND))
+    return lambda seen: mod.fetch(client=client, limit=limit, seen=seen)
+
+
+def note_known_bad(links: list[str], lists: list[str]) -> None:
+    """Hosts the public lists name now give the scorer's known-bad reason, credited to their list."""
+    from urllib.parse import urlsplit
+    reasons = _try("istibaq.core.reasons")
+    feed = _try("istibaq.adapters.phishfeed")
+    if reasons is None or feed is None or not hasattr(reasons, "add_known_bad"):
+        return
+    for link, name in zip(links, lists):
+        host = (urlsplit(link).hostname or "").lower()
+        reasons.add_known_bad([host], feed.CREDIT.get(name, name), now_iso())
+    scorer = _try("istibaq.core.scorer")
+    if scorer is not None and hasattr(scorer, "_score_offline"):
+        scorer._score_offline.cache_clear()
 
 
 def default_capture() -> CaptureFn | None:

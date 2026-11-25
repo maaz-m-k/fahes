@@ -77,6 +77,11 @@ def openai_transport(seen):
 
 
 @pytest.fixture
+def recorded_capture_fn():
+    return recorded_capture
+
+
+@pytest.fixture
 def fake_key():
     return FAKE_KEY
 
@@ -95,11 +100,12 @@ def make_client(tmp_path, monkeypatch, seen):
 
     def make(db="t.db", token=True, **kw):
         opts = dict(schedule=False, watch_round=recorded_watch_round, capture=recorded_capture,
-                    openai_transport=openai_transport(seen), feeds=recorded_feeds)
+                    openai_transport=openai_transport(seen), feeds=recorded_feeds, phish_feed=None)
         opts.update(kw)
         c = TestClient(create_app(str(tmp_path / db), **opts),
                        headers={TOKEN_HEADER: OFFICER_TOKEN} if token else {})
         c.__enter__()
+        c.app.state.feeds.refresh()  # the background count, done now so the tests read numbers
         clients.append(c)
         return c
     yield make

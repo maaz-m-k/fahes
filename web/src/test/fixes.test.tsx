@@ -33,7 +33,7 @@ function setup(initial: AppInitial = { lang: 'en' }, voice = fakeVoice(false)) {
   const speak = vi.fn();
   Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { speak, cancel: () => undefined, getVoices: () => [] } });
   (globalThis as unknown as { SpeechSynthesisUtterance: unknown }).SpeechSynthesisUtterance = class { lang = ''; voice = null; onend = null; onerror = null; constructor(public text: string) {} };
-  render(<App engine={createFakeClient()} initial={{ markers: true, ...initial }} makeVoice={voice.make} />);
+  render(<App engine={createFakeClient()} initial={{ ...initial }} makeVoice={voice.make} />);
   const say = async (text: string) => { await user.clear(box()); await user.type(box(), text + '{Enter}'); };
   return { user, say, speak, voice: voice.f };
 }
@@ -156,8 +156,7 @@ describe('5. typing joins the live voice conversation', () => {
     expect(screen.queryByTestId('card-body')).toBeNull(); // nothing answered locally: the model decides
     await act(async () => { await v.f.hooks!.onTool('check_address', { domain: 'adpolice-fines.top' }); });
     await waitKind('check');
-    expect(screen.getByText(/REAL · realtime/)).toBeInTheDocument();
-    await say('and abudhabipolice.ae');
+        await say('and abudhabipolice.ae');
     await waitFor(() => expect(v.f.sent).toHaveLength(2));
     expect(v.f.started).toBe(1);
     expect(speak).not.toHaveBeenCalled();
@@ -174,11 +173,11 @@ describe('5. typing joins the live voice conversation', () => {
     await waitFor(() => expect(v.f.sent.at(-1)).toMatch(/^\(on screen\) Open the first case\. Facts:/));
   });
 
-  it('when the live session cannot start, the labelled fallback answers and speaks', async () => {
+  it('when the live session cannot start, the fallback answers and speaks', async () => {
     const { say, speak } = setup({ lang: 'en' }, fakeVoice(false));
     await say('what do we have today');
     await waitKind('summary');
-    expect(screen.getByTestId('fallback-note')).toHaveTextContent('STAND-IN');
+    expect(screen.getByTestId('fallback-note')).toHaveTextContent('Live voice is not available');
     await waitFor(() => expect(speak).toHaveBeenCalled());
   });
 });
@@ -186,7 +185,7 @@ describe('5. typing joins the live voice conversation', () => {
 describe('the name and the voice: Fahes / فاحص, voice cedar', () => {
   it('the screen says فاحص in Arabic and Fahes in English, never the old name', async () => {
     const user = userEvent.setup();
-    render(<App engine={createFakeClient()} initial={{ markers: true }} makeVoice={fakeVoice(false).make} />);
+    render(<App engine={createFakeClient()}  makeVoice={fakeVoice(false).make} />);
     expect(document.title).toBe('فاحص');
     expect(screen.getByRole('button', { name: /تكلّم مع فاحص/ })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'English' }));

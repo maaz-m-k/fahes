@@ -1,0 +1,17 @@
+{
+  "file": "dev_ai.jsonl",
+  "sha256": "3bba5cfbcd5321bcdc3726b2e210b224b2b483b2ee969d31b8fa4badd9f58ddd",
+  "built_at": "2026-11-25T01:29:58Z",
+  "seed": 20261126,
+  "fakes_submitted": [
+    "2026-11-01",
+    "2026-11-16"
+  ],
+  "rows": 2600,
+  "slices": {
+    "dev_fakes_phishtank": 800,
+    "dev_popular_subdomains": 1200,
+    "dev_popular_sites": 600
+  },
+  "note": "Development split for the AI second opinion. Chosen on, never the sealed test. Contains live scam links: never open them in a browser."
+}

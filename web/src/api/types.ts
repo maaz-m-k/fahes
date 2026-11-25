@@ -1,11 +1,8 @@
 /* The shapes the screens read from the Fahes engine (spec: issue #9).
-   Every number, name, address and verdict on screen comes from one of these responses.
-   `marker` says what each part is: REAL, STAND-IN (holds the place of something real) or DEMO DATA. */
+   Every number, name, address and verdict on screen comes from one of these responses. */
 
 export type Lang = 'ar' | 'en';
 export type Bi = { ar: string; en: string };
-export type MarkerKind = 'real' | 'stand' | 'demo';
-export type Marker = { kind: MarkerKind; note?: string };
 export type Verdict = 'green' | 'grey' | 'red';
 
 export type Reason = { code: string; ar: string; en: string };
@@ -21,11 +18,10 @@ export interface CaseSummary {
   verdict: Verdict;
   status: CaseStatus;
   sawThrough: Bi;
-  marker: Marker;
 }
 
 /* real footage of a browser at work: a sped-up video and its captioned moments (t in real-time ms) */
-export interface Footage { src: string; speed: number; width: number; height: number; moments: { t: number; ar: string; en: string }[]; marker: Marker }
+export interface Footage { src: string; speed: number; width: number; height: number; moments: { t: number; ar: string; en: string }[] }
 
 export interface CaseDetail extends CaseSummary {
   capturedAt: string; // "02:14"
@@ -42,7 +38,6 @@ export interface CaseDetail extends CaseSummary {
 export interface DeskSummary {
   needDecision: number;
   cases: CaseSummary[];
-  marker: Marker;
 }
 
 export interface ScoreResult {
@@ -52,7 +47,6 @@ export interface ScoreResult {
   officialAddresses: string[]; // a green family's addresses
   reasons: Reason[];
   modelVersion: string;
-  marker: Marker;
   link?: string; // as given
   score?: number;
 }
@@ -62,9 +56,8 @@ export interface RegisterFamily {
   name: Bi;
   kind: 'gov' | 'bank' | 'generic' | 'licensed';
   addresses: string[];
-  marker: Marker;
 }
-export interface RegisterList { total: number; families: RegisterFamily[]; learned: string[]; marker: Marker }
+export interface RegisterList { total: number; families: RegisterFamily[]; learned: string[] }
 
 export interface RecordFields {
   time: string;
@@ -85,7 +78,6 @@ export interface SealedRecord {
   fingerprint: string; // SHA-256 of the sealed fields
   status: 'draft' | 'approved';
   approvedVia: 'voice' | 'click' | null;
-  marker: Marker;
 }
 export interface VerifyResult { ok: boolean; fingerprintNow: string }
 export interface ApproveResult { approved: boolean; why: Bi | null; via: 'voice' | 'click'; fingerprint: string; takedownReady: boolean }
@@ -95,7 +87,6 @@ export interface TakedownPackage {
   address: string;
   recipients: { id: string; name: Bi; state: 'draft' | 'ready' }[];
   sent: false; // nothing is ever sent outward
-  marker: Marker;
 }
 
 export type Device = 'computer' | 'phone';
@@ -130,7 +121,6 @@ export interface Round {
   /* ONE short overview video per view of the round, always sped up; plus extra clips (e.g. a real Google clip) */
   footage?: { computer?: Footage; phone?: Footage };
   clips?: { label: Bi; footage: { computer?: Footage; phone?: Footage } }[];
-  marker: Marker;
 }
 export interface WatchState {
   everyHours: number;
@@ -139,37 +129,36 @@ export interface WatchState {
   progress: { i: number; total: number } | null;
   engines: { id: string; name: string; logo: string; first: boolean }[];
   lastRound: Round | null;
-  marker: Marker;
 }
 
+/* the scale numbers, counted by the server in the background (never on request); null parts while it warms up */
 export interface Feeds {
-  ct: { log: string; size: number; at: number; perMin: number; spark: number[]; marker: Marker };
-  names: { total: number; branded: number; lookAlikes: number; source: string; marker: Marker };
+  updatedAt: number | null; // when the server last counted
+  ct: { log: string; size: number; at: number; perMin: number; spark: number[] } | null;
+  names: { total: number; branded: number; lookAlikes: number; source: string } | null;
   needDecision: number;
-  funnel: { n: number; label: Bi; marker: Marker }[];
+  funnel: { n: number; label: Bi }[];
 }
 
 export interface DrillInfo {
   drill: { t: string; line: Bi }[];
   attacker: { t: string; line: Bi }[];
-  marker: Marker;
 }
 
 export interface Scorecard {
-  rows: { value: string; label: Bi; marker: Marker }[];
+  rows: { value: string; label: Bi; pending?: boolean }[]; // pending: not measured yet
 }
 
 export interface Costs {
-  soFar: { item: Bi; usd: number; marker: Marker }[];
+  soFar: { item: Bi; usd: number }[];
   projectedMonthUsd: number;
   projectedNote: Bi;
-  marker: Marker;
 }
 
 export type AgentId = 'watch' | 'register' | 'check' | 'capture' | 'seal' | 'drill' | 'scale' | 'officer';
 export interface AgentsState {
-  agents: { id: AgentId; name: Bi; status: Bi; busy: boolean; marker: Marker }[];
-  lastCase: { query: Bi; at: number; steps: { agent: AgentId; line: Bi }[]; marker: Marker } | null;
+  agents: { id: AgentId; name: Bi; status: Bi; busy: boolean }[];
+  lastCase: { query: Bi; at: number; steps: { agent: AgentId; line: Bi }[] } | null;
 }
 
 export interface VoiceSession { value: string; model: string; expiresAt: number; sessionId?: number; maxSeconds?: number }

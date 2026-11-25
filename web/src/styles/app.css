@@ -38,27 +38,8 @@ input { font: inherit; }
 .modes svg, .side svg, .ic svg, .chip svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .tools { display: flex; gap: 8px; align-items: center; }
 .ghost { border: 1px solid var(--line2); background: var(--s1); border-radius: 999px; padding: 7px 13px; font-size: 13px; white-space: nowrap; }
-.switch { display: flex; align-items: center; gap: 8px; font: 500 12.5px var(--en); cursor: pointer; white-space: nowrap; background: var(--s1); border: 1px solid var(--line2); border-radius: 999px; padding: 5px 12px 5px 6px; }
-html[dir=rtl] .switch { padding: 5px 6px 5px 12px; }
-.switch input { display: none; }
-.switch .sw { width: 30px; height: 18px; border-radius: 999px; background: #2a3a3a; position: relative; flex: none; transition: .25s; }
-.switch .sw::after { content: ''; position: absolute; top: 2px; inset-inline-start: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: .25s var(--ease); }
-.switch input:checked + .sw { background: var(--teal); }
-.switch input:checked + .sw::after { transform: translateX(12px); }
-html[dir=rtl] .switch input:checked + .sw::after { transform: translateX(-12px); }
 
-/* ---------- markers ---------- */
-.mk { display: none; align-items: center; gap: 5px; font: 700 10.5px/1 var(--en); letter-spacing: .06em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; white-space: nowrap; direction: ltr; vertical-align: middle; }
-.show-mk .mk { display: inline-flex; }
-.mk::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.mk.real { color: #57e39a; background: rgba(43,182,115,.13); box-shadow: inset 0 0 0 1px rgba(87,227,154,.45); }
-.mk.stand { color: var(--amber); background: rgba(255,170,40,.11); box-shadow: inset 0 0 0 1px rgba(255,198,107,.45); }
-.mk.stand::before { background: none; box-shadow: inset 0 0 0 1.5px currentColor; }
-.mk.demo { color: var(--demo); background: rgba(185,140,255,.13); box-shadow: inset 0 0 0 1px rgba(201,166,255,.5); }
-.mk.demo::before { border-radius: 1px; transform: rotate(45deg); }
-.mk.live::before { animation: pulse 1.6s infinite; }
 @keyframes pulse { 50% { opacity: .25; } }
-.mks { display: inline-flex; flex-wrap: wrap; gap: 6px; }
 
 /* ---------- live activity pill ---------- */
 .activity { display: inline-flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; border-radius: 999px; background: rgba(15,28,30,.85); border: 1px solid var(--line2); font-size: 13px; backdrop-filter: blur(10px); max-width: 100%; }
@@ -104,7 +85,6 @@ html[dir=rtl] .activity { padding: 6px 14px 6px 6px; }
 .words { font-size: 34px; line-height: 1.35; font-weight: 600; text-align: center; max-width: 620px; }
 .words span { display: inline-block; animation: wordIn .5s var(--ease) both; white-space: pre; }
 @keyframes wordIn { from { opacity: 0; transform: translateY(8px); filter: blur(6px); } }
-.brainline { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line2); background: rgba(255,255,255,.06); border-radius: 999px; padding: 10px 18px; font-size: 15px; font-weight: 500; transition: .2s; }
 .chip:hover { background: rgba(255,255,255,.1); border-color: var(--mint); }
@@ -160,7 +140,6 @@ html[lang=en] .reasons .ar { display: none; } html[lang=en] .reasons .en { color
 .wire .nopay { margin-top: 8px; border: 1.5px dashed #2e3f41; border-radius: 10px; padding: 9px; color: var(--mut); font-size: 12px; text-align: center; }
 .wire .okb { display: inline-block; margin-top: 6px; background: var(--greenbg); color: #6be6a6; border-radius: 999px; padding: 4px 10px; font-size: 12px; }
 .wire .crumbs { font-size: 11.5px; color: var(--mut); }
-.stampdemo { position: absolute; top: 12px; inset-inline-end: 12px; transform: rotate(-8deg); border: 2px solid var(--demo); color: var(--demo); font: 800 12px var(--en); padding: 1px 7px; border-radius: 7px; opacity: .8; }
 .addrbig { font: 600 26px/1.2 var(--en); direction: ltr; text-align: center; overflow-wrap: anywhere; }
 .addrbig .lit { background: var(--red); border-radius: 8px; padding: 0 6px; }
 .doors { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
@@ -294,14 +273,13 @@ html[dir=rtl] .eng { padding: 8px 8px 8px 16px; }
 .parts { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .parts li { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; background: var(--s2); border-radius: 14px; font-size: 13.5px; }
 .parts li small { display: block; color: var(--mut); font-size: 12px; }
-.parts .mk { display: inline-flex !important; }
 
 /* ---------- phone ---------- */
 @media (max-width: 760px) {
   .top { padding: 10px 12px; gap: 8px; flex-wrap: wrap; }
   .bt small { display: none; }
   .modes { order: 3; width: 100%; } .modes button { flex: 1; justify-content: center; }
-  .tools { margin-inline-start: auto; gap: 6px; } #mkLbl { display: none; } .switch { padding: 5px !important; }
+  .tools { margin-inline-start: auto; gap: 6px; }
   .voice { padding: 124px 10px 100px; }
   .glass { padding: 20px 14px 24px; border-radius: 30px; min-height: calc(100vh - 250px); }
   .orbslot { width: 250px; height: 250px; margin-top: max(10px, calc((100vh - 250px - 250px) / 2 - 40px)); }
@@ -316,7 +294,7 @@ html[dir=rtl] .eng { padding: 8px 8px 8px 16px; }
   .main { padding: 16px 12px; }
   .casecard { grid-template-columns: 1fr; }
   .counter { font-size: 32px; } .bignum .v { font-size: 42px; } .addrbig { font-size: 20px; }
-  .askbar .mk, .wake { display: none !important; }
+  .wake { display: none !important; }
   .activity { font-size: 12px; }
 }
 .row .addr { display: inline-block; }
@@ -336,7 +314,6 @@ html[dir=rtl] .eng { padding: 8px 8px 8px 16px; }
 @media (max-width: 760px) { .row { grid-template-columns: 30px minmax(0, 1fr); } .row > .pill { grid-column: 2; justify-self: start; } .row .saw { grid-column: 1 / 3 !important; } }
 
 .vpill { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; } .vpill .vt { font: 600 12px var(--en); color: var(--mint); }
-@media (max-width: 760px) { .vpill .mk { display: none !important; } }
 .glass.hasproblem .orbslot { width: 190px; height: 190px; margin-top: 10px; }
 .glass.hasproblem .hint { display: none; }
 

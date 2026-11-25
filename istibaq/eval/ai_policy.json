@@ -1,0 +1,823 @@
+{
+  "frozen_at": "2026-11-25T02:03:19Z",
+  "chosen_on": "dev split only (istibaq/data/testsets/dev_ai.jsonl)",
+  "prompt_version": "so-v1",
+  "model": "google/gemini-2.5-flash-lite",
+  "model_rule": "highest dev gain for the second opinion (catch-rate change minus false-alarm-rate change, precision may not drop)",
+  "policies": {
+    "second_opinion": {
+      "idea": "second_opinion",
+      "conf": 0.8,
+      "lo": 0.7,
+      "hi": 0.99,
+      "raise_": true,
+      "clear": true,
+      "officer_only": false,
+      "require_fake": false
+    },
+    "brand_reading": {
+      "idea": "brand_reading",
+      "conf": 0.6,
+      "lo": 0.0,
+      "hi": 1.01,
+      "raise_": true,
+      "clear": true,
+      "officer_only": false,
+      "require_fake": true
+    },
+    "brand_reading_global": {
+      "idea": "brand_reading_global",
+      "conf": 0.8,
+      "lo": 0.0,
+      "hi": 1.01,
+      "raise_": true,
+      "clear": true,
+      "officer_only": true,
+      "require_fake": false
+    },
+    "builder_clear": {
+      "idea": "builder_clear",
+      "conf": 0.95,
+      "lo": 0.0,
+      "hi": 1.01,
+      "raise_": true,
+      "clear": true,
+      "officer_only": false,
+      "require_fake": false
+    }
+  },
+  "dev_before": {
+    "judging": {
+      "catch_rate": 0.8163,
+      "catch_range95": [
+        0.7841,
+        0.8438
+      ],
+      "false_alarms": 118,
+      "false_alarm_rate": 0.0656,
+      "false_alarm_range95": [
+        0.0547,
+        0.0785
+      ],
+      "caught": 653,
+      "fakes": 800,
+      "reals": 1800,
+      "precision": 0.847,
+      "precision_range95": [
+        0.8198,
+        0.8706
+      ],
+      "precision_at_half_fakes": 0.9257
+    },
+    "officer": {
+      "catch_rate": 0.0563,
+      "catch_range95": [
+        0.0405,
+        0.0762
+      ],
+      "false_alarms": 3,
+      "false_alarm_rate": 0.0017,
+      "false_alarm_range95": [
+        0.0006,
+        0.0052
+      ],
+      "caught": 45,
+      "fakes": 800,
+      "reals": 1800,
+      "precision": 0.9375,
+      "precision_range95": [
+        0.8316,
+        0.9785
+      ],
+      "precision_at_half_fakes": 0.9712
+    }
+  },
+  "dev": {
+    "google/gemini-2.5-flash-lite": {
+      "coverage": [
+        2559,
+        2559
+      ],
+      "second_opinion": {
+        "policy": {
+          "idea": "second_opinion",
+          "conf": 0.8,
+          "lo": 0.7,
+          "hi": 0.99,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": 0.0561,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8762,
+            "catch_range95": [
+              0.8485,
+              0.8994
+            ],
+            "false_alarms": 125,
+            "false_alarm_rate": 0.0694,
+            "false_alarm_range95": [
+              0.058,
+              0.0823
+            ],
+            "caught": 701,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.8487,
+            "precision_range95": [
+              0.8226,
+              0.8715
+            ],
+            "precision_at_half_fakes": 0.9266
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      },
+      "brand_reading": {
+        "policy": {
+          "idea": "brand_reading",
+          "conf": 0.6,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": true
+        },
+        "dev_gain": 0.0012,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.0575,
+            "catch_range95": [
+              0.0418,
+              0.0779
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 46,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9388,
+            "precision_range95": [
+              0.8348,
+              0.979
+            ],
+            "precision_at_half_fakes": 0.9718
+          }
+        }
+      },
+      "brand_reading_global": {
+        "policy": {
+          "idea": "brand_reading_global",
+          "conf": 0.8,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": true,
+          "require_fake": false
+        },
+        "dev_gain": 0.2862,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.3475,
+            "catch_range95": [
+              0.3111,
+              0.3843
+            ],
+            "false_alarms": 12,
+            "false_alarm_rate": 0.0067,
+            "false_alarm_range95": [
+              0.0037,
+              0.0117
+            ],
+            "caught": 278,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9586,
+            "precision_range95": [
+              0.9291,
+              0.9762
+            ],
+            "precision_at_half_fakes": 0.9812
+          }
+        }
+      },
+      "builder_clear": {
+        "policy": {
+          "idea": "builder_clear",
+          "conf": 0.95,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": 0.0,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      }
+    },
+    "openai/gpt-4.1-nano": {
+      "coverage": [
+        2538,
+        2559
+      ],
+      "second_opinion": {
+        "policy": {
+          "idea": "second_opinion",
+          "conf": 0.6,
+          "lo": 0.5,
+          "hi": 0.99,
+          "raise_": false,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": 0.0006,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 117,
+            "false_alarm_rate": 0.065,
+            "false_alarm_range95": [
+              0.0542,
+              0.0778
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.8481,
+            "precision_range95": [
+              0.821,
+              0.8717
+            ],
+            "precision_at_half_fakes": 0.9262
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      },
+      "brand_reading": {
+        "policy": {
+          "idea": "brand_reading",
+          "conf": 0.8,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": -Infinity,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 120,
+            "false_alarm_rate": 0.0667,
+            "false_alarm_range95": [
+              0.0558,
+              0.0798
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.8448,
+            "precision_range95": [
+              0.8175,
+              0.8686
+            ],
+            "precision_at_half_fakes": 0.9245
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 4,
+            "false_alarm_rate": 0.0022,
+            "false_alarm_range95": [
+              0.0009,
+              0.0061
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9184,
+            "precision_range95": [
+              0.8081,
+              0.9678
+            ],
+            "precision_at_half_fakes": 0.962
+          }
+        }
+      },
+      "brand_reading_global": {
+        "policy": {
+          "idea": "brand_reading_global",
+          "conf": 0.8,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": true,
+          "require_fake": false
+        },
+        "dev_gain": 0.1257,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.1825,
+            "catch_range95": [
+              0.1548,
+              0.2143
+            ],
+            "false_alarms": 4,
+            "false_alarm_rate": 0.0022,
+            "false_alarm_range95": [
+              0.0009,
+              0.0061
+            ],
+            "caught": 146,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9733,
+            "precision_range95": [
+              0.9334,
+              0.9896
+            ],
+            "precision_at_half_fakes": 0.988
+          }
+        }
+      },
+      "builder_clear": {
+        "policy": {
+          "idea": "builder_clear",
+          "conf": 0.9,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": 0.0,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      }
+    },
+    "openai/gpt-4o-mini": {
+      "coverage": [
+        2559,
+        2559
+      ],
+      "second_opinion": {
+        "policy": {
+          "idea": "second_opinion",
+          "conf": 0.6,
+          "lo": 0.5,
+          "hi": 0.99,
+          "raise_": false,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": 0.0006,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 117,
+            "false_alarm_rate": 0.065,
+            "false_alarm_range95": [
+              0.0542,
+              0.0778
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.8481,
+            "precision_range95": [
+              0.821,
+              0.8717
+            ],
+            "precision_at_half_fakes": 0.9262
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      },
+      "brand_reading": {
+        "policy": {
+          "idea": "brand_reading",
+          "conf": 0.6,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": true
+        },
+        "dev_gain": 0.0,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      },
+      "brand_reading_global": {
+        "policy": {
+          "idea": "brand_reading_global",
+          "conf": 0.8,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": true,
+          "require_fake": true
+        },
+        "dev_gain": 0.145,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.2013,
+            "catch_range95": [
+              0.1721,
+              0.2339
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 161,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9817,
+            "precision_range95": [
+              0.9476,
+              0.9938
+            ],
+            "precision_at_half_fakes": 0.9918
+          }
+        }
+      },
+      "builder_clear": {
+        "policy": {
+          "idea": "builder_clear",
+          "conf": 0.9,
+          "lo": 0.0,
+          "hi": 1.01,
+          "raise_": true,
+          "clear": true,
+          "officer_only": false,
+          "require_fake": false
+        },
+        "dev_gain": 0.0,
+        "dev_after": {
+          "judging": {
+            "catch_rate": 0.8163,
+            "catch_range95": [
+              0.7841,
+              0.8438
+            ],
+            "false_alarms": 118,
+            "false_alarm_rate": 0.0656,
+            "false_alarm_range95": [
+              0.0547,
+              0.0785
+            ],
+            "caught": 653,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.847,
+            "precision_range95": [
+              0.8198,
+              0.8706
+            ],
+            "precision_at_half_fakes": 0.9257
+          },
+          "officer": {
+            "catch_rate": 0.0563,
+            "catch_range95": [
+              0.0405,
+              0.0762
+            ],
+            "false_alarms": 3,
+            "false_alarm_rate": 0.0017,
+            "false_alarm_range95": [
+              0.0006,
+              0.0052
+            ],
+            "caught": 45,
+            "fakes": 800,
+            "reals": 1800,
+            "precision": 0.9375,
+            "precision_range95": [
+              0.8316,
+              0.9785
+            ],
+            "precision_at_half_fakes": 0.9712
+          }
+        }
+      }
+    }
+  }
+}

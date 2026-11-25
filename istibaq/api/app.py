@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 from istibaq import __version__
 from istibaq.api import integrations, limits, watchrun
+from istibaq.api.feedcache import FeedCache
 from istibaq.cases import service as cases
 from istibaq.costs import log as costlog
 from istibaq.drill import records as drills
@@ -103,13 +104,19 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
                capture: Callable | None | Literal["default"] = "default",
                openai_transport: httpx.BaseTransport | None = None,
                feeds: Callable[[], dict] | Literal["default"] = "default",
-               google_client: httpx.Client | None = None) -> FastAPI:
+               google_client: httpx.Client | None = None,
+               phish_feed: Callable | None | Literal["default"] = "default",
+               ai_client: httpx.Client | None = None) -> FastAPI:
     store = Store(db_path)
     sink = costlog.make_sink(store)
+    reviewer = integrations.ai_reviewer(store, sink, ai_client)
     wr = integrations.default_watch_round() if watch_round == "default" else watch_round
     cap = integrations.default_capture() if capture == "default" else capture
     google_round = integrations.default_google_round(store)
-    feed_counts = (lambda: integrations.feed_counts(sink)) if feeds == "default" else feeds
+    lists = integrations.default_phish_feed() if phish_feed == "default" else phish_feed
+    feed_counts = (lambda: integrations.feed_counts(sink, refresh=True)) if feeds == "default" else feeds
+    # the scale numbers: counted in the background at start and hourly, served from this cache at once
+    feed_cache = FeedCache(feed_counts, None if store.path == ":memory:" else Path(store.path).parent / "feeds-cache.json")
     if schedule is None:
         schedule = os.environ.get("ISTIBAQ_SCHEDULE", "0") == "1"
     state = {"next_run_at": None, "last_error": None}
@@ -119,7 +126,7 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
         while True:
             await asyncio.sleep(delay)
             try:
-                await asyncio.to_thread(watchrun.run_round, store, wr, cap, sink, "schedule")
+                await asyncio.to_thread(watchrun.run_round, store, wr, cap, sink, "schedule", lists)
             except Exception as exc:
                 state["last_error"] = type(exc).__name__
             delay = WATCH_EVERY_SECONDS
@@ -127,13 +134,17 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
     @asynccontextmanager
     async def lifespan(_app):
         cases.reapply_register_edits(store)
+        watchrun.archive_quiet_grey(store)  # grey cases without a brand reason are archived, not deleted
         task = asyncio.create_task(scheduler()) if schedule else None
+        counting = asyncio.create_task(feed_cache.loop())
         yield
+        counting.cancel()
         if task:
             task.cancel()
 
     app = FastAPI(title="Istibaq engine", version=__version__, lifespan=lifespan)
     app.state.store = store
+    app.state.feeds = feed_cache
     lim = limits.Limits(store)
     app.state.limits = lim
 
@@ -213,7 +224,7 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
             lim.hit(visitor(request))
         except limits.LimitHit as exc:
             return limited(exc)
-        return integrations.score(body.link, mode=body.mode)
+        return integrations.score(body.link, mode=body.mode, reviewer=reviewer)
 
     @app.post("/api/score/batch")
     def score_batch(body: ScoreMany, request: Request):
@@ -224,7 +235,7 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
         links = [l.strip() for l in body.links if l.strip()]
         if len(links) > limits.batch_max():
             raise HTTPException(413, f"at most {limits.batch_max()} links per request")
-        return {"results": integrations.score_many(links, mode=body.mode), "count": len(links)}
+        return {"results": integrations.score_many(links, mode=body.mode, reviewer=reviewer), "count": len(links)}
 
     # ---------------------------------------------------------------- register
     @app.get("/api/register/lookup")
@@ -296,9 +307,9 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
             return {"status": "off", "note_en": "Paid searches are switched off on this server (ISTIBAQ_PAID=0)",
                     "note_ar": "عمليات البحث المدفوعة متوقفة على هذا الخادم", "results": 0, "cases": []}
         if wait:
-            return watchrun.run_round(store, wr, cap, sink, trigger=trigger)
+            return watchrun.run_round(store, wr, cap, sink, trigger=trigger, phish_feed=lists)
         import threading
-        threading.Thread(target=watchrun.run_round, args=(store, wr, cap, sink, trigger), daemon=True).start()
+        threading.Thread(target=watchrun.run_round, args=(store, wr, cap, sink, trigger, lists), daemon=True).start()
         return {"status": "started"}
 
     @app.post("/api/watch/run")
@@ -348,7 +359,7 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
     # ---------------------------------------------------------------- feeds, drill, scorecard, costs
     @app.get("/api/feeds")
     def feeds(reveal: bool = False):
-        return integrations.mask_feed_names(feed_counts(), reveal)
+        return integrations.mask_feed_names(feed_cache.get(), reveal)
 
     @app.get("/api/drills")
     def drill_report():
@@ -376,7 +387,8 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
         last = watchrun.get_run(store)
         sealed = store.one("SELECT COUNT(*) n FROM records")["n"]
         dr = drills.report(store)
-        feeds_status = integrations.feeds_status()
+        cached = feed_cache.get()
+        feeds_status = cached.get("status", "live") if cached.get("status") in ("warming", "unavailable") else "live"
         return [
             {"agent": "watch", "status": "live" if wr else "unavailable",
              "last_run_at": last and last["started_at"]},
@@ -454,7 +466,7 @@ def create_app(db_path: str | None = None, *, schedule: bool | None = None,
         if name == "approve":
             return nf(cases.approve, store, need_case(), "voice", body.officer)
         if name == "scale":
-            return integrations.mask_feed_names(feed_counts(), body.reveal)
+            return integrations.mask_feed_names(feed_cache.get(), body.reveal)
         if name == "run_now":
             try:
                 return run_now("voice")

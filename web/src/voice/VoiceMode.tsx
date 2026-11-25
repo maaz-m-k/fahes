@@ -2,10 +2,9 @@
    below it; the card stays while the conversation goes on and its content changes in place; it folds back into the
    orb only on "close" (voice or ×) or when an answer needs no screen. */
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import type { Lang, Marker, ToolName, WatchState } from '../api/types';
+import type { Lang, ToolName, WatchState } from '../api/types';
 import { useEngine, useLang } from '../i18n';
 import { SchedulePill } from '../kit/pieces';
-import { Mk } from '../kit/basics';
 import { AnswerCard, type CardActions } from './AnswerCard';
 import { deskReducer, initialDesk } from './desk';
 import { match } from './matcher';
@@ -60,11 +59,10 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
   const levels = useRef<Levels>({ user: 0, self: 0, typing: 0, on: false });
   const [orb, setOrb] = useState<OrbState>('idle');
   const [heard, setHeard] = useState('');
-  const [brain, setBrain] = useState<Marker>({ kind: 'real', note: 'realtime' });
   const [status, setStatus] = useState<VoiceStatus>('off');
   const [model, setModel] = useState('');
   const [problem, setProblem] = useState<VoiceProblem | null>(null);
-  const [fallback, setFallback] = useState<VoiceProblem | null>(null); // realtime could not run: answers use the labelled fallback
+  const [fallback, setFallback] = useState<VoiceProblem | null>(null); // realtime could not run: answers use the fallback
   const [text, setText] = useState('');
   const langRef = useRef(lang); langRef.current = lang;
   const statusRef = useRef(status); statusRef.current = status;
@@ -74,8 +72,8 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
   const hear = (v: string) => { setHeard(v); const l = onHeard?.(v); if (l) langRef.current = l; };
 
   /* run a tool and show its card. Speech: the realtime voice speaks for itself; the browser voice only as the fallback */
-  const run = useCallback(async (name: ToolName, args: Record<string, unknown>, via: 'voice' | 'click', mark: Marker) => {
-    setOrb('think'); setBrain(mark);
+  const run = useCallback(async (name: ToolName, args: Record<string, unknown>, via: 'voice' | 'click') => {
+    setOrb('think');
     const tool = TOOL_NAMES.includes(name) ? name : 'help';
     let r: ToolResult;
     try { r = await runTool(engine, ctx.current, tool, args, via); }
@@ -97,14 +95,14 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
       onStatus: (s, m) => { setStatus(s); if (m) setModel(m); },
       onOrb: setOrb, onHeard: hear,
       onProblem: p => { if (p?.quiet) { failed.current = true; setFallback(p); } else setProblem(p); },
-      onTool: (name, args) => run(name as ToolName, args, 'voice', { kind: 'real', note: 'realtime · ' + (rt.current?.model || 'gpt-realtime-2.1') }),
+      onTool: (name, args) => run(name as ToolName, args, 'voice'),
       testAudio: new URLSearchParams(location.search).get('testaudio'),
     };
     rt.current = makeVoice ? makeVoice(hooks) : new RealtimeVoice(hooks);
   }
   useEffect(() => () => rt.current?.stop(), []);
   // the voice tool seam: the same entry the realtime session calls, handed to tests that simulate the model's tool calls
-  useEffect(() => { toolPort?.((name, args) => run(name as ToolName, args, 'voice', { kind: 'real', note: 'realtime (simulated)' })); }, [toolPort, run]);
+  useEffect(() => { toolPort?.((name, args) => run(name as ToolName, args, 'voice')); }, [toolPort, run]);
 
   /* typed or pasted text joins the live voice conversation (starting it if needed); the fallback answers only if it cannot run */
   const typed = async (raw: string) => {
@@ -117,7 +115,7 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
     failed.current = true;
     let u; try { u = await engine.understand(v, langRef.current); } catch { u = match(v); }
     if (u.tool === 'help') { const l = match(v); if (l.tool !== 'help') u = l; } // the model was unsure; the matcher knows the words
-    await run(u.tool, u.args, 'click', { kind: 'stand', note: (u.source === 'model' ? 'brain' : 'local matcher') + ' · browser voice' });
+    await run(u.tool, u.args, 'click');
   };
   const talk = () => {
     const voice = rt.current!;
@@ -128,7 +126,7 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
 
   /* a tap does what saying it does: the same tool; a live session is told what is now on screen */
   const tap = async (name: ToolName, args: Record<string, unknown>, label: string, via: 'voice' | 'click' = 'click') => {
-    const out = await run(name, args, via, brain);
+    const out = await run(name, args, via);
     if (rt.current?.on) rt.current.sendNote(`${label}. Facts: ${JSON.stringify(out).slice(0, 1500)}`);
   };
   const act: CardActions = {
@@ -149,7 +147,7 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
         <div className={`glass${answering ? ' answer' : ''}${shown?.card.kind === 'replay' ? ' wide' : ''}${anim === 'collapse' ? ' collapsing' : ''}${problem ? ' hasproblem' : ''}`} data-testid="glass">
           {answering && <button className="closecard" type="button" aria-label={tx('إغلاق', 'close')} onClick={close}>×</button>}
           <div className="orbslot" role="button" tabIndex={0} aria-label={tx('تكلّم', 'talk')} onClick={talk}><Orb state={orb} levels={levels} /></div>
-          <button className={'talkbtn' + (status === 'on' ? ' live' : '')} type="button" disabled={status === 'connecting'} onClick={talk} title={status === 'on' ? 'REAL · realtime (' + model + ')' : ''}>
+          <button className={'talkbtn' + (status === 'on' ? ' live' : '')} type="button" disabled={status === 'connecting'} onClick={talk} title={status === 'on' ? 'realtime (' + model + ')' : ''}>
             {status === 'connecting' ? tx('لحظة…', 'One moment…') : status === 'on' ? <><i />{tx('أستمع · اضغط للإنهاء', 'Listening · tap to end')}</>
               : <><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12Z" /></svg>{tx('تكلّم مع فاحص', 'Talk to Fahes')}</>}
           </button>
@@ -165,12 +163,12 @@ export function VoiceMode({ watch, onRunNow, onOpenStudio, toolPort, onHeard, ma
             </div>
           )}
           <div className={'born' + (anim ? ' ' + anim : '')} data-testid="born">
-            {shown && <AnswerCard key={shownKey} answer={shown} brain={brain} act={act} />}
+            {shown && <AnswerCard key={shownKey} answer={shown} act={act} />}
           </div>
         </div>
       </section>
       <div className="askwrap">
-        {fallback && <div className="fallnote" data-testid="fallback-note"><Mk m={{ kind: 'stand', note: 'browser voice' }} /> {tx('الصوت الفوري غير متاح؛ أجيب بالبديل.', 'Live voice is not available; answering with the fallback.')} <small dir="ltr">{fallback.detail?.slice(0, 80)}</small></div>}
+        {fallback && <div className="fallnote" data-testid="fallback-note">{tx('الصوت الفوري غير متاح؛ أجيب بالبديل.', 'Live voice is not available; answering with the fallback.')} <small dir="ltr">{fallback.detail?.slice(0, 80)}</small></div>}
         <div className="askbar">
           <input id="cmd" aria-label={tx('اكتب سؤالاً أو عنواناً', 'Type a question or an address')} autoComplete="off" spellCheck={false} value={text}
             placeholder={tx('اكتب سؤالاً أو عنواناً…', 'Type a question or an address…')}
