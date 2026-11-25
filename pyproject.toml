@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "istibaq"
+dynamic = ["version"]
+description = "Istibaq engine: proactive detection of fake links for Abu Dhabi Police"
+requires-python = ">=3.12"
+dependencies = ["tldextract>=5.1", "numpy>=1.26", "scikit-learn>=1.4", "lightgbm>=4.0"]
+
+[project.optional-dependencies]
+service = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "httpx>=0.27"]
+capture = ["playwright>=1.45"]
+dev = ["pytest>=8", "fastapi>=0.110", "uvicorn[standard]>=0.29", "httpx>=0.27", "playwright>=1.45"]
+
+[project.scripts]
+istibaq = "istibaq.cli:main"
+
+[tool.hatch.version]
+path = "istibaq/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["istibaq"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,110 @@
+{
+  "built_at": "2026-11-24T22:37:46Z",
+  "model_version": "addr-lr3to5+lgbm-cut2026-11-17-v2",
+  "cut_date": "2026-11-17",
+  "testset": {
+    "file": "uae_v1.jsonl",
+    "sha256": "f1f7ee039d5fe6d555cfb43e5d1815a33e2b8007f11911920c78de1ebccc4787",
+    "sealed_at": "2026-11-24T22:11:23Z"
+  },
+  "scored_with": "address model alone, is_fraud = score >= 0.9",
+  "threshold": 0.9,
+  "slices": {
+    "uae_real_pages": {
+      "label": 0,
+      "counted": true,
+      "n": 124,
+      "flagged": 0,
+      "flagged_strict": 0,
+      "domains": 2,
+      "metric": "false-alarm rate",
+      "rate": 0.0,
+      "range95": [
+        0.0,
+        0.6576
+      ]
+    },
+    "uae_names": {
+      "label": 0,
+      "counted": true,
+      "n": 47,
+      "flagged": 0,
+      "flagged_strict": 0,
+      "domains": 47,
+      "metric": "false-alarm rate",
+      "rate": 0.0,
+      "range95": [
+        0.0,
+        0.0756
+      ]
+    },
+    "fresh_fakes_phishtank": {
+      "label": 1,
+      "counted": true,
+      "n": 1064,
+      "flagged": 710,
+      "flagged_strict": 573,
+      "domains": 749,
+      "metric": "catch rate",
+      "rate": 0.6673,
+      "range95": [
+        0.633,
+        0.7004
+      ]
+    },
+    "fresh_fakes_openphish": {
+      "label": 1,
+      "counted": true,
+      "n": 299,
+      "flagged": 252,
+      "flagged_strict": 242,
+      "domains": 270,
+      "metric": "catch rate",
+      "rate": 0.8428,
+      "range95": [
+        0.7964,
+        0.8828
+      ]
+    },
+    "stress_uae_lookalikes": {
+      "label": 1,
+      "counted": false,
+      "n": 20,
+      "flagged": 7,
+      "flagged_strict": 3,
+      "domains": 2,
+      "metric": "catch rate",
+      "rate": 0.35,
+      "range95": [
+        0.0945,
+        0.9055
+      ]
+    }
+  },
+  "overall_counted": {
+    "catch_rate": 0.7058,
+    "catch_range95": [
+      0.6769,
+      0.7328
+    ],
+    "false_alarm_rate": 0.0,
+    "false_alarm_range95": [
+      0.0,
+      0.0727
+    ],
+    "fakes": 1363,
+    "reals": 171,
+    "fake_domains": 1019,
+    "real_domains": 49
+  },
+  "notes": [
+    "Our own sealed test set only; public benchmark numbers are never our accuracy.",
+    "Fresh fakes are global (PhishTank after the cut date, OpenPhish held out), not UAE-specific.",
+    "stress_uae_lookalikes is synthetic and never counted as accuracy.",
+    "Ranges are Wilson 95% intervals clustered by registered domain (n = distinct domains); small slices have wide ranges.",
+    "Time split approximate: fakes trained on are PhishTank rows submitted before the cut date; Phishing.Database (undated) is no longer used.",
+    "Site split is by exact site; sibling campaign subdomains can still appear on both sides.",
+    "Real UAE pages come from 2 held-out hosts only (moi.gov.ae, dge.gov.ae).",
+    "Any OpenPhish figure is the address model or scorer with known_bad off; a merged number with known_bad on is a lookup, never accuracy."
+  ]
+}

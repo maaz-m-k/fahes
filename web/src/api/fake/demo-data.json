@@ -1,0 +1,95 @@
+{
+  "_note": "PROTOTYPE, wipe me. DEMO DATA: stand-in tool outputs for the voice desk prototype. Every number shown or spoken by the desk comes from this file or from a computation in the browser. Addresses on .test are reserved names that cannot exist on the internet.",
+  "desk": {
+    "label": "DEMO DATA",
+    "sealedAt": "07:12",
+    "needDecision": 3,
+    "watchedOvernight": 214,
+    "grey": 41,
+    "red": 5
+  },
+  "items": [
+    {
+      "id": "c1",
+      "label": "REPLAY",
+      "sealedAt": "02:14",
+      "verdict": "red",
+      "address": "tamm-abudhabi.fines-pay.test/ae/pay",
+      "trick": { "decoy": "tamm-abudhabi.", "owner": "fines-pay.test", "rest": "/ae/pay" },
+      "imitates": "tamm",
+      "source": { "ar": "إعلانات البحث", "en": "Search ads" },
+      "query": { "ar": "دفع مخالفات المرور أبوظبي", "en": "pay Abu Dhabi traffic fine" },
+      "title": { "ar": "صفحة مخالفات مرورية وهمية", "en": "A fake traffic fines page" },
+      "reasons": [
+        { "kind": "register", "ar": "العنوان ليس في سجل أبوظبي الحقيقي. مالكه الفعلي fines-pay.test وليس منصة تم.", "en": "The address is not in the register of the real Abu Dhabi. Its real owner is fines-pay.test, not TAMM." },
+        { "kind": "path", "ar": "يطلب الدفع خارج مسار الحكومة؛ مخالفات المرور تُدفع عبر تم.", "en": "It asks for payment outside the government path; traffic fines are paid through TAMM." },
+        { "kind": "payee", "ar": "الحساب المستلم المعروض ليس من الحسابات التي تستخدمها الحكومة (فحص المستفيد).", "en": "The receiving account shown is not one the government uses (payee check)." }
+      ],
+      "payee": { "shown": "AE•• •••• •••• 4471", "label": "DEMO DATA" }
+    },
+    {
+      "id": "c2",
+      "label": "REPLAY",
+      "sealedAt": "05:40",
+      "verdict": "red",
+      "address": "adcb-verify.freehost.test/login",
+      "trick": { "decoy": "adcb-verify.", "owner": "freehost.test", "rest": "/login" },
+      "imitates": "adcb",
+      "source": { "ar": "موقع على استضافة مجانية", "en": "A free website host" },
+      "query": { "ar": "رقم خدمة عملاء بنك أبوظبي التجاري", "en": "ADCB helpline" },
+      "title": { "ar": "صفحة دخول تشبه بنك أبوظبي التجاري", "en": "A login page that looks like ADCB" },
+      "reasons": [
+        { "kind": "register", "ar": "يستخدم اسم بنك أبوظبي التجاري وليس من عناوينه الرسمية.", "en": "It uses ADCB's name and is not one of its official addresses." },
+        { "kind": "host", "ar": "منشور على استضافة مجانية لا يستخدمها البنك.", "en": "It sits on a free host the bank does not use." }
+      ]
+    },
+    {
+      "id": "c3",
+      "label": "REPLAY",
+      "sealedAt": "06:05",
+      "verdict": "grey",
+      "address": "alnoor-typing.test",
+      "imitates": null,
+      "source": { "ar": "الخرائط", "en": "Maps" },
+      "query": { "ar": "تجديد الإقامة أبوظبي", "en": "renew residence visa Abu Dhabi" },
+      "title": { "ar": "مكتب طباعة يذكر خدمات حكومية", "en": "A typing office that mentions government services" },
+      "reasons": [
+        { "kind": "grey", "ar": "ليس جهة رسمية، ولا يوجد دليل ضده. لا نتّهمه.", "en": "Not official, and there is no evidence against it. We accuse nothing." }
+      ]
+    }
+  ],
+  "realPath": {
+    "address": "tamm.abudhabi",
+    "crumbs": { "ar": ["تم", "خدمات الشرطة", "دفع المخالفات المرورية"], "en": ["TAMM", "Police services", "Pay traffic fines"] }
+  },
+  "funnel": {
+    "label": "DEMO DATA",
+    "note": { "ar": "أشكال الأرقام مأخوذة من مصادر المجلس المقاسة؛ الأرقام هنا للعرض فقط.", "en": "The shape follows the board's measured feeds; the counts here are demo only." },
+    "stages": [
+      { "n": 812400, "ar": "إدخالات جديدة في سجل شهادات واحد مسمّى، هذه الساعة", "en": "new entries in one named certificate log, this hour", "src": "BORROWED" },
+      { "n": 17000, "ar": "أسماء نطاقات جديدة هذه الساعة (قائمة مفتوحة واحدة)", "en": "new domain names this hour (one open list)", "src": "BORROWED" },
+      { "n": 214, "ar": "تلمس اسماً من أبوظبي", "en": "touch an Abu Dhabi name", "src": "DEMO DATA" },
+      { "n": 41, "ar": "رمادي: غير رسمي، بدون اتهام", "en": "grey: not official, not accused", "src": "DEMO DATA" },
+      { "n": 5, "ar": "أحمر: بسببين مستقلين على الأقل", "en": "red: two independent reasons or more", "src": "DEMO DATA" },
+      { "n": 3, "ar": "تحتاج قرارك", "en": "need your decision", "src": "DEMO DATA" }
+    ]
+  },
+  "scorecard": {
+    "easy": { "pct": "98.96", "ar": "قاعدة واحدة («العنوان لا يبدأ بـ https://www.») على مجموعة البيانات العامة الشائعة", "en": "one rule (\"the address does not start with https://www.\") on the popular public dataset", "label": "MEASURED" },
+    "honest": { "caught": "55", "falseAlarms": "6", "ar": "من العنوان وحده، على 13 موقعاً إماراتياً لم يرها النموذج", "en": "address alone, on 13 UAE sites the model never saw", "label": "MEASURED" },
+    "sealed": { "x": null, "y": null, "ar": "مجموعة الاختبار الإماراتية المختومة: بانتظار التشغيل المختوم", "en": "Sealed UAE test set: awaiting the sealed run", "label": "DEMO DATA" }
+  },
+  "takedown": {
+    "label": "DEMO DATA",
+    "to": [
+      { "ar": "مسجّل النطاق ومزوّد الاستضافة", "en": "The domain registrar and the host" },
+      { "ar": "تنبيه مستفيد للبنك عبر توَاصُل (نموذج)", "en": "A payee alert to the bank through Tawasul (mock)" },
+      { "ar": "StaySafe: فاحص الروابط العام", "en": "StaySafe, the public link checker" }
+    ]
+  },
+  "alert": {
+    "label": "DEMO DATA",
+    "ar": "تنبيه: صفحة جديدة مشتبه بها تشبه منصة تم ظهرت في إعلانات البحث.",
+    "en": "Alert: a new suspected page that looks like TAMM appeared in search ads."
+  }
+}

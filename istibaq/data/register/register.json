@@ -1,0 +1,553 @@
+{
+  "version": "2026-11-25",
+  "note": "The Genuine Register: the real Abu Dhabi and UAE. Every entry has a source and a date. A domain listed here is official for itself and all its subdomains. Suffix entries (government-only namespaces) cover every name under them. Edit as data; officers' marks are applied on top at run time.",
+  "official_suffixes": [
+    {
+      "suffix": "gov.ae",
+      "family": "uae_government",
+      "source": "TDRA .ae policy: gov.ae is reserved for UAE federal and local government entities",
+      "date": "2026-11-25"
+    },
+    {
+      "suffix": "gov.abudhabi",
+      "family": "abu_dhabi_government",
+      "source": "Public certificate logs (crt.sh) for Abu Dhabi government entities, e.g. adha.gov.abudhabi, dot.gov.abudhabi, sdi.gov.abudhabi",
+      "date": "2026-11-25"
+    },
+    {
+      "suffix": "abudhabi.ae",
+      "family": "abu_dhabi_government",
+      "source": "Abu Dhabi Government portal domain; entity subdomains (dot.abudhabi.ae, drm.abudhabi.ae, adm.abudhabi.ae) seen in public certificate logs (crt.sh) alongside gov.abudhabi names",
+      "date": "2026-11-25"
+    },
+    {
+      "suffix": "mil.ae",
+      "family": "uae_government",
+      "source": "TDRA .ae policy: mil.ae is reserved for UAE armed forces",
+      "date": "2026-11-25"
+    }
+  ],
+  "families": [
+    {
+      "family": "abu_dhabi_police",
+      "name_ar": "شرطة أبوظبي",
+      "name_en": "Abu Dhabi Police",
+      "brands": [
+        "adpolice",
+        "abudhabipolice"
+      ],
+      "domains": [
+        "adpolice.gov.ae",
+        "abudhabipolice.ae",
+        "police.abudhabi"
+      ],
+      "source": "Abu Dhabi Police public website and public certificate logs (crt.sh)",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "tamm",
+      "name_ar": "تم",
+      "name_en": "TAMM (Abu Dhabi Government services)",
+      "brands": [
+        "tamm"
+      ],
+      "domains": [
+        "tamm.abudhabi",
+        "tamm.ae"
+      ],
+      "source": "Public certificate logs (crt.sh): DGE certificate names under tamm.abudhabi",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "dge",
+      "name_ar": "دائرة التمكين الحكومي",
+      "name_en": "Department of Government Enablement",
+      "brands": [
+        "dge"
+      ],
+      "domains": [
+        "dge.abudhabi",
+        "dge.gov.ae",
+        "data.abudhabi",
+        "statistics.abudhabi",
+        "mediaoffice.abudhabi",
+        "nic.abudhabi",
+        "ghadan.abudhabi",
+        "adio.abudhabi",
+        "ditc.abudhabi",
+        "iskan.abudhabi",
+        "gov.abudhabi"
+      ],
+      "source": "Public certificate logs (crt.sh) for *.abudhabi names issued to Abu Dhabi government entities",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "uae_federal",
+      "name_ar": "البوابة الرسمية لحكومة الإمارات",
+      "name_en": "UAE federal government portal",
+      "brands": [
+        "uaegov"
+      ],
+      "domains": [
+        "u.ae",
+        "government.ae"
+      ],
+      "source": "Official UAE government portal u.ae",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "uae_pass",
+      "name_ar": "الهوية الرقمية",
+      "name_en": "UAE PASS",
+      "brands": [
+        "uaepass"
+      ],
+      "domains": [
+        "uaepass.ae"
+      ],
+      "source": "UAE PASS official site (listed on u.ae)",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "icp",
+      "name_ar": "الهيئة الاتحادية للهوية والجنسية والجمارك وأمن المنافذ",
+      "name_en": "ICP (Identity, Citizenship, Customs and Port Security)",
+      "brands": [
+        "icp",
+        "uaeicp"
+      ],
+      "domains": [
+        "icp.gov.ae",
+        "ica.gov.ae"
+      ],
+      "source": "ICP official site (listed on u.ae)",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "uae_entities",
+      "name_ar": "جهات حكومية إماراتية",
+      "name_en": "UAE and emirate government entities",
+      "brands": [
+        "mohre",
+        "dubaipolice",
+        "salik",
+        "rtadubai",
+        "emiratespost"
+      ],
+      "domains": [
+        "rta.ae",
+        "salik.ae",
+        "addc.ae",
+        "aadc.ae",
+        "taqa.com",
+        "itc.gov.ae",
+        "darb.ae",
+        "adnoc.ae",
+        "adnocdistribution.ae",
+        "seha.ae",
+        "emiratespost.ae",
+        "epg.gov.ae",
+        "centralbank.ae",
+        "visitabudhabi.ae",
+        "investinabudhabi.ae",
+        "abudhabichamber.ae",
+        "wam.ae",
+        "emirates.com",
+        "etihad.com",
+        "theuaelottery.ae",
+        "dubai.ae",
+        "sharjah.ae",
+        "ajman.ae",
+        "ewec.ae",
+        "adx.ae",
+        "dfm.ae",
+        "adgm.com",
+        "difc.ae",
+        "daman.ae",
+        "malaffi.ae",
+        "uaecabinet.ae",
+        "etihadrail.ae",
+        "adq.ae",
+        "mubadala.com"
+      ],
+      "source": "Official entity sites listed on u.ae and Tranco .ae entries checked by hand; added 2026-11-25: EWEC, ADX, DFM, ADGM, DIFC, Daman, Malaffi, UAE Cabinet, Etihad Rail, ADQ, Mubadala (each entity's own official website)",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "banks",
+      "name_ar": "بنوك إماراتية",
+      "name_en": "UAE banks",
+      "brands": [
+        "adcb",
+        "bankfab",
+        "emiratesnbd",
+        "enbd",
+        "adib",
+        "mashreq",
+        "rakbank",
+        "emiratesislamic",
+        "ajmanbank",
+        "alhilalbank",
+        "wiobank",
+        "fab",
+        "almasraf",
+        "nbq",
+        "investbank",
+        "zand",
+        "firstabudhabibank",
+        "abudhabicommercialbank",
+        "abudhabiislamicbank",
+        "mashreqbank"
+      ],
+      "domains": [
+        "adcb.com",
+        "bankfab.com",
+        "fab.ae",
+        "emiratesnbd.com",
+        "adib.ae",
+        "adib.com",
+        "mashreq.com",
+        "mashreqbank.com",
+        "rakbank.ae",
+        "emiratesislamic.ae",
+        "ajmanbank.ae",
+        "dib.ae",
+        "cbd.ae",
+        "nbf.ae",
+        "hilalbank.ae",
+        "hilalbank.abudhabi",
+        "wio.io",
+        "liv.me",
+        "hsbc.ae",
+        "uab.ae",
+        "sib.ae",
+        "cbi.ae",
+        "bankofsharjah.com",
+        "arabbank.ae",
+        "almasraf.ae",
+        "nbq.ae",
+        "investbank.ae",
+        "eibank.com",
+        "zand.ae"
+      ],
+      "source": "Banks licensed by the CBUAE (CBUAE public register) and their public websites; added 2026-11-25: Al Masraf, National Bank of Umm Al Qaiwain, Invest Bank, Emirates Investment Bank, Zand (CBUAE register of licensed banks, https://www.centralbank.ae/en/our-operations/licensing/, and each bank's own website)",
+      "date": "2026-11-25"
+    },
+    {
+      "family": "telecom_utilities",
+      "name_ar": "الاتصالات والمرافق",
+      "name_en": "Telecoms and utilities",
+      "brands": [
+        "etisalat",
+        "eand",
+        "dewa",
+        "addc",
+        "aadc",
+        "sewa",
+        "etihadwe"
+      ],
+      "domains": [
+        "etisalat.ae",
+        "eand.ae",
+        "eand.com",
+        "du.ae",
+        "dewa.gov.ae",
+        "sewa.gov.ae",
+        "etihadwe.ae",
+        "tdra.gov.ae",
+        "virginmobile.ae"
+      ],
+      "source": "Licensed telecom operators (TDRA) and utility sites listed on u.ae; added 2026-11-25: Virgin Mobile UAE (operated by du, https://www.du.ae)",
+      "date": "2026-11-25"
+    }
+  ],
+  "helplines": [
+    {
+      "number": "999",
+      "name_ar": "الطوارئ - الشرطة",
+      "name_en": "Police emergency",
+      "family": "abu_dhabi_police",
+      "source": "https://www.adpolice.gov.ae/en",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "8002626",
+      "name_ar": "خدمة أمان - شرطة أبوظبي",
+      "name_en": "Aman service, Abu Dhabi Police",
+      "family": "abu_dhabi_police",
+      "source": "https://www.adpolice.gov.ae/en",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "8003333",
+      "name_ar": "مراكز خدمة الشرطة - شرطة أبوظبي",
+      "name_en": "Police service centres, Abu Dhabi Police",
+      "family": "abu_dhabi_police",
+      "source": "https://www.adpolice.gov.ae/en",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "800555",
+      "name_ar": "مركز اتصال تم",
+      "name_en": "TAMM contact centre",
+      "family": "tamm",
+      "source": "https://www.tamm.abudhabi/",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "171",
+      "name_ar": "مركز اتصال حكومة الإمارات",
+      "name_en": "UAE Government contact centre",
+      "family": "uae_federal",
+      "source": "https://icp.gov.ae/en/contact-us/",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "600522222",
+      "name_ar": "مركز اتصال الهيئة الاتحادية للهوية والجنسية",
+      "name_en": "ICP contact centre",
+      "family": "icp",
+      "source": "https://icp.gov.ae/en/contact-us/",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "600625500",
+      "name_ar": "مركز اتصال بنك أبوظبي الأول",
+      "name_en": "FAB call centre",
+      "family": "banks",
+      "brand": "fab",
+      "source": "https://www.bankfab.com/en-ae/contact-us",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "80040000",
+      "name_ar": "الخدمات المصرفية المميزة - بنك أبوظبي الأول",
+      "name_en": "FAB Elite and Private Banking",
+      "family": "banks",
+      "brand": "fab",
+      "source": "https://www.bankfab.com/en-ae/contact-us",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "600540000",
+      "name_ar": "مركز اتصال بنك الإمارات دبي الوطني",
+      "name_en": "Emirates NBD contact centre",
+      "family": "banks",
+      "brand": "emiratesnbd",
+      "source": "https://www.emiratesnbd.com/en/contact-us",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "600599999",
+      "name_ar": "مركز اتصال بريد الإمارات",
+      "name_en": "Emirates Post contact centre",
+      "family": "uae_entities",
+      "brand": "emiratespost",
+      "source": "https://www.emiratespost.ae/contact-us",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "600590000",
+      "name_ar": "مركز اتصال وزارة الموارد البشرية والتوطين",
+      "name_en": "MOHRE call centre",
+      "family": "uae_entities",
+      "brand": "mohre",
+      "source": "https://www.mohre.gov.ae/en/contact-us.aspx",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "8009090",
+      "name_ar": "مركز اتصال هيئة الطرق والمواصلات",
+      "name_en": "RTA call centre",
+      "family": "uae_entities",
+      "brand": "rtadubai",
+      "source": "https://www.rta.ae/wps/portal/rta/ae/home/contact-us",
+      "date": "2026-11-25"
+    },
+    {
+      "number": "101",
+      "name_ar": "خدمة عملاء اتصالات",
+      "name_en": "e& (Etisalat) customer care",
+      "family": "telecom_utilities",
+      "brand": "etisalat",
+      "source": "https://www.etisalat.ae/en/c/contact-us.html",
+      "date": "2026-11-25"
+    }
+  ],
+  "payees": [
+    {
+      "name": "Department of Government Enablement",
+      "family": "dge",
+      "source": "Collector name shown on public TAMM payment pages (synthetic placeholder until confirmed by officers)",
+      "date": "2026-11-25"
+    },
+    {
+      "name": "Abu Dhabi Police",
+      "family": "abu_dhabi_police",
+      "source": "Public entity name",
+      "date": "2026-11-25"
+    },
+    {
+      "name": "TAMM",
+      "family": "tamm",
+      "source": "Public entity name",
+      "date": "2026-11-25"
+    },
+    {
+      "name": "Integrated Transport Centre",
+      "family": "uae_entities",
+      "source": "Public entity name (Darb, parking fines)",
+      "date": "2026-11-25"
+    }
+  ],
+  "licensed": [
+    {
+      "domain": "abudhabipolice.example",
+      "family": "abu_dhabi_police",
+      "note": "Reserved-name placeholder for a licensed look-alike neighbour; replace with real ones as officers mark them",
+      "source": "synthetic",
+      "date": "2026-11-25"
+    }
+  ],
+  "global_brands": {
+    "note": "Global consumer brands used in the UAE. Never green: their domains host user content and logins. Matched only as look-alike brands; their own domains are 'owned, not accused'. Domains that are also shared platforms (amazonaws.com, cloudfront.net) stay free hosts; listing them here only stops their names being read as Amazon look-alikes.",
+    "source": "Brand websites; brands most impersonated in UAE scam reports",
+    "date": "2026-11-25",
+    "brands": [
+      {
+        "family": "aramex",
+        "name_ar": "أرامكس",
+        "name_en": "Aramex",
+        "brands": [
+          "aramex"
+        ],
+        "domains": [
+          "aramex.com",
+          "aramex.ae"
+        ]
+      },
+      {
+        "family": "dhl",
+        "name_ar": "دي إتش إل",
+        "name_en": "DHL",
+        "brands": [
+          "dhl"
+        ],
+        "domains": [
+          "dhl.com",
+          "dhl.ae"
+        ]
+      },
+      {
+        "family": "fedex",
+        "name_ar": "فيديكس",
+        "name_en": "FedEx",
+        "brands": [
+          "fedex"
+        ],
+        "domains": [
+          "fedex.com"
+        ]
+      },
+      {
+        "family": "paypal",
+        "name_ar": "باي بال",
+        "name_en": "PayPal",
+        "brands": [
+          "paypal"
+        ],
+        "domains": [
+          "paypal.com",
+          "paypal.me",
+          "paypalobjects.com"
+        ]
+      },
+      {
+        "family": "apple",
+        "name_ar": "آبل",
+        "name_en": "Apple",
+        "brands": [
+          "apple"
+        ],
+        "domains": [
+          "apple.com",
+          "icloud.com"
+        ]
+      },
+      {
+        "family": "microsoft",
+        "name_ar": "مايكروسوفت",
+        "name_en": "Microsoft",
+        "brands": [
+          "microsoft"
+        ],
+        "domains": [
+          "microsoft.com",
+          "microsoftonline.com",
+          "live.com",
+          "office.com",
+          "outlook.com",
+          "office365.com",
+          "windows.net",
+          "azure.com"
+        ]
+      },
+      {
+        "family": "netflix",
+        "name_ar": "نتفليكس",
+        "name_en": "Netflix",
+        "brands": [
+          "netflix"
+        ],
+        "domains": [
+          "netflix.com"
+        ]
+      },
+      {
+        "family": "amazon",
+        "name_ar": "أمازون",
+        "name_en": "Amazon",
+        "brands": [
+          "amazon"
+        ],
+        "domains": [
+          "amazon.ae",
+          "amazon.com",
+          "amazonaws.com",
+          "cloudfront.net"
+        ]
+      },
+      {
+        "family": "noon",
+        "name_ar": "نون",
+        "name_en": "noon",
+        "brands": [],
+        "domains": [
+          "noon.com"
+        ]
+      },
+      {
+        "family": "careem",
+        "name_ar": "كريم",
+        "name_en": "Careem",
+        "brands": [
+          "careem"
+        ],
+        "domains": [
+          "careem.com"
+        ]
+      },
+      {
+        "family": "talabat",
+        "name_ar": "طلبات",
+        "name_en": "talabat",
+        "brands": [
+          "talabat"
+        ],
+        "domains": [
+          "talabat.com"
+        ]
+      }
+    ]
+  }
+}

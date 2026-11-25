@@ -1,0 +1,164 @@
+{
+ "computer": {
+  "width": 2560,
+  "height": 1600,
+  "moments": [
+   {
+    "t": 1695,
+    "ar": "فتحت صفحة البحث (fahes).",
+    "en": "Opened the search page (fahes)."
+   },
+   {
+    "t": 3006,
+    "ar": "أكتب السؤال كما يكتبه المقيم.",
+    "en": "Typing the question the way a resident does."
+   },
+   {
+    "t": 8342,
+    "ar": "النتائج كما يراها المقيم.",
+    "en": "The results, as a resident sees them."
+   },
+   {
+    "t": 12958,
+    "ar": "أقرأ النتائج إلى أسفل.",
+    "en": "Reading down the results."
+   },
+   {
+    "t": 14502,
+    "ar": "فتحت صفحة البحث (fahes).",
+    "en": "Opened the search page (fahes)."
+   },
+   {
+    "t": 15539,
+    "ar": "أكتب السؤال كما يكتبه المقيم.",
+    "en": "Typing the question the way a resident does."
+   },
+   {
+    "t": 20949,
+    "ar": "النتائج كما يراها المقيم.",
+    "en": "The results, as a resident sees them."
+   },
+   {
+    "t": 24652,
+    "ar": "أقرأ النتائج إلى أسفل.",
+    "en": "Reading down the results."
+   },
+   {
+    "t": 26193,
+    "ar": "فتحت صفحة البحث (fahes).",
+    "en": "Opened the search page (fahes)."
+   },
+   {
+    "t": 27284,
+    "ar": "أكتب السؤال كما يكتبه المقيم.",
+    "en": "Typing the question the way a resident does."
+   },
+   {
+    "t": 32892,
+    "ar": "النتائج كما يراها المقيم.",
+    "en": "The results, as a resident sees them."
+   },
+   {
+    "t": 36636,
+    "ar": "أقرأ النتائج إلى أسفل.",
+    "en": "Reading down the results."
+   },
+   {
+    "t": 37982,
+    "ar": "أفتح النتيجة الرسمية فقط.",
+    "en": "Opening the official result only."
+   },
+   {
+    "t": 41621,
+    "ar": "الصفحة الرسمية: www.adcb.com.",
+    "en": "The official page: www.adcb.com."
+   },
+   {
+    "t": 46006,
+    "ar": "انتهيت. الرمادية بقيت مغلقة.",
+    "en": "Done. Grey results stayed closed."
+   }
+  ]
+ },
+ "phone": {
+  "width": 1170,
+  "height": 1992,
+  "moments": [
+   {
+    "t": 1559,
+    "ar": "فتحت صفحة البحث (fahes).",
+    "en": "Opened the search page (fahes)."
+   },
+   {
+    "t": 2127,
+    "ar": "أكتب السؤال كما يكتبه المقيم.",
+    "en": "Typing the question the way a resident does."
+   },
+   {
+    "t": 7426,
+    "ar": "النتائج كما يراها المقيم.",
+    "en": "The results, as a resident sees them."
+   },
+   {
+    "t": 10862,
+    "ar": "أقرأ النتائج إلى أسفل.",
+    "en": "Reading down the results."
+   },
+   {
+    "t": 12393,
+    "ar": "فتحت صفحة البحث (fahes).",
+    "en": "Opened the search page (fahes)."
+   },
+   {
+    "t": 12895,
+    "ar": "أكتب السؤال كما يكتبه المقيم.",
+    "en": "Typing the question the way a resident does."
+   },
+   {
+    "t": 18089,
+    "ar": "النتائج كما يراها المقيم.",
+    "en": "The results, as a resident sees them."
+   },
+   {
+    "t": 21436,
+    "ar": "أقرأ النتائج إلى أسفل.",
+    "en": "Reading down the results."
+   },
+   {
+    "t": 22959,
+    "ar": "فتحت صفحة البحث (fahes).",
+    "en": "Opened the search page (fahes)."
+   },
+   {
+    "t": 23426,
+    "ar": "أكتب السؤال كما يكتبه المقيم.",
+    "en": "Typing the question the way a resident does."
+   },
+   {
+    "t": 28911,
+    "ar": "النتائج كما يراها المقيم.",
+    "en": "The results, as a resident sees them."
+   },
+   {
+    "t": 32478,
+    "ar": "أقرأ النتائج إلى أسفل.",
+    "en": "Reading down the results."
+   },
+   {
+    "t": 33767,
+    "ar": "أفتح النتيجة الرسمية فقط.",
+    "en": "Opening the official result only."
+   },
+   {
+    "t": 41738,
+    "ar": "الصفحة الرسمية: www.adcb.com.",
+    "en": "The official page: www.adcb.com."
+   },
+   {
+    "t": 46883,
+    "ar": "انتهيت. الرمادية بقيت مغلقة.",
+    "en": "Done. Grey results stayed closed."
+   }
+  ]
+ }
+}

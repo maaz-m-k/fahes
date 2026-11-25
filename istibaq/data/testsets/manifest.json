@@ -1,0 +1,16 @@
+{
+  "file": "uae_v1.jsonl",
+  "sha256": "f1f7ee039d5fe6d555cfb43e5d1815a33e2b8007f11911920c78de1ebccc4787",
+  "sealed_at": "2026-11-24T22:11:23Z",
+  "sealed_before_tuning": true,
+  "cut_date": "2026-11-17",
+  "rows": 1554,
+  "slices": {
+    "uae_real_pages": 124,
+    "uae_names": 47,
+    "fresh_fakes_phishtank": 1064,
+    "fresh_fakes_openphish": 299,
+    "stress_uae_lookalikes": 20
+  },
+  "note": "Hash recorded before any model tuning. Training excludes every host in this file."
+}

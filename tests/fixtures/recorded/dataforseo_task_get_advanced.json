@@ -1,0 +1,184 @@
+{
+ "version": "0.1.20261120",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "0.0730 sec.",
+ "cost": 0,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11250000-0000-0000-0000-000000000001",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "0.0400 sec.",
+   "cost": 0,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "serp",
+    "google",
+    "organic",
+    "task_get",
+    "advanced",
+    "11250000-0000-0000-0000-000000000001"
+   ],
+   "data": {
+    "api": "serp",
+    "function": "task_get",
+    "se": "google",
+    "se_type": "organic",
+    "keyword": "pay abu dhabi police traffic fine",
+    "location_code": 2784,
+    "language_code": "en",
+    "device": "desktop",
+    "depth": 10,
+    "tag": "istibaq"
+   },
+   "result": [
+    {
+     "keyword": "pay abu dhabi police traffic fine",
+     "type": "organic",
+     "se_domain": "google.com",
+     "location_code": 2784,
+     "language_code": "en",
+     "check_url": "https://www.google.ae/search?q=pay+abu+dhabi+police+traffic+fine&gl=AE&hl=en",
+     "datetime": "2026-11-25 08:00:41 +00:00",
+     "spell": null,
+     "item_types": [
+      "ai_overview",
+      "paid",
+      "organic",
+      "people_also_ask",
+      "knowledge_graph"
+     ],
+     "se_results_count": 1250000,
+     "items_count": 7,
+     "items": [
+      {
+       "type": "ai_overview",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[3]",
+       "asynchronous_ai_overview": false,
+       "markdown": "Pay fines online through [TAMM](https://www.tamm.abudhabi/en/fines) or [a fines portal](https://fines-ad-gov.example/pay).",
+       "items": [
+        {
+         "type": "ai_overview_element",
+         "position": "left",
+         "title": null,
+         "text": "Pay fines online.",
+         "markdown": "Pay fines online.",
+         "links": null,
+         "images": null,
+         "references": [
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Fines portal",
+           "domain": "fines-ad-gov.example",
+           "url": "https://fines-ad-gov.example/pay",
+           "title": "Pay Abu Dhabi fines - 50% off",
+           "text": "..."
+          }
+         ]
+        }
+       ],
+       "references": [
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "TAMM Abu Dhabi",
+         "domain": "www.tamm.abudhabi",
+         "url": "https://www.tamm.abudhabi/en/fines",
+         "title": "Traffic Fines Payment - TAMM",
+         "text": "..."
+        },
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "Fines portal",
+         "domain": "fines-ad-gov.example",
+         "url": "https://fines-ad-gov.example/pay",
+         "title": "Pay Abu Dhabi fines - 50% off",
+         "text": "..."
+        }
+       ],
+       "rectangle": null
+      },
+      {
+       "type": "paid",
+       "rank_group": 1,
+       "rank_absolute": 2,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[1]",
+       "title": "Pay Your Traffic Fines Online - 50% Discount Today",
+       "domain": "adpolice-fines-pay.example",
+       "website_name": "Fines Pay",
+       "url": "https://adpolice-fines-pay.example/discount",
+       "breadcrumb": "https://adpolice-fines-pay.example",
+       "description": "Settle Abu Dhabi traffic fines instantly. Limited offer.",
+       "extra": {
+        "ad_aclk": null,
+        "description": "Settle Abu Dhabi traffic fines instantly. Limited offer.",
+        "description_rows": null
+       },
+       "links": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 1,
+       "rank_absolute": 3,
+       "page": 1,
+       "position": "left",
+       "domain": "www.tamm.abudhabi",
+       "title": "Pay traffic fines | TAMM",
+       "url": "https://www.tamm.abudhabi/en/aspects-of-life/transport/fines",
+       "breadcrumb": "https://www.tamm.abudhabi › transport",
+       "description": "Pay your traffic fines through TAMM."
+      },
+      {
+       "type": "organic",
+       "rank_group": 2,
+       "rank_absolute": 4,
+       "page": 1,
+       "position": "left",
+       "domain": "www.adpolice.gov.ae",
+       "title": "Abu Dhabi Police - Traffic Fines",
+       "url": "https://www.adpolice.gov.ae/en/services/traffic-fines",
+       "description": "Inquire and pay traffic fines."
+      },
+      {
+       "type": "organic",
+       "rank_group": 3,
+       "rank_absolute": 5,
+       "page": 1,
+       "position": "left",
+       "domain": "tamm-abudhabi-pay.test",
+       "title": "Tamm fines payment portal",
+       "url": "https://tamm-abudhabi-pay.test/login",
+       "description": null
+      },
+      {
+       "type": "people_also_ask",
+       "rank_group": 1,
+       "rank_absolute": 5,
+       "items": []
+      },
+      {
+       "type": "knowledge_graph",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "url": "https://www.adpolice.gov.ae/",
+       "title": "Traffic Fine Payment"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+# Istibaq engine on Fly.io. Secrets are set with `fly secrets set` (see scripts/deploy.sh);
+# no values live in this file. Secret names:
+#   ISTIBAQ_OFFICER_TOKEN, OPENAI_API_KEY, OPENROUTER_API_KEY, BRAVE_API_KEY, GOOGLE_PLACES_API_KEY,
+#   DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD (the Google and ads check also needs ISTIBAQ_DATAFORSEO=1)
+app = "istibaq"
+primary_region = "dxb"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  ISTIBAQ_DB = "/data/istibaq.db"
+  ISTIBAQ_SCHEDULE = "1"
+
+[[mounts]]
+  source = "istibaq_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "20s"
+    interval = "30s"
+    method = "GET"
+    path = "/health"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"

@@ -1,0 +1,57 @@
+/* additions for the React build (the rest is the approved prototype's stylesheet, app.css) */
+.orbslot .orb { width: 100%; height: 100%; }
+.orb canvas { width: 100%; height: 100%; display: block; }
+.recaddr { width: 100%; text-align: right !important; background: transparent; border: 0; border-bottom: 1px dashed var(--line2); color: inherit; padding: 2px 0; outline: none; text-align: start; }
+.recaddr:focus { border-bottom-color: var(--teal); }
+
+/* ---------- replay: a smooth, video-like playback in device frames ---------- */
+.rp-stage { display: grid; gap: 22px; align-items: start; padding: 18px; border-radius: 22px; background: radial-gradient(600px 300px at 50% 0%, rgba(15,139,141,.12), transparent 70%), var(--s1); }
+.rp-stage.both { grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr); }
+.rp-stage.one { justify-items: center; }
+.rp-dev { margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; width: 100%; }
+.rp-stage.one .rp-dev { align-items: center; }
+.rp-screen { position: relative; overflow: hidden; background: #fff; }
+.rp-layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0; transition: opacity .7s var(--ease); will-change: opacity, transform; transform-origin: 50% 0; }
+.rp-layer.on { opacity: 1; }
+.rp-phone { position: relative; width: 100%; max-width: 300px; margin: 0 auto; padding: 30px 11px 22px; border-radius: 44px; background: linear-gradient(160deg, #26393b, #0d1718); box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 24px 60px -20px rgba(0,0,0,.8), inset 0 0 0 2px rgba(255,255,255,.05); }
+.rp-phone .rp-screen { aspect-ratio: 412 / 839; border-radius: 10px; }
+.rp-notch { position: absolute; z-index: 2; top: 11px; left: 50%; width: 64px; height: 9px; margin-left: -32px; border-radius: 999px; background: #050a0b; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+.rp-stage.one.phone .rp-phone { max-width: 340px; }
+.rp.fill .rp-stage.one.phone .rp-phone { max-width: min(400px, 82vw); }
+.rp-win { width: 100%; border-radius: 16px; overflow: hidden; background: #0d1718; box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 24px 60px -20px rgba(0,0,0,.8); }
+.rp-stage.one.computer .rp-win { max-width: 900px; }
+.rp-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #172426; direction: ltr; }
+.rp-bar i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; flex: none; }
+.rp-bar i:nth-child(2) { background: #febc2e; } .rp-bar i:nth-child(3) { background: #28c840; }
+.rp-bar span { flex: 1; min-width: 0; margin-inline-start: 10px; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--mut); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rp-win .rp-screen { aspect-ratio: 16 / 10; }
+.rp-dev figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; }
+.rp-dev figcaption b { font-weight: 600; }
+.rp-cap { flex-basis: 100%; color: var(--tx); font-size: 14px; min-height: 2.6em; }
+.rp-dev.diff .rp-phone, .rp-dev.diff .rp-win { box-shadow: 0 0 0 2px var(--amber), 0 24px 60px -20px rgba(0,0,0,.8); }
+.rp-dev .difftag { position: static; }
+.rp-ctl { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.rp-ctl .play { width: 40px; height: 40px; flex: none; border-radius: 50%; border: 0; background: var(--teal); color: #fff; font-size: 13px; }
+.rp-track { position: relative; flex: 1; height: 28px; display: flex; align-items: center; }
+.rp-track input[type=range] { position: relative; z-index: 1; width: 100%; margin: 0; accent-color: var(--mint); background: transparent; }
+.rp-tick { position: absolute; top: 2px; width: 3px; height: 8px; border-radius: 2px; margin-left: -1px; background: rgba(255,255,255,.25); }
+.rp-tick.phone { top: auto; bottom: 2px; }
+.rp-tick.past { background: var(--mint); }
+.rp-time { font: 500 12px var(--en); color: var(--mut); min-width: 82px; text-align: end; }
+@media (max-width: 760px) { .rp-stage.both { grid-template-columns: 1fr; } .rp-stage { padding: 12px; } }
+
+/* ---------- the link checker in the voice card ---------- */
+.checkpanel .field { display: flex; gap: 8px; }
+.checkpanel .field input { flex: 1; min-width: 0; }
+.checkpanel.compact .checks { max-height: none; }
+.askwrap { flex-direction: column; align-items: center; }
+.fallnote { width: auto; max-width: min(760px, 100%); padding: 4px 12px; border-radius: 999px; background: rgba(3,8,10,.88); margin: 0 auto 8px; font-size: 12px; color: var(--mut); text-align: center; }
+
+/* a replay needs room: the card widens so the captures are large enough to read */
+.glass.answer.wide { width: min(1180px, 100%); }
+
+/* ---------- real footage ---------- */
+.fp-screen { position: relative; background: #000; }
+.fp-screen video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.fp-speed { position: absolute; top: 8px; inset-inline-end: 8px; z-index: 2; padding: 2px 8px; border-radius: 999px; background: rgba(3,8,10,.72); color: #fff; font: 700 12px var(--en); direction: ltr; }
+.fp .rp-phone .rp-screen { aspect-ratio: auto; }

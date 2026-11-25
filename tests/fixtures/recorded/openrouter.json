@@ -1,0 +1,7 @@
+{
+  "id": "gen-1795554000-abc",
+  "model": "google/gemini-2.5-flash-lite",
+  "object": "chat.completion",
+  "choices": [{"index": 0, "finish_reason": "stop", "message": {"role": "assistant", "content": "{\"suspicious\": true, \"en\": \"Page claims to be TAMM and asks for card number and CVV to pay a traffic fine.\", \"ar\": \"الصفحة تدّعي أنها تطبيق تم وتطلب رقم البطاقة ورمز التحقق لدفع مخالفة مرورية.\", \"claims\": \"TAMM\"}"}}],
+  "usage": {"prompt_tokens": 812, "completion_tokens": 64, "total_tokens": 876, "cost": 0.0000867}
+}

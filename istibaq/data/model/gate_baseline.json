@@ -1,0 +1,97 @@
+{
+  "scored_with": "full scorer (judging mode, known_bad off)",
+  "model_version": "addr-lr3to5+lgbm-cut2026-11-17-v2",
+  "sweep_size": 10000,
+  "sweep_counted": 9994,
+  "sweep_over_0.9": 18,
+  "sweep_over_0.98": 4,
+  "sweep_top20": [
+    [
+      "linqapp.com",
+      0.9967
+    ],
+    [
+      "pages.de",
+      0.9916
+    ],
+    [
+      "sharelink-1.shop",
+      0.9844
+    ],
+    [
+      "allegramarketingprint.com",
+      0.983
+    ],
+    [
+      "backlinkservicepro.shop",
+      0.9685
+    ],
+    [
+      "lihi1.com",
+      0.9561
+    ],
+    [
+      "designrr.page",
+      0.9521
+    ],
+    [
+      "usgovcloud-usercontent.microsoft",
+      0.9508
+    ],
+    [
+      "contact.page",
+      0.9445
+    ],
+    [
+      "primelocationdev.com",
+      0.9413
+    ],
+    [
+      "slicedrive.my.id",
+      0.9368
+    ],
+    [
+      "sacredsites.com",
+      0.9227
+    ],
+    [
+      "netclix.cloud",
+      0.9214
+    ],
+    [
+      "icp.fr",
+      0.921
+    ],
+    [
+      "tested.website",
+      0.9207
+    ],
+    [
+      "bankfax.ru",
+      0.9203
+    ],
+    [
+      "qrmex.shop",
+      0.9197
+    ],
+    [
+      "acconsento.click",
+      0.9184
+    ],
+    [
+      "illustrious-consideration.com",
+      0.8883
+    ],
+    [
+      "boost-my.website",
+      0.8877
+    ]
+  ],
+  "google_flagged": 0,
+  "uae_sanity_flagged": 0,
+  "fresh_catch_phishtank": 0.6889,
+  "fresh_catch_openphish": 0.8462,
+  "uae_real_page_false_alarms": 0,
+  "uae_name_false_alarms": 0,
+  "testset_sha256": "f1f7ee039d5fe6d555cfb43e5d1815a33e2b8007f11911920c78de1ebccc4787"
+}

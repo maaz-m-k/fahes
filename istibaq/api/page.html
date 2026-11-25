@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استباق · Istibaq link check</title>
+<style>
+  :root { --bg:#f7f7f4; --fg:#1b1b1b; --muted:#666; --card:#fff; --line:#ddd;
+          --green:#1f7a3a; --grey:#6b6b6b; --red:#b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141414; --fg:#eee; --muted:#aaa; --card:#1e1e1e; --line:#333;
+          --green:#4cc06f; --grey:#9a9a9a; --red:#ff6b5e; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  main { max-width:900px; margin:0 auto; padding:24px 16px; }
+  h1 { margin:0 0 4px; font-size:1.6rem; } .en { color:var(--muted); direction:ltr; unicode-bidi:isolate; }
+  textarea { width:100%; min-height:140px; padding:10px; font:14px ui-monospace, monospace; direction:ltr;
+             background:var(--card); color:var(--fg); border:1px solid var(--line); border-radius:8px; }
+  .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:10px 0 20px; }
+  button { padding:10px 18px; border:0; border-radius:8px; background:var(--fg); color:var(--bg); font-weight:600; cursor:pointer; }
+  .card { background:var(--card); border:1px solid var(--line); border-inline-start:6px solid var(--grey);
+          border-radius:8px; padding:12px 14px; margin-bottom:12px; min-width:0; }
+  .card.green { border-inline-start-color:var(--green); } .card.red { border-inline-start-color:var(--red); }
+  .link { direction:ltr; font-family:ui-monospace, monospace; overflow-wrap:anywhere; }
+  .badge { font-weight:700; } .green .badge { color:var(--green); } .red .badge { color:var(--red); } .grey .badge { color:var(--grey); }
+  ul { margin:6px 0 0; padding-inline-start:20px; } li { margin:2px 0; }
+  .meta { color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>استباق: فحص الروابط <span class="en">· Istibaq link check</span></h1>
+  <p>الصق رابطاً أو أكثر، رابط في كل سطر. <span class="en">Paste one or more links, one per line.</span></p>
+  <textarea id="links" placeholder="https://tamm-fines-pay.example&#10;https://www.adpolice.gov.ae"></textarea>
+  <div class="row">
+    <button id="go">افحص <span>· Check</span></button>
+    <label><input type="radio" name="mode" value="judging" checked> وضع التحكيم · judging</label>
+    <label><input type="radio" name="mode" value="officer"> وضع الضابط · officer</label>
+  </div>
+  <div id="out"></div>
+</main>
+<script>
+const LABEL = { green: ["رسمي", "official"], grey: ["غير رسمي، غير متهم", "not official, not accused"],
+                red: ["وهمي", "fake"] };
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+document.getElementById("go").onclick = async () => {
+  const links = document.getElementById("links").value.split("\n").map(s => s.trim()).filter(Boolean);
+  const mode = document.querySelector("input[name=mode]:checked").value;
+  const out = document.getElementById("out"); out.textContent = "…";
+  try {
+    const r = await fetch("/api/score/batch", { method: "POST", headers: { "Content-Type": "application/json" },
+                                                 body: JSON.stringify({ links, mode }) });
+    const data = await r.json(); out.textContent = "";
+    for (const v of data.results || []) {
+      const c = el("div", "card " + v.verdict);
+      const [ar, en] = LABEL[v.verdict] || [v.verdict, v.verdict];
+      const head = el("div"); head.append(el("span", "badge", ar + " "), el("span", "en", "· " + en + " · score " + v.score.toFixed(2)));
+      c.append(head, el("div", "link", v.link));
+      const ul = el("ul");
+      for (const x of v.reasons || []) { const li = el("li"); li.append(el("span", null, x.ar + " "), el("span", "en", "· " + x.en)); ul.append(li); }
+      if ((v.reasons || []).length) c.append(ul);
+      c.append(el("div", "meta en", "is_fraud=" + v.is_fraud + " · " + v.model_version + " · " + v.scored_at));
+      out.append(c);
+    }
+  } catch (e) { out.textContent = "خطأ · error: " + e; }
+};
+</script>
+</body>
+</html>

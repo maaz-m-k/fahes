@@ -1,0 +1,11 @@
+{
+  "type": "search",
+  "query": {"original": "رقم مساعدة شرطة أبوظبي", "country": "ae"},
+  "web": {
+    "type": "search",
+    "results": [
+      {"title": "شرطة أبوظبي", "url": "https://www.adpolice.gov.ae/ar", "description": "الموقع الرسمي لشرطة أبوظبي", "language": "ar", "family_friendly": true},
+      {"title": "خدمة عملاء شرطة أبوظبي 24 ساعة", "url": "https://adpolice-help.example/contact", "description": "اتصل بنا الآن", "language": "ar", "family_friendly": true}
+    ]
+  }
+}

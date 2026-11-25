@@ -1,0 +1,6 @@
+{"version": "0.1.20261120", "status_code": 20000, "status_message": "Ok.", "time": "0.0821 sec.", "cost": 0,
+ "tasks_count": 1, "tasks_error": 0,
+ "tasks": [{"id": "11250000-0000-0000-0000-0000000000aa", "status_code": 20000, "status_message": "Ok.",
+            "time": "0.0101 sec.", "cost": 0, "result_count": 1, "path": ["v3", "appendix", "user_data"], "data": {"api": "appendix", "function": "user_data"},
+            "result": [{"login": "team@istibaq.example", "timezone": "Asia/Dubai", "rates": {}, "statistics": {},
+                        "money": {"total": 1.0, "balance": 0.9}}]}]}

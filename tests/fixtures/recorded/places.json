@@ -1,0 +1,8 @@
+{
+  "places": [
+    {"displayName": {"text": "Abu Dhabi Police GHQ", "languageCode": "en"}, "websiteUri": "https://www.adpolice.gov.ae/", "formattedAddress": "Muroor Rd, Abu Dhabi", "nationalPhoneNumber": "800 2626"},
+    {"displayName": {"text": "Fines Payment Center", "languageCode": "en"}, "websiteUri": "http://fines-center-ad.example/", "formattedAddress": "Abu Dhabi"},
+    {"displayName": {"text": "Some cafe", "languageCode": "en"}, "formattedAddress": "Abu Dhabi", "nationalPhoneNumber": "02 555 0100"},
+    {"displayName": {"text": "Abu Dhabi Police Fines Help Desk", "languageCode": "en"}, "formattedAddress": "Abu Dhabi", "nationalPhoneNumber": "050 555 0199"}
+  ]
+}

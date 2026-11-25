@@ -1,0 +1,10 @@
+{
+ "source": "hagezi/nrd, nrd7.txt (https://github.com/hagezi/nrd), GPL-3.0",
+ "url": "https://raw.githubusercontent.com/hagezi/nrd/main/domains/nrd7.txt",
+ "fetched": "2026-11-24",
+ "list_date": "2026-11-24T07:02Z",
+ "covers": "domains first seen from 7 days before the list date to the day before it",
+ "file": "nrd7.txt.xz",
+ "note": "Sorted, lower-case, one name per line, xz-compressed. Refresh with scripts/data/refresh_nrd.sh before a judging run: the list is a week wide, so names registered after list_date are not in it.",
+ "domains": []
+}

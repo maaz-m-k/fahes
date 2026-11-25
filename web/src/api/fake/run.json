@@ -1,0 +1,1428 @@
+{
+ "id": "2026-11-24T23-12-49-625Z",
+ "startedAt": 1795561971661,
+ "state": "done",
+ "capture": {
+  "phone": {
+   "device": "Pixel 7",
+   "deviceScaleFactor": 3
+  },
+  "computer": {
+   "viewport": "1280x800",
+   "deviceScaleFactor": 2
+  },
+  "jpegQuality": 92
+ },
+ "cases": [
+  {
+   "id": "case1",
+   "q": "pay Abu Dhabi traffic fine",
+   "ar": "دفع مخالفة مرور في أبوظبي",
+   "startedAt": 1795561971661,
+   "ms": 10366,
+   "computer": {
+    "view": "computer",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=en",
+      "title": "Abu Dhabi Police GHQ - e-Services - Public Services",
+      "ad": false,
+      "id": 0,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=en",
+      "title": "Traffic Fines Payment",
+      "ad": false,
+      "id": 1,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=ar",
+      "title": "Traffic Fines Payment",
+      "ad": false,
+      "id": 2,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://moi.gov.ae/en/eservices/payment.traffic.fines.aspx?clearcache=true",
+      "title": "Payment of Traffic Fines",
+      "ad": false,
+      "id": 3,
+      "host": "moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://moi.gov.ae/en/eservices/payment.traffic.fines.aspx",
+      "title": "Payment of Traffic Fines",
+      "ad": false,
+      "id": 4,
+      "host": "moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://www.adjd.gov.ae/sites/eServices/EN/Pages/JudgementPayment.aspx",
+      "title": "Fine Payment - Abu Dhabi Judicial Department",
+      "ad": false,
+      "id": 5,
+      "host": "adjd.gov.ae",
+      "verdict": "green",
+      "match": "adjd.gov.ae"
+     },
+     {
+      "href": "https://es.adpolice.gov.ae/trafficservices/",
+      "title": "Abu Dhabi Police GHQ - e-Services - Home",
+      "ad": false,
+      "id": 6,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://emirateseportal.com/en/pay-traffic-fines-abu-dhabi/",
+      "title": "Pay Traffic Fines Abu Dhabi - Emirates E-Portal",
+      "ad": false,
+      "id": 7,
+      "host": "emirateseportal.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://adpolice.gov.ae/en/home",
+      "title": "AbuDhabi Police",
+      "ad": false,
+      "id": 8,
+      "host": "adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://howuae.ae/traffic-fines-abu-dhabi-how-to-check-and-pay-online/",
+      "title": "Traffic Fines Abu Dhabi: How to Check and Pay Online",
+      "ad": false,
+      "id": 9,
+      "host": "howuae.ae",
+      "verdict": "grey",
+      "match": null
+     }
+    ],
+    "opened": {
+     "host": "es.adpolice.gov.ae",
+     "landed": "es.adpolice.gov.ae",
+     "match": "adpolice.gov.ae"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2862,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case1-computer-0.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 3863,
+      "ar": "قرأت 10 عناوين: 8 رسمية، 2 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 8 official, 2 not official and not accused.",
+      "shot": "case1-computer-1.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 4257,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case1-computer-2.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 4651,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case1-computer-3.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 5080,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case1-computer-4.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 8471,
+      "ar": "فتحت الرسمية فقط: es.adpolice.gov.ae. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: es.adpolice.gov.ae. Grey results stayed closed.",
+      "shot": "case1-computer-5.webp",
+      "url": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=en",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 9001,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case1-computer-6.webp",
+      "url": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=en",
+      "kind": "opened"
+     }
+    ]
+   },
+   "phone": {
+    "view": "phone",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=en",
+      "title": "Traffic Fines Payment",
+      "ad": false,
+      "id": 0,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=ar",
+      "title": "Traffic Fines Payment",
+      "ad": false,
+      "id": 1,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=en",
+      "title": "Abu Dhabi Police GHQ - e-Services - Public Services",
+      "ad": false,
+      "id": 2,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://moi.gov.ae/en/eservices/payment.traffic.fines.aspx?clearcache=true",
+      "title": "Payment of Traffic Fines",
+      "ad": false,
+      "id": 3,
+      "host": "moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://moi.gov.ae/en/eservices/payment.traffic.fines.aspx",
+      "title": "Payment of Traffic Fines",
+      "ad": false,
+      "id": 4,
+      "host": "moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://es.adpolice.gov.ae/trafficservices/",
+      "title": "Abu Dhabi Police GHQ - e-Services - Home",
+      "ad": false,
+      "id": 5,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://www.adjd.gov.ae/sites/eServices/EN/Pages/JudgementPayment.aspx",
+      "title": "Fine Payment - Abu Dhabi Judicial Department",
+      "ad": false,
+      "id": 6,
+      "host": "adjd.gov.ae",
+      "verdict": "green",
+      "match": "adjd.gov.ae"
+     },
+     {
+      "href": "https://howuae.ae/traffic-fines-abu-dhabi-how-to-check-and-pay-online/",
+      "title": "Traffic Fines Abu Dhabi: How to Check and Pay Online",
+      "ad": false,
+      "id": 7,
+      "host": "howuae.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://emirateseportal.com/en/pay-traffic-fines-abu-dhabi/",
+      "title": "Pay Traffic Fines Abu Dhabi - Emirates E-Portal",
+      "ad": false,
+      "id": 8,
+      "host": "emirateseportal.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://adpolice.gov.ae/en/home",
+      "title": "AbuDhabi Police",
+      "ad": false,
+      "id": 9,
+      "host": "adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     }
+    ],
+    "opened": {
+     "host": "tamm.abudhabi",
+     "landed": "www.tamm.abudhabi",
+     "match": "tamm.abudhabi"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 3815,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case1-phone-0.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 3974,
+      "ar": "قرأت 10 عناوين: 8 رسمية، 2 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 8 official, 2 not official and not accused.",
+      "shot": "case1-phone-1.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 4445,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case1-phone-2.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 4821,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case1-phone-3.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 5368,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case1-phone-4.webp",
+      "url": "https://duckduckgo.com/?q=pay+Abu+Dhabi+traffic+fine&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 9029,
+      "ar": "فتحت الرسمية فقط: www.tamm.abudhabi. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: www.tamm.abudhabi. Grey results stayed closed.",
+      "shot": "case1-phone-5.webp",
+      "url": "https://www.tamm.abudhabi/wb/adp/general-service/login?redirectUrl=https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=en",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 9526,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case1-phone-6.webp",
+      "url": "https://www.tamm.abudhabi/wb/adp/general-service/login?redirectUrl=https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=en",
+      "kind": "opened"
+     }
+    ]
+   },
+   "counts": {
+    "read": 20,
+    "green": 16,
+    "grey": 4,
+    "red": 0
+   },
+   "onlyPhone": [],
+   "onlyComputer": []
+  },
+  {
+   "id": "case2",
+   "q": "دفع مخالفات المرور أبوظبي",
+   "ar": "دفع مخالفات المرور أبوظبي",
+   "startedAt": 1795561984129,
+   "ms": 8213,
+   "computer": {
+    "view": "computer",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=ar",
+      "title": "القيادة العامة لشرطة أبوظبي - الخدمات الإلكترونية - خدمات عامة",
+      "ad": false,
+      "id": 0,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://emirateseportal.com/%D8%AF%D9%81%D8%B9-%D8%A7%D9%84%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1%D9%8A%D8%A9-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "دفع المخالفات المرورية أبوظبي - بوابة الإمارات الإلكترونية",
+      "ad": false,
+      "id": 1,
+      "host": "emirateseportal.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Introduction.aspx?Culture=ar",
+      "title": "القيادة العامة لشرطة أبوظبي - الخدمات الإلكترونية - خدماتنا",
+      "ad": false,
+      "id": 2,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://portal.moi.gov.ae/eservices/Default.aspx?2.6",
+      "title": "وزارة الداخلية - الخدمات الإلكترونية - دليل الخدمات",
+      "ad": false,
+      "id": 3,
+      "host": "portal.moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://moi.gov.ae/ar/eservices/payment.traffic.fines.aspx?clearcache=1%27",
+      "title": "دفع المخالفات المرورية",
+      "ad": false,
+      "id": 4,
+      "host": "moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=ar",
+      "title": "General Service - Loading - خدمات حكومة أبوظبي",
+      "ad": false,
+      "id": 5,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://www.tamm.abudhabi/ar-AE/life-events/individual/Make-a-payment/Fines/paytrafficfines",
+      "title": "TAMM - Loading - خدمات حكومة أبوظبي",
+      "ad": false,
+      "id": 6,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://emiratesarchive.com/%D8%AF%D9%81%D8%B9-%D8%A7%D9%84%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1%D9%8A%D8%A9-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "دفع المخالفات المرورية أبوظبي: أسرع طرق السداد الإلكتروني",
+      "ad": false,
+      "id": 7,
+      "host": "emiratesarchive.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://emirateseportal.com/%D8%AF%D9%81%D8%B9-%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA-%D8%AF%D8%B1%D8%A8-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "دفع مخالفات درب أبوظبي - بوابة الإمارات الإلكترونية",
+      "ad": false,
+      "id": 8,
+      "host": "emirateseportal.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://emaratena.com/8708/%D8%AF%D9%81%D8%B9-%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "دفع مخالفات أبوظبي: مركبتي، شرطة أبوظبي، وزارة الداخلية",
+      "ad": false,
+      "id": 9,
+      "host": "emaratena.com",
+      "verdict": "grey",
+      "match": null
+     }
+    ],
+    "opened": {
+     "host": "es.adpolice.gov.ae",
+     "landed": "es.adpolice.gov.ae",
+     "match": "adpolice.gov.ae"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2848,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case2-computer-0.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 3071,
+      "ar": "قرأت 10 عناوين: 6 رسمية، 4 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 6 official, 4 not official and not accused.",
+      "shot": "case2-computer-1.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 3475,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case2-computer-2.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 3878,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case2-computer-3.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 4255,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case2-computer-4.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 7058,
+      "ar": "فتحت الرسمية فقط: es.adpolice.gov.ae. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: es.adpolice.gov.ae. Grey results stayed closed.",
+      "shot": "case2-computer-5.webp",
+      "url": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=ar",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 7540,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case2-computer-6.webp",
+      "url": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=ar",
+      "kind": "opened"
+     }
+    ]
+   },
+   "phone": {
+    "view": "phone",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://emirateseportal.com/%D8%AF%D9%81%D8%B9-%D8%A7%D9%84%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1%D9%8A%D8%A9-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "دفع المخالفات المرورية أبوظبي - بوابة الإمارات الإلكترونية",
+      "ad": false,
+      "id": 0,
+      "host": "emirateseportal.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=ar",
+      "title": "القيادة العامة لشرطة أبوظبي - الخدمات الإلكترونية - خدمات عامة",
+      "ad": false,
+      "id": 1,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://moi.gov.ae/ar/eservices/payment.traffic.fines.aspx?clearcache=1%27",
+      "title": "دفع المخالفات المرورية",
+      "ad": false,
+      "id": 2,
+      "host": "moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     },
+     {
+      "href": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Introduction.aspx?Culture=ar",
+      "title": "القيادة العامة لشرطة أبوظبي - الخدمات الإلكترونية - خدماتنا",
+      "ad": false,
+      "id": 3,
+      "host": "es.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://www.tamm.abudhabi/wb/adp/pay-traffic-fines?lang=ar",
+      "title": "General Service - Loading - خدمات حكومة أبوظبي",
+      "ad": false,
+      "id": 4,
+      "host": "tamm.abudhabi",
+      "verdict": "green",
+      "match": "tamm.abudhabi"
+     },
+     {
+      "href": "https://abudhabipolice.ae/ar-AE/",
+      "title": "الصفحة الرئيسية | عن شرطة أبوظبي",
+      "ad": false,
+      "id": 5,
+      "host": "abudhabipolice.ae",
+      "verdict": "green",
+      "match": "abudhabipolice.ae"
+     },
+     {
+      "href": "https://emiratesarchive.com/%D8%AF%D9%81%D8%B9-%D8%A7%D9%84%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1%D9%8A%D8%A9-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "دفع المخالفات المرورية أبوظبي: أسرع طرق السداد الإلكتروني",
+      "ad": false,
+      "id": 6,
+      "host": "emiratesarchive.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://uaereference.net/416/%D8%B4%D8%B1%D8%B7%D8%A9-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A-%D8%AF%D9%81%D8%B9-%D8%A7%D9%84%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA/",
+      "title": "شرطة أبوظبي دفع المخالفات عبر الموقع أو التطبيق 2026",
+      "ad": false,
+      "id": 7,
+      "host": "uaereference.net",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://testes.adpolice.gov.ae/TrafficServices/PublicServices/SiteMap.aspx?Culture=ar",
+      "title": "القيادة العامة لشرطة أبوظبي - الخدمات الإلكترونية -خارطة الموقع",
+      "ad": false,
+      "id": 8,
+      "host": "testes.adpolice.gov.ae",
+      "verdict": "green",
+      "match": "adpolice.gov.ae"
+     },
+     {
+      "href": "https://portal.moi.gov.ae/eservices/Default.aspx?2.6",
+      "title": "وزارة الداخلية - الخدمات الإلكترونية - دليل الخدمات",
+      "ad": false,
+      "id": 9,
+      "host": "portal.moi.gov.ae",
+      "verdict": "green",
+      "match": "moi.gov.ae"
+     }
+    ],
+    "opened": {
+     "host": "es.adpolice.gov.ae",
+     "landed": "es.adpolice.gov.ae",
+     "match": "adpolice.gov.ae"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2818,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case2-phone-0.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 2998,
+      "ar": "قرأت 10 عناوين: 7 رسمية، 3 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 7 official, 3 not official and not accused.",
+      "shot": "case2-phone-1.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 3435,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case2-phone-2.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 3807,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case2-phone-3.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 4287,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case2-phone-4.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AF%D9%81%D8%B9+%D9%85%D8%AE%D8%A7%D9%84%D9%81%D8%A7%D8%AA+%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%B1+%D8%A3%D8%A8%D9",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 7005,
+      "ar": "فتحت الرسمية فقط: es.adpolice.gov.ae. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: es.adpolice.gov.ae. Grey results stayed closed.",
+      "shot": "case2-phone-5.webp",
+      "url": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=ar",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 7531,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case2-phone-6.webp",
+      "url": "https://es.adpolice.gov.ae/TrafficServices/PublicServices/Default.aspx?Culture=ar",
+      "kind": "opened"
+     }
+    ]
+   },
+   "counts": {
+    "read": 20,
+    "green": 13,
+    "grey": 7,
+    "red": 0
+   },
+   "onlyPhone": [
+    "abudhabipolice.ae",
+    "uaereference.net",
+    "testes.adpolice.gov.ae"
+   ],
+   "onlyComputer": [
+    "emaratena.com"
+   ]
+  },
+  {
+   "id": "case3",
+   "q": "ADCB customer service number",
+   "ar": "رقم خدمة عملاء بنك أبوظبي التجاري",
+   "startedAt": 1795561994480,
+   "ms": 11868,
+   "computer": {
+    "view": "computer",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://www.adcb.com/en/get-in-touch/call-us/",
+      "title": "Call Us | ADCB",
+      "ad": false,
+      "id": 0,
+      "host": "adcb.com",
+      "verdict": "green",
+      "match": "adcb.com"
+     },
+     {
+      "href": "https://www.adcb.com/en/ways-to-bank/phone-banking/",
+      "title": "Phone Banking Services - Contact Us| ADCB",
+      "ad": false,
+      "id": 1,
+      "host": "adcb.com",
+      "verdict": "green",
+      "match": "adcb.com"
+     },
+     {
+      "href": "https://www.complaintsboard.com/abu-dhabi-commercial-bank-adcb-b102853/contacts",
+      "title": "Abu Dhabi Commercial Bank [ADCB] Customer Service Phone, Email, Address ...",
+      "ad": false,
+      "id": 2,
+      "host": "complaintsboard.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcbsecurities.com/en/get-in-touch/call-us",
+      "title": "Call Us - ADCB Securities",
+      "ad": false,
+      "id": 3,
+      "host": "adcbsecurities.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://masarif.ae/banks/abu-dhabi-commercial-bank/customer-care",
+      "title": "Abu Dhabi Commercial Bank Customer Care UAE: Phone Numbers & Complaints ...",
+      "ad": false,
+      "id": 4,
+      "host": "masarif.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcbsecurities.com/ar/get-in-touch/call-us",
+      "title": "للاتصال بنا - ADCB Securities",
+      "ad": false,
+      "id": 5,
+      "host": "adcbsecurities.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://servicearabic.com/%D8%AE%D8%AF%D9%85%D8%A9-%D8%B9%D9%85%D9%84%D8%A7%D8%A1-%D8%A8%D9%86%D9%83-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A-%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A-adcb-abu-dhabi-commercial-bank/",
+      "title": "خدمة عملاء بنك أبوظبي التجاري - ADCB - Abu Dhabi Commercial Bank",
+      "ad": false,
+      "id": 6,
+      "host": "servicearabic.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcb.com.eg/ar/%D8%AA%D9%88%D8%A7%D8%B5%D9%84-%D9%85%D8%B9%D9%86%D8%A7/",
+      "title": "تواصل معنا | Adcb",
+      "ad": false,
+      "id": 7,
+      "host": "adcb.com.eg",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcb.com.eg/contact-us-and-complaints/",
+      "title": "Contact us and Complaints | ADCB",
+      "ad": false,
+      "id": 8,
+      "host": "adcb.com.eg",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adib.com/en/pages/contact.aspx",
+      "title": "ADIB | Contact Us | Abu Dhabi Islamic Bank",
+      "ad": false,
+      "id": 9,
+      "host": "adib.com",
+      "verdict": "grey",
+      "match": null
+     }
+    ],
+    "opened": {
+     "host": "adcb.com",
+     "landed": "www.adcb.com",
+     "match": "adcb.com"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2531,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case3-computer-0.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 2667,
+      "ar": "قرأت 10 عناوين: 2 رسمية، 8 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 2 official, 8 not official and not accused.",
+      "shot": "case3-computer-1.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 3064,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case3-computer-2.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 3448,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case3-computer-3.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 4299,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case3-computer-4.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 10543,
+      "ar": "فتحت الرسمية فقط: www.adcb.com. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: www.adcb.com. Grey results stayed closed.",
+      "shot": "case3-computer-5.webp",
+      "url": "https://www.adcb.com/en/get-in-touch/call-us/",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 11181,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case3-computer-6.webp",
+      "url": "https://www.adcb.com/en/get-in-touch/call-us/",
+      "kind": "opened"
+     }
+    ]
+   },
+   "phone": {
+    "view": "phone",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://www.adcb.com/en/get-in-touch/call-us/",
+      "title": "Call Us | ADCB",
+      "ad": false,
+      "id": 0,
+      "host": "adcb.com",
+      "verdict": "green",
+      "match": "adcb.com"
+     },
+     {
+      "href": "https://www.adcb.com/en/ways-to-bank/phone-banking/",
+      "title": "Phone Banking Services - Contact Us| ADCB",
+      "ad": false,
+      "id": 1,
+      "host": "adcb.com",
+      "verdict": "green",
+      "match": "adcb.com"
+     },
+     {
+      "href": "https://www.complaintsboard.com/abu-dhabi-commercial-bank-adcb-b102853/contacts",
+      "title": "Abu Dhabi Commercial Bank [ADCB] Customer Service Phone, Email, Address ...",
+      "ad": false,
+      "id": 2,
+      "host": "complaintsboard.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://servicearabic.com/%D8%AE%D8%AF%D9%85%D8%A9-%D8%B9%D9%85%D9%84%D8%A7%D8%A1-%D8%A8%D9%86%D9%83-%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A-%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A-adcb-abu-dhabi-commercial-bank/",
+      "title": "خدمة عملاء بنك أبوظبي التجاري - ADCB - Abu Dhabi Commercial Bank",
+      "ad": false,
+      "id": 3,
+      "host": "servicearabic.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcbsecurities.com/en/get-in-touch/call-us",
+      "title": "Call Us - ADCB Securities",
+      "ad": false,
+      "id": 4,
+      "host": "adcbsecurities.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://masarif.ae/ar/banks/abu-dhabi-commercial-bank/customer-care",
+      "title": "خدمة عملاء بنك أبوظبي التجاري في الإمارات: أرقام الهاتف والشكاوى ...",
+      "ad": false,
+      "id": 5,
+      "host": "masarif.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://masarif.ae/banks/abu-dhabi-commercial-bank/customer-care",
+      "title": "Abu Dhabi Commercial Bank Customer Care UAE: Phone Numbers & Complaints ...",
+      "ad": false,
+      "id": 6,
+      "host": "masarif.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcb.com.eg/ar/%D8%AA%D9%88%D8%A7%D8%B5%D9%84-%D9%85%D8%B9%D9%86%D8%A7/",
+      "title": "تواصل معنا | Adcb",
+      "ad": false,
+      "id": 7,
+      "host": "adcb.com.eg",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcb.com.eg/career_expertise/customer-service/",
+      "title": "Customer service | ADCB",
+      "ad": false,
+      "id": 8,
+      "host": "adcb.com.eg",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.adcbsecurities.com/ar/get-in-touch/call-us",
+      "title": "للاتصال بنا - ADCB Securities",
+      "ad": false,
+      "id": 9,
+      "host": "adcbsecurities.com",
+      "verdict": "grey",
+      "match": null
+     }
+    ],
+    "opened": {
+     "host": "adcb.com",
+     "landed": "www.adcb.com",
+     "match": "adcb.com"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2661,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case3-phone-0.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 2772,
+      "ar": "قرأت 10 عناوين: 2 رسمية، 8 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 2 official, 8 not official and not accused.",
+      "shot": "case3-phone-1.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 3172,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case3-phone-2.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 3579,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case3-phone-3.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 4289,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case3-phone-4.webp",
+      "url": "https://duckduckgo.com/?q=ADCB+customer+service+number&kl=xa-ar&ia=web",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 10536,
+      "ar": "فتحت الرسمية فقط: www.adcb.com. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: www.adcb.com. Grey results stayed closed.",
+      "shot": "case3-phone-5.webp",
+      "url": "https://www.adcb.com/en/get-in-touch/call-us/",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 11179,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case3-phone-6.webp",
+      "url": "https://www.adcb.com/en/get-in-touch/call-us/",
+      "kind": "opened"
+     }
+    ]
+   },
+   "counts": {
+    "read": 20,
+    "green": 4,
+    "grey": 16,
+    "red": 0
+   },
+   "onlyPhone": [],
+   "onlyComputer": [
+    "adib.com"
+   ]
+  },
+  {
+   "id": "case4",
+   "q": "تجديد الإقامة أبوظبي",
+   "ar": "تجديد الإقامة أبوظبي",
+   "startedAt": 1795562008520,
+   "ms": 10515,
+   "computer": {
+    "view": "computer",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e66",
+      "title": "تجديد تصاريح الإقامة",
+      "ad": false,
+      "id": 0,
+      "host": "icp.gov.ae",
+      "verdict": "green",
+      "match": "icp.gov.ae"
+     },
+     {
+      "href": "https://gdrfad.gov.ae/ar/services/71ea8dd8-56c3-11ea-0320-0050569629e8",
+      "title": "تجديد تصريح الإقامة",
+      "ad": false,
+      "id": 1,
+      "host": "gdrfad.gov.ae",
+      "verdict": "green",
+      "match": "gdrfad.gov.ae"
+     },
+     {
+      "href": "https://gdrfad.gov.ae/ar/services/95222a46-56f2-11ea-0320-0050569629e8",
+      "title": "تجديد تصريح إقامة لأفراد أُسرة الأجنبي المُقيم في",
+      "ad": false,
+      "id": 2,
+      "host": "gdrfad.gov.ae",
+      "verdict": "green",
+      "match": "gdrfad.gov.ae"
+     },
+     {
+      "href": "https://tamamgov.com/%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF-%D8%A7%D9%82%D8%A7%D9%85%D8%A9-%D8%A7%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "تجديد اقامة ابوظبي 2026: الرسوم والخطوات والرابط الرسمي عبر Icp",
+      "ad": false,
+      "id": 3,
+      "host": "tamamgov.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e5d",
+      "title": "تجديد بطاقة الهوية",
+      "ad": false,
+      "id": 4,
+      "host": "icp.gov.ae",
+      "verdict": "green",
+      "match": "icp.gov.ae"
+     },
+     {
+      "href": "https://smartservices.icp.gov.ae/echannels/web/client/default.html",
+      "title": "ICP Smart Services",
+      "ad": false,
+      "id": 5,
+      "host": "smartservices.icp.gov.ae",
+      "verdict": "green",
+      "match": "icp.gov.ae"
+     },
+     {
+      "href": "https://uaeeasy.com/2026/09/26/uae-residence-renewal-2026/",
+      "title": "تجديد الإقامة في الإمارات 2026: الشروط والرسوم وفترة السماح وغرامة ...",
+      "ad": false,
+      "id": 6,
+      "host": "uaeeasy.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://abudhabi.advocator.ae/%D8%A7%D9%84%D9%85%D8%AF%D9%88%D9%86%D8%A9/%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF-%D8%A7%D9%84%D8%A7%D9%82%D8%A7%D9%85%D8%A9-%D9%81%D9%8A-%D8%A7%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "تجديد الاقامة في ابوظبي: الشروط والخطوات القانونية",
+      "ad": false,
+      "id": 7,
+      "host": "abudhabi.advocator.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://honaemirates.com/2613/%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF-%D8%A7%D9%84%D8%A7%D9%82%D8%A7%D9%85%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%A7%D9%85%D8%A7%D8%B1%D8%A7%D8%AA/",
+      "title": "شروط ورسوم وخطوات تجديد الاقامة في الامارات 2026 - هنا الإمارات",
+      "ad": false,
+      "id": 8,
+      "host": "honaemirates.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://setgo.ae/residence-visa-renewal-fees-uae/",
+      "title": "رسوم ومدة تجديد الإقامة في الإمارات 2026: الدليل الكامل | SetGo",
+      "ad": false,
+      "id": 9,
+      "host": "setgo.ae",
+      "verdict": "grey",
+      "match": null
+     }
+    ],
+    "opened": {
+     "host": "icp.gov.ae",
+     "landed": "icp.gov.ae",
+     "match": "icp.gov.ae"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2641,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case4-computer-0.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 2903,
+      "ar": "قرأت 10 عناوين: 5 رسمية، 5 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 5 official, 5 not official and not accused.",
+      "shot": "case4-computer-1.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 3314,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case4-computer-2.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 3753,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case4-computer-3.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 4249,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case4-computer-4.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 8961,
+      "ar": "فتحت الرسمية فقط: icp.gov.ae. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: icp.gov.ae. Grey results stayed closed.",
+      "shot": "case4-computer-5.webp",
+      "url": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e66",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 9454,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case4-computer-6.webp",
+      "url": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e66",
+      "kind": "opened"
+     }
+    ]
+   },
+   "phone": {
+    "view": "phone",
+    "engine": "DuckDuckGo",
+    "results": [
+     {
+      "href": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e66",
+      "title": "تجديد تصاريح الإقامة",
+      "ad": false,
+      "id": 0,
+      "host": "icp.gov.ae",
+      "verdict": "green",
+      "match": "icp.gov.ae"
+     },
+     {
+      "href": "https://tamamgov.com/%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF-%D8%A7%D9%82%D8%A7%D9%85%D8%A9-%D8%A7%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "تجديد اقامة ابوظبي 2026: الرسوم والخطوات والرابط الرسمي عبر Icp",
+      "ad": false,
+      "id": 1,
+      "host": "tamamgov.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://gdrfad.gov.ae/ar/services/71ea8dd8-56c3-11ea-0320-0050569629e8",
+      "title": "تجديد تصريح الإقامة",
+      "ad": false,
+      "id": 2,
+      "host": "gdrfad.gov.ae",
+      "verdict": "green",
+      "match": "gdrfad.gov.ae"
+     },
+     {
+      "href": "https://setgo.ae/residence-visa-renewal-fees-uae/",
+      "title": "رسوم ومدة تجديد الإقامة في الإمارات 2026: الدليل الكامل | SetGo",
+      "ad": false,
+      "id": 3,
+      "host": "setgo.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://gdrfad.gov.ae/ar/services/95222a40-56f2-11ea-0320-0050569629e8",
+      "title": "تجديد تصريح إقامة للقطاع الخاص",
+      "ad": false,
+      "id": 4,
+      "host": "gdrfad.gov.ae",
+      "verdict": "green",
+      "match": "gdrfad.gov.ae"
+     },
+     {
+      "href": "https://abudhabi.advocator.ae/%D8%A7%D9%84%D9%85%D8%AF%D9%88%D9%86%D8%A9/%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF-%D8%A7%D9%84%D8%A7%D9%82%D8%A7%D9%85%D8%A9-%D9%81%D9%8A-%D8%A7%D8%A8%D9%88%D8%B8%D8%A8%D9%8A/",
+      "title": "تجديد الاقامة في ابوظبي: الشروط والخطوات القانونية",
+      "ad": false,
+      "id": 5,
+      "host": "abudhabi.advocator.ae",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://www.mohre.gov.ae/ar/services/renewal-of-a-domestic-workers-employment-contract-2022",
+      "title": "تجديد عقد عمل - عامل مساعد | دليل الخدمات | الخدمات | وزارة...",
+      "ad": false,
+      "id": 6,
+      "host": "mohre.gov.ae",
+      "verdict": "green",
+      "match": "mohre.gov.ae"
+     },
+     {
+      "href": "https://smartservices.icp.gov.ae/echannels/web/client/default.html",
+      "title": "ICP Smart Services",
+      "ad": false,
+      "id": 7,
+      "host": "smartservices.icp.gov.ae",
+      "verdict": "green",
+      "match": "icp.gov.ae"
+     },
+     {
+      "href": "https://uaeeasy.com/2026/09/26/uae-residence-renewal-2026/",
+      "title": "تجديد الإقامة في الإمارات 2026: الشروط والرسوم وفترة السماح وغرامة ...",
+      "ad": false,
+      "id": 8,
+      "host": "uaeeasy.com",
+      "verdict": "grey",
+      "match": null
+     },
+     {
+      "href": "https://visaforma.ae/ar/residence-visa-renewal/",
+      "title": "تجديد الإقامة في الإمارات 2026: مهلتك 60 أو 90 أو 180 يومًا — والغرامة ...",
+      "ad": false,
+      "id": 9,
+      "host": "visaforma.ae",
+      "verdict": "grey",
+      "match": null
+     }
+    ],
+    "opened": {
+     "host": "icp.gov.ae",
+     "landed": "icp.gov.ae",
+     "match": "icp.gov.ae"
+    },
+    "robot": [],
+    "steps": [
+     {
+      "n": 0,
+      "at": 2858,
+      "ar": "بحثت كما يبحث أحد السكان في DuckDuckGo.",
+      "en": "Searched the way a resident would, on DuckDuckGo.",
+      "shot": "case4-phone-0.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "search"
+     },
+     {
+      "n": 1,
+      "at": 2979,
+      "ar": "قرأت 10 عناوين: 5 رسمية، 5 غير رسمية وغير متهمة.",
+      "en": "Read 10 addresses: 5 official, 5 not official and not accused.",
+      "shot": "case4-phone-1.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "read"
+     },
+     {
+      "n": 2,
+      "at": 3412,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case4-phone-2.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "scroll"
+     },
+     {
+      "n": 3,
+      "at": 3841,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case4-phone-3.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "scroll"
+     },
+     {
+      "n": 4,
+      "at": 4354,
+      "ar": "أتابع القراءة إلى أسفل الصفحة.",
+      "en": "Reading on down the page.",
+      "shot": "case4-phone-4.webp",
+      "url": "https://duckduckgo.com/?q=%D8%AA%D8%AC%D8%AF%D9%8A%D8%AF+%D8%A7%D9%84%D8%A5%D9%82%D8%A7%D9%85%D8%A9+%D8%A3%D8%A8%D9%88%D8%B8%D8%A8%D9%8A&kl=",
+      "kind": "scroll"
+     },
+     {
+      "n": 5,
+      "at": 8934,
+      "ar": "فتحت الرسمية فقط: icp.gov.ae. الرمادية بقيت مغلقة.",
+      "en": "Opened only the official one: icp.gov.ae. Grey results stayed closed.",
+      "shot": "case4-phone-5.webp",
+      "url": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e66",
+      "kind": "opened"
+     },
+     {
+      "n": 6,
+      "at": 9782,
+      "ar": "أقرأ الصفحة الرسمية.",
+      "en": "Reading the official page.",
+      "shot": "case4-phone-6.webp",
+      "url": "https://icp.gov.ae/services-details/?serviceid=64afe3c1035448005bd52e66",
+      "kind": "opened"
+     }
+    ]
+   },
+   "counts": {
+    "read": 20,
+    "green": 10,
+    "grey": 10,
+    "red": 0
+   },
+   "onlyPhone": [
+    "mohre.gov.ae",
+    "visaforma.ae"
+   ],
+   "onlyComputer": [
+    "honaemirates.com"
+   ]
+  }
+ ],
+ "ms": 50021
+}

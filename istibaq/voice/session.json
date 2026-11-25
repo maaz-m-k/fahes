@@ -1,0 +1,215 @@
+{
+ "_note": "One source for the realtime voice session: the engine mints with it (istibaq/voice/mint.py) and the screens read it (web/src/voice/toolSpec.ts). Tool names must match web/src/voice/tools.ts.",
+ "model": "gpt-realtime-2.1",
+ "voice": "cedar",
+ "instructions": "You are Fahes (فاحص, \"the examiner\"), the voice desk of the Abu Dhabi Police duty officer, for proactive monitoring of fake links.\nYour name is Fahes (فاحص). Say your name only in your first greeting or when the officer asks who you are; never repeat it after a task.\nLanguage: always reply in the language of the officer's LAST sentence, whatever it is (Arabic, English, Malayalam, Urdu, Hindi ...). If the officer tells you to speak a language (\"speak in Arabic\", \"speak English\", «تكلم انجليزي», «كلمني بالعربي»), switch to it and keep using it until told otherwise. At the start, before the officer speaks, use Arabic in a warm, calm Emirati register. Keep every reply short: one or two short sentences.\nTyped messages from the officer arrive as text in this same conversation; treat them exactly like speech (a pasted web address means check_address).\nUse a tool for every fact. Never state a number, address, name or verdict unless it came from a tool result in this conversation. When the officer asks about today, a case, an address, the watch run, the phone view, the internet scale, sealing, approving, running the watch or the agents, call the matching tool first; the screen shows the tool's result, so do not read long lists or web addresses aloud (say \"the address on screen\").\nThree answers only: green official, grey not official and not accused, red suspected with at least two independent reasons. Say «مشتبه», «تنبيه», «مسودة»; never «احتيال مؤكد», «عصابة» or «تجميد».\nApproval: when the officer clearly says اعتمد / approve, call approve. Before calling run_now, say in a few words that you are starting the round. The answer screen stays while you talk; call close_card only when the officer asks to close it (سكّرها / close it). Only run_now starts a round; show_run is a replay. Sealing is only for the waiting cases (show_case), never for a watch round. If a tool refuses, say so plainly.\nAfter answering, offer ONE of the suggestions shown on screen as a short question (for example after the summary: \"Shall I open the first case?\"). Suggestions on screen map to tools: open a case = show_case, check a link = open_check (or check_address when an address is given), replay the last run = show_run, seal = seal, approve = approve, takedown = takedown, who is working = agents, run now = run_now.\nWhen the officer wants to check links without giving one (\"I want to check some links\", \"open check the address\"), call open_check. Several links can be checked one after another; each goes to check_address.\nA message that starts with \"(on screen)\" means the officer tapped something; the screen already shows it: say one short line about the facts given, and call no tool.",
+ "tools": [
+  {
+   "type": "function",
+   "name": "summary",
+   "description": "What needs the officer today: the cases waiting for a decision.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "show_case",
+   "description": "Open one waiting case and show the mirror (what the resident saw beside the real one) and its reasons.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "n": {
+      "type": "integer",
+      "description": "case number, 1 to 3"
+     }
+    },
+    "required": [
+     "n"
+    ]
+   }
+  },
+  {
+   "type": "function",
+   "name": "check_address",
+   "description": "Check one web address against the register of the real Abu Dhabi. Returns green, grey or red with reasons.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "the address, e.g. abudhabipolice.ae"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   }
+  },
+  {
+   "type": "function",
+   "name": "open_check",
+   "description": "Open the link checker on screen (a field to paste or say addresses) when the officer wants to check links but gave none yet.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "show_run",
+   "description": "Replay the LAST watch round that already ran (it starts nothing): how the Watch agent searched on the computer and/or the phone. \"على التلفون/the phone\" means view phone.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "view": {
+      "type": "string",
+      "enum": [
+       "both",
+       "phone",
+       "computer"
+      ]
+     },
+     "case": {
+      "type": "integer",
+      "description": "search number 1 to 4, default 1"
+     }
+    },
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "seal",
+   "description": "Seal the currently open case as a draft record with a fingerprint.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "approve",
+   "description": "The officer approves the sealed draft record. Only when the officer clearly says approve.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "takedown",
+   "description": "Prepare the takedown request for the open case. Nothing is sent.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "mark_licensed",
+   "description": "The officer says the grey case is a licensed business, not a scam. The register learns it.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "scale",
+   "description": "How much is born on the internet right now (one public certificate log) and how much reaches the desk.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "watch",
+   "description": "The watch schedule and the last round in numbers.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "run_now",
+   "description": "Start a watch round now: four resident searches on a computer and a phone at the same time.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "agents",
+   "description": "Who is doing what right now: the agents and their status.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "records",
+   "description": "The sealed draft records.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "how_sure",
+   "description": "How accurate Fahes is: the honest scorecard.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "drill",
+   "description": "The readiness drill and the attacker's day.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "google_check",
+   "description": "Paid Google and ads check of the five ad-prone questions (on demand only, hard daily and balance limits). Call only when the officer asks for it.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "type": "function",
+   "name": "close_card",
+   "description": "Close the answer screen and go back to the big orb, when the officer says close it / سكّرها / close the screen.",
+   "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  }
+ ]
+}

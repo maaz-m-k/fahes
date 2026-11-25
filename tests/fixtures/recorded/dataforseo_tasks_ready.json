@@ -1,0 +1,10 @@
+{"version": "0.1.20261120", "status_code": 20000, "status_message": "Ok.", "time": "0.0420 sec.", "cost": 0,
+ "tasks_count": 1, "tasks_error": 0,
+ "tasks": [{"id": "11250000-0000-0000-0000-0000000000bb", "status_code": 20000, "status_message": "Ok.",
+            "time": "0.0301 sec.", "cost": 0, "result_count": 1,
+            "path": ["v3", "serp", "google", "organic", "tasks_ready"], "data": {"api": "serp", "function": "tasks_ready", "se": "google", "se_type": "organic"},
+            "result": [{"id": "11250000-0000-0000-0000-000000000001", "se": "google", "se_type": "organic",
+                        "date_posted": "2026-11-25 08:00:00 +00:00", "tag": "istibaq",
+                        "endpoint_regular": "/v3/serp/google/organic/task_get/regular/11250000-0000-0000-0000-000000000001",
+                        "endpoint_advanced": "/v3/serp/google/organic/task_get/advanced/11250000-0000-0000-0000-000000000001",
+                        "endpoint_html": "/v3/serp/google/organic/task_get/html/11250000-0000-0000-0000-000000000001"}]}]}

@@ -1,0 +1,9 @@
+{"version": "0.1.20261120", "status_code": 20000, "status_message": "Ok.", "time": "0.1102 sec.", "cost": 0.0006,
+ "tasks_count": 1, "tasks_error": 0,
+ "tasks": [{"id": "11250000-0000-0000-0000-000000000001", "status_code": 20100, "status_message": "Task Created.",
+            "time": "0.0052 sec.", "cost": 0.0006, "result_count": 0,
+            "path": ["v3", "serp", "google", "organic", "task_post"],
+            "data": {"api": "serp", "function": "task_post", "se": "google", "se_type": "organic",
+                     "keyword": "pay abu dhabi police traffic fine", "location_code": 2784, "language_code": "en",
+                     "device": "desktop", "os": "windows", "depth": 10, "priority": 1},
+            "result": null}]}

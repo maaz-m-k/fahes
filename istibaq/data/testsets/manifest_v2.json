@@ -1,0 +1,36 @@
+{
+  "file": "sealed_v2.jsonl",
+  "sha256": "5e2f530701af70acc46d2ac2e9ec4525f80bdcf3f17c49599633fd3ebe87d2ac",
+  "sealed_at": "2026-11-25T00:00:46Z",
+  "sealed_before_tuning": true,
+  "cut_date": "2026-11-17",
+  "seed": 20261125,
+  "rows": 6971,
+  "slices": {
+    "fresh_fakes_openphish": 266,
+    "fresh_fakes_phishtank": 745,
+    "uae_real_pages": 278,
+    "uae_search_results": 30,
+    "uae_names": 127,
+    "popular_sites": 2500,
+    "popular_subdomains": 3000,
+    "stress_uae_lookalikes": 25
+  },
+  "surface_forms": {
+    "real": {
+      "rows": 5935,
+      "trailing_slash": 0.499,
+      "www": 0.498,
+      "scheme": 0.662,
+      "has_subdomain": 0.51
+    },
+    "fake": {
+      "rows": 1011,
+      "trailing_slash": 0.442,
+      "www": 0.501,
+      "scheme": 0.653,
+      "has_subdomain": 0.688
+    }
+  },
+  "note": "Hash recorded before any lever was tuned. Never edit; improve the parts, never the test."
+}
